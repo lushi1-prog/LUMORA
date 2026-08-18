@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vardagskompassen</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#faf9f5;color:#253b42;font-family:Arial,sans-serif}
+.app{max-width:720px;margin:auto;padding:18px}.top{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.logo{width:50px;height:50px;border-radius:15px;background:#e4f0ea;display:grid;place-items:center;font-size:30px}
+h1{font-size:22px;margin:0}.hero{background:#eaf4ef;border-radius:26px;padding:24px;margin-bottom:26px}
+.hero .hello{font-size:20px;font-weight:bold}.hero h2{font-size:32px;line-height:1.05;margin:8px 0 12px}.hero p{font-size:16px;line-height:1.4;margin:0;color:#40565b}
+.section-title{font-size:21px;font-weight:bold;margin-bottom:8px}.sub{color:#52656a;margin-bottom:16px}
+.topic{width:100%;border:0;border-radius:22px;padding:16px 18px;margin-bottom:14px;min-height:86px;display:flex;align-items:center;gap:16px;text-align:left;cursor:pointer;color:#253b42}
+.topic .icon{font-size:38px}.topic .name{font-size:20px;font-weight:bold;flex:1}.arrow{font-size:22px}
+.note{background:white;border-radius:22px;padding:20px;line-height:1.5;margin-top:6px}
+.hidden{display:none}.back{border:0;background:none;font-size:16px;cursor:pointer;padding:8px 0;color:#40565b}
+.topic-head{text-align:center}.topic-head .big{font-size:70px}.intro{font-size:20px;line-height:1.4;font-weight:600;color:#40565b}
+.progress-text{font-weight:bold;color:#52656a;margin-top:20px}.bar{height:8px;background:#e2e8e4;border-radius:10px;overflow:hidden;margin:8px 0 24px}.fill{height:100%;background:#3f927d;transition:.2s}
+.card{border-radius:24px;padding:22px;margin-bottom:18px}.card h3{font-size:22px;margin:0 0 16px}.card .label{font-weight:bold;font-size:18px}.card p{font-size:17px;line-height:1.55;color:#40565b}
+.btn{width:100%;height:58px;border:0;border-radius:18px;font-size:18px;font-weight:bold;cursor:pointer;background:#3f927d;color:white}.btn.secondary{background:white;color:#3f927d;border:2px solid #3f927d;margin-top:10px}
+.done{text-align:center;background:white;border-radius:24px;padding:30px;margin-top:35px}.done .heart{font-size:60px}.done h2{font-size:30px}.done p{font-size:17px;line-height:1.55;color:#40565b}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+const topics=[
+{icon:"❤️",title:"Kärlek",intro:"Visa barnet att du tycker om det och finns kvar.",color:"#fbe0e2",steps:[
+["Kärlek i vardagen","Små stunder av värme, närhet och omtanke spelar roll. Barnet behöver få känna att du finns där."],
+["Se barnet","Försök se barnet bakom beteendet. Visa intresse för vem barnet är, inte bara för vad barnet gör."],
+["När det blir svårt","Du kan sätta en gräns och samtidigt visa kärlek. Beteendet kan vara fel utan att barnet är fel."],
+["Visa att du finns kvar","När barnet är ledset, argt eller oroligt behöver det ofta känna att du fortfarande finns nära."],
+["Ett litet steg","Välj en liten sak idag: en kram, några minuter tillsammans, ett vänligt ord eller bara att lyssna."]
+]},
+{icon:"👨‍👩‍👧",title:"Närvaro",intro:"Var tillsammans och försök vara närvarande i stunden.",color:"#e5f1ec",steps:[
+["Vanliga stunder räknas","Att äta tillsammans, prata en stund eller göra något enkelt ihop kan skapa kontakt."],
+["Lägg undan det andra","Försök ibland ge barnet din odelade uppmärksamhet, även om det bara är några minuter."],
+["Lyssna färdigt","När barnet berättar något, försök lyssna klart innan du ger råd eller försöker lösa problemet."],
+["Följ barnets initiativ","Fråga vad barnet vill berätta, visa eller göra. Barnet behöver känna att det också får ta plats."],
+["Ett litet steg","Välj en kort stund idag då du är helt närvarande tillsammans med barnet."]
+]},
+{icon:"💬",title:"Bekräftelse",intro:"Lyssna och visa att barnets känslor får finnas.",color:"#e2eef7",steps:[
+["Börja med att lyssna","Du behöver inte alltid lösa problemet. Börja med att lyssna och försöka förstå hur barnet har det."],
+["Sätt ord på känslan","Prova till exempel: ”Jag tror att det här blev jobbigt för dig.” Det visar att du försöker förstå."],
+["Du behöver inte hålla med","Att bekräfta en känsla betyder inte att du måste hålla med om allt barnet gör eller säger."],
+["Undvik att förminska","Försök undvika ”det är väl inget”. Visa i stället att barnets upplevelse får finnas."],
+["Ett litet steg","Nästa gång barnet blir ledset eller argt: lyssna först, bekräfta och fråga sedan vad barnet behöver."]
+]},
+{icon:"🌱",title:"Självkänsla",intro:"Hjälp barnet att utveckla en trygg bild av sig själv.",color:"#e8f2dd",steps:[
+["Barnet är mer än prestationer","Visa intresse för barnet som person, inte bara för resultat, betyg eller prestationer."],
+["Se ansträngningen","Uppmärksamma när barnet försöker, tränar, vågar eller fortsätter trots att något är svårt."],
+["Misstag hör till","Hjälp barnet att förstå att misstag är en naturlig del av att lära sig och utvecklas."],
+["Se styrkorna","Hjälp barnet att upptäcka sina styrkor och egenskaper. Ge konkreta exempel på det du ser."],
+["Ett litet steg","Säg idag något positivt om barnet som inte handlar om prestation."]
+]},
+{icon:"😴",title:"Återhämtning",intro:"Barn och föräldrar behöver vila och återhämtning.",color:"#e8e5f5",steps:[
+["Lägg märke till signalerna","När vardagen blir intensiv kan både barn och vuxna behöva pausa. Lägg märke till trötthet och stress."],
+["Skapa lugn","Små stunder med mindre ljud, krav och intryck kan göra stor skillnad."],
+["Barn behöver pauser","Återhämtning är inte något barnet måste förtjäna. Det är en del av en fungerande vardag."],
+["Föräldrar behöver också pauser","Fundera på när du själv börjar bli slut. En liten paus kan hjälpa dig att orka vara den förälder du vill vara."],
+["Ett litet steg","Vad kan göra resten av dagen lite lugnare? Välj en liten sak och prova den idag."]
+]},
+{icon:"🧭",title:"Ramar",intro:"Barn behöver tydliga och trygga gränser.",color:"#ffefd8",steps:[
+["Tydlighet skapar trygghet","Var tydlig med vad som gäller. Barn behöver veta vilka ramar som finns."],
+["Få regler kan räcka","Fokusera på det som verkligen är viktigt. För många regler kan göra vardagen onödigt konfliktfylld."],
+["Var lugn och tydlig","En gräns kan vara tydlig samtidigt som barnets känsla får finnas."],
+["Känslan får finnas","Du kan säga: ”Jag förstår att du är arg. Det är ändå det här som gäller.”"],
+["Ett litet steg","Välj en situation där du vill vara lite tydligare eller lugnare nästa gång."]
+]}
+];
+let current=null,step=0;
+function home(){
+app.innerHTML=`<div class="top"><div class="logo">🧭</div><h1>Vardagskompassen</h1></div>
+<div class="hero"><div class="hello">Hej! 👋</div><h2>Vad behöver<br>vi just nu?</h2><p>Välj ett område för att få några enkla tankar och råd.</p></div>
+<div class="section-title">Den psykologiska tallriksmodellen</div><div class="sub">Tryck på ett område för att börja.</div>
+${topics.map((t,i)=>`<button class="topic" style="background:${t.color}" onclick="openTopic(${i})"><span class="icon">${t.icon}</span><span class="name">${t.title}</span><span class="arrow">›</span></button>`).join("")}
+<div class="note">💛 Du behöver inte vara en perfekt förälder. Små steg i vardagen räknas.</div>`;
+}
+function openTopic(i){current=topics[i];step=0;renderStep();}
+function renderStep(){
+let s=current.steps[step],last=step===4;
+app.innerHTML=`<button class="back" onclick="home()">← Tillbaka till Vardagskompassen</button>
+<div class="topic-head"><div class="big">${current.icon}</div><div class="intro">${current.intro}</div></div>
+<div class="progress-text">Steg ${step+1} av 5</div><div class="bar"><div class="fill" style="width:${(step+1)*20}%"></div></div>
+<div class="card" style="background:${current.color}"><h3>${s[0]}</h3><div class="label">🌿 Att tänka på</div><p>${s[1]}</p></div>
+<button class="btn" onclick="${last?'done()':'next()'}">${last?'Klart ✓':'Nästa steg →'}</button>
+<button class="btn secondary" onclick="prev()">${step===0?'← Tillbaka':'← Föregående steg'}</button>`;
+}
+function next(){step++;renderStep()}
+function prev(){if(step>0){step--;renderStep()}else home()}
+function done(){app.innerHTML=`<button class="back" onclick="home()">← Tillbaka</button><div class="done"><div class="heart">💛</div><h2>Klart!</h2><p>Bra jobbat!<br><br>Välj gärna en liten sak att prova i vardagen. Det behöver inte vara perfekt.</p><button class="btn" onclick="home()">Tillbaka till Vardagskompassen</button></div>`}
+home();
+</script>
+</body>
+</html>
