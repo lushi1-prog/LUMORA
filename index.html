@@ -1,79 +1,238 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LUMORA – stöd för föräldrar</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vardagskompassen – komplett</title>
 <style>
-:root{--g:#258563;--g2:#e8f5ee;--ink:#173b43;--muted:#66777b;--bg:#f6f8f6;--line:#dfe8e3;--white:#fff;--shadow:0 5px 18px rgba(20,55,60,.08)}
-*{box-sizing:border-box}body{margin:0;background:#111;font-family:Arial,Helvetica,sans-serif;color:var(--ink)}button,input,select,textarea{font:inherit}.app{width:min(900px,100%);min-height:100vh;margin:auto;background:var(--bg)}
-header{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:10}.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px}.mark{width:34px;height:34px;border:2px solid var(--g);border-radius:50%;display:grid;place-items:center;color:var(--g)}
-main{padding:18px 16px 40px}.hero{background:linear-gradient(135deg,#fff,#edf7f1);border-radius:22px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px}.hero h1{margin:4px 0 8px;font-size:27px}.hero p{margin:0;color:var(--muted);line-height:1.45}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{border:0;border-radius:17px;padding:17px;min-height:110px;text-align:left;cursor:pointer;box-shadow:var(--shadow);color:var(--ink)}.card b{display:block;margin-top:8px}.pink{background:#fde8e6}.yellow{background:#fff3dc}.purple{background:#eee8f8}.blue{background:#e5f2f7}.green{background:#e5f3ea}.orange{background:#fff0e5}.mint{background:#e2f2ed}.lav{background:#eeeaf8}.peach{background:#ffebe1}.red{background:#ffe6e2}.emoji{font-size:26px}
-.tabs{display:flex;gap:7px;overflow:auto;margin:15px 0}.tab{border:0;background:#e8efeb;padding:10px 13px;border-radius:13px;font-weight:700;white-space:nowrap;cursor:pointer}.tab.active{background:var(--g);color:#fff}.section{display:none}.section.active{display:block}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:14px;box-shadow:var(--shadow)}.panel h2{margin:2px 0 10px}.muted{color:var(--muted);font-size:14px;line-height:1.45}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#eef6f1;border-radius:15px;padding:14px}.stat strong{font-size:25px;display:block}.btn{border:0;border-radius:12px;padding:11px 14px;background:var(--g);color:#fff;font-weight:700;cursor:pointer}.btn.alt{background:#e8efeb;color:var(--ink)}.btn.danger{background:#f8e4e1;color:#963d38}.input,.select,.text{width:100%;border:1px solid #cbd9d3;border-radius:11px;padding:11px;margin-top:6px;background:#fff}.text{min-height:95px;resize:vertical}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.item{border:1px solid var(--line);border-radius:14px;padding:13px;margin:8px 0;background:#fff}.chip{display:inline-block;background:#e7f3ed;padding:4px 8px;border-radius:20px;font-size:12px;margin-top:4px}.progress{height:9px;background:#e6eeea;border-radius:9px;overflow:hidden;margin:8px 0}.progress i{display:block;height:100%;background:var(--g)}
-.flow{display:none}.flow.active{display:block}.flowbar{background:#fff;padding:14px;border-bottom:1px solid var(--line)}.back{border:0;background:none;cursor:pointer;font-weight:700;color:var(--ink)}.steps{display:flex;margin-top:14px}.step{flex:1;text-align:center;color:#899396;font-size:11px}.dot{width:29px;height:29px;border-radius:50%;background:#edf0ef;margin:auto auto 5px;display:grid;place-items:center;font-weight:700}.step.active{color:var(--g)}.step.active .dot{background:var(--g);color:#fff}.stage{display:none}.stage.active{display:block}.advice{background:#edf7ef;border-radius:13px;padding:14px;margin:14px 0;line-height:1.45}.bad{background:#fff0ed}.good{background:#eaf6ee}.choice{padding:13px;background:#f5f7f6;border-radius:12px;margin:8px 0;cursor:pointer}.choice.selected{outline:2px solid var(--g);background:var(--g2)}.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.show{display:flex}.modalbox{background:#fff;border-radius:20px;padding:20px;max-width:520px;width:100%;max-height:85vh;overflow:auto}.empty{padding:20px;text-align:center;color:var(--muted)}
-@media(max-width:650px){.stats{grid-template-columns:1fr 1fr}.formgrid,.grid{grid-template-columns:1fr 1fr}.hero h1{font-size:24px}}
-</style></head>
-<body><div class="app">
-<header><div class="brand"><div class="mark">↗</div>LUMORA</div><button class="btn alt" onclick="info()">ⓘ</button></header>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#FAF9F5;color:#253B42}
+button,input,textarea,select{font:inherit}
+.app{max-width:760px;margin:auto;padding:16px}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.logo{width:50px;height:50px;border-radius:15px;background:#E4F0EA;display:flex;align-items:center;justify-content:center;font-size:30px}
+.brand{font-size:23px;font-weight:700}.tagline{font-size:12px;color:#66777b}
+.topnav{display:flex;gap:7px;overflow:auto;margin:10px 0 16px;padding-bottom:3px}
+.navbtn{border:0;background:#e7efeb;color:#29454b;border-radius:14px;padding:9px 12px;font-weight:700;white-space:nowrap;cursor:pointer}
+.navbtn.active{background:#3F927D;color:white}
+.page{display:none}.page.active{display:block}
+.intro{background:#EAF4EF;border-radius:26px;padding:24px}
+.hello{font-size:20px;font-weight:700}.intro h1{font-size:32px;line-height:1.05;margin:8px 0 12px}.intro p,.sub{color:#40565B;line-height:1.4}
+.section-title{font-size:21px;font-weight:700;margin:25px 0 8px}.sub{font-size:15px;color:#52656A;margin-bottom:16px}
+.topic{width:100%;min-height:84px;border:0;border-radius:22px;margin-bottom:12px;padding:12px 18px;display:flex;align-items:center;gap:15px;text-align:left;color:#253B42;cursor:pointer;font-size:19px;font-weight:700}
+.topic span:first-child{font-size:38px}.topic .arrow{margin-left:auto}
+.remember,.card{background:white;border-radius:22px;padding:19px;margin-top:12px}
+.backtop{border:0;background:transparent;padding:8px 0;font-size:16px;color:#40565B;cursor:pointer}
+.topic-head{text-align:center;margin:12px 0 15px}.topic-icon{font-size:68px}.topic-title{font-size:29px;font-weight:700;margin-top:10px}.topic-intro{font-size:18px;line-height:1.45;color:#40565B;margin-top:8px;text-align:left}
+.step-card{border-radius:24px;padding:22px;margin-top:18px}.step-label{font-size:19px;font-weight:700}.step-text{font-size:18px;line-height:1.55;color:#40565B;margin-top:14px}
+.white-card{background:white}.white-card h3{margin:0 0 8px;font-size:19px}.white-card p{font-size:16px;line-height:1.5;color:#40565B}
+.primary,.secondary{width:100%;min-height:56px;border-radius:17px;font-size:17px;font-weight:700;cursor:pointer;margin-top:12px}
+.primary{background:#3F927D;color:white;border:0}.secondary{background:transparent;color:#3F927D;border:2px solid #3F927D}
+.done{text-align:center;background:white;border-radius:24px;padding:28px 22px;margin-top:20px}.done .big{font-size:55px}.done h2{font-size:28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:11px}.field{margin-top:10px}.field label{font-size:13px;font-weight:700;color:#52656A}
+.input,.select,.textarea{width:100%;border:1px solid #ccd9d4;border-radius:11px;padding:10px;margin-top:5px;background:white}.textarea{min-height:90px;resize:vertical}
+.smallbtn{border:0;border-radius:11px;padding:9px 12px;background:#e7efeb;color:#29454b;font-weight:700;cursor:pointer}.smallbtn.green{background:#3F927D;color:white}.smallbtn.red{background:#f5e3e3;color:#9a4040}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#f0f6f2;border-radius:17px;padding:14px}.stat b{display:block;font-size:27px}.muted{color:#6b7b80;font-size:13px}
+.item{border:1px solid #e0e8e4;border-radius:16px;padding:13px;margin:9px 0}.item strong{display:block;margin-bottom:4px}.chips{margin-top:7px}.chip{display:inline-block;background:#e7f3ed;border-radius:20px;padding:4px 8px;font-size:12px;margin:2px}
+.progress{height:9px;background:#e6eeea;border-radius:10px;overflow:hidden;margin:8px 0}.progress i{display:block;height:100%;background:#3F927D}
+.check{display:flex;gap:9px;align-items:flex-start;padding:10px 0}.check input{margin-top:4px}
+@media(max-width:480px){.app{padding:13px}.intro h1{font-size:29px}.topic{min-height:80px}.statgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="logo">🧭</div>
+    <div><div class="brand">Vardagskompassen</div><div class="tagline">Små steg i vardagen räknas</div></div>
+  </div>
 
-<section id="home" class="section active"><main>
-<div class="hero"><h1>Hej! Vad händer hemma just nu?</h1><p>Välj det som passar bäst. LUMORA hjälper dig steg för steg – och låter dig komma tillbaka och följa upp.</p></div>
-<div class="grid">
-<button class="card pink" onclick="startFlow('Mitt barn får ett utbrott','😡')"><span class="emoji">😡</span><b>Mitt barn får ett utbrott</b></button>
-<button class="card yellow" onclick="startFlow('Vi bråkar om mobilen/skärmen','📱')"><span class="emoji">📱</span><b>Vi bråkar om mobilen/skärmen</b></button>
-<button class="card purple" onclick="startFlow('Läggningen fungerar inte','🛏️')"><span class="emoji">🛏️</span><b>Läggningen fungerar inte</b></button>
-<button class="card blue" onclick="startFlow('Mitt barn vill inte gå till skolan','🏫')"><span class="emoji">🏫</span><b>Mitt barn vill inte gå till skolan</b></button>
-<button class="card green" onclick="startFlow('Mitt barn vill inte prata','💬')"><span class="emoji">💬</span><b>Mitt barn vill inte prata</b></button>
-<button class="card mint" onclick="startFlow('Mitt barn verkar ledset eller nedstämt','☹️')"><span class="emoji">☹️</span><b>Mitt barn verkar ledset eller nedstämt</b></button>
-<button class="card orange" onclick="startFlow('Vi bråkar mycket hemma','🏠')"><span class="emoji">🏠</span><b>Vi bråkar mycket hemma</b></button>
-<button class="card peach" onclick="startFlow('Jag håller själv på att tappa tålamodet','🔥')"><span class="emoji">🔥</span><b>Jag håller själv på att tappa tålamodet</b></button>
-<button class="card blue" onclick="startFlow('Mitt barn har problem med kompisar','👥')"><span class="emoji">👥</span><b>Mitt barn har problem med kompisar</b></button>
-<button class="card red" onclick="startFlow('Jag känner mig som en dålig förälder','❤️')"><span class="emoji">❤️</span><b>Jag känner mig som en dålig förälder</b></button>
+  <div class="topnav">
+    <button class="navbtn active" data-page="home">Hem</button>
+    <button class="navbtn" data-page="profile">Barn</button>
+    <button class="navbtn" data-page="history">Historik</button>
+    <button class="navbtn" data-page="patterns">Mönster</button>
+    <button class="navbtn" data-page="follow">Uppföljning</button>
+    <button class="navbtn" data-page="reminders">Påminnelser</button>
+  </div>
+
+  <section id="home" class="page active">
+    <div class="intro">
+      <div class="hello">Hej! 👋</div>
+      <h1>Vad behöver<br>vi just nu?</h1>
+      <p>Välj ett område för att få enkla tankar, fem steg och ett litet nästa steg.</p>
+    </div>
+    <div class="section-title">Den psykologiska tallriksmodellen</div>
+    <div class="sub">Välj det område som känns mest relevant idag.</div>
+    <div id="topics"></div>
+    <div class="card">
+      <strong>💛 Kom ihåg</strong>
+      <p class="muted">Du behöver inte vara en perfekt förälder. Små förändringar i vardagen kan göra skillnad.</p>
+    </div>
+    <div class="card">
+      <div class="statgrid">
+        <div class="stat"><span class="muted">Sparade situationer</span><b id="homeEvents">0</b></div>
+        <div class="stat"><span class="muted">Öppna uppföljningar</span><b id="homeFollow">0</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="topicPage" class="page">
+    <button class="backtop" onclick="showPage('home')">← Tillbaka</button>
+    <div class="topic-head"><div id="topicIcon" class="topic-icon"></div><div id="topicTitle" class="topic-title"></div><div id="topicIntro" class="topic-intro"></div></div>
+    <div id="stepCard" class="step-card"><div id="stepLabel" class="step-label"></div><div id="stepText" class="step-text"></div></div>
+    <div class="card white-card"><h3>💛 Ett litet steg</h3><p id="advice"></p></div>
+    <div class="card white-card">
+      <h3>📝 Stanna upp</h3>
+      <p class="muted">Vill du spara vad som hände och följa upp senare?</p>
+      <div class="field"><label>Barn</label><select id="topicChild" class="select"></select></div>
+      <div class="field"><label>Anteckning</label><textarea id="topicNote" class="textarea" placeholder="Skriv bara det som är viktigt för dig..."></textarea></div>
+      <button class="smallbtn green" onclick="saveTopicEvent()">Spara situation</button>
+    </div>
+    <button id="nextBtn" class="primary" onclick="nextStep()">Nästa steg →</button>
+    <button id="prevBtn" class="secondary" onclick="previousStep()">← Föregående steg</button>
+  </section>
+
+  <section id="donePage" class="page">
+    <button class="backtop" onclick="showPage('home')">← Tillbaka</button>
+    <div class="done"><div class="big">💛</div><h2>Bra jobbat!</h2><p>Du har gått igenom alla fem steg.</p><p>Välj gärna en liten sak att prova och följ upp hur det gick.</p><button class="primary" onclick="showPage('home')">Tillbaka till Vardagskompassen</button></div>
+  </section>
+
+  <section id="profile" class="page">
+    <div class="section-title">Barnprofiler</div>
+    <div class="sub">Du bestämmer själv vilken information du vill spara.</div>
+    <div class="card"><div id="childrenList"></div></div>
+    <div class="card">
+      <h3>Lägg till barn</h3>
+      <div class="grid">
+        <div class="field"><label>Namn / smeknamn</label><input id="childName" class="input" placeholder="Ex. Alex"></div>
+        <div class="field"><label>Ålder</label><input id="childAge" class="input" type="number" min="0" max="25"></div>
+      </div>
+      <div class="field"><label>Det som är bra att komma ihåg</label><textarea id="childNote" class="textarea"></textarea></div>
+      <button class="primary" onclick="addChild()">Spara barnprofil</button>
+    </div>
+  </section>
+
+  <section id="history" class="page">
+    <div class="section-title">Historik</div>
+    <div class="sub">Här kan du gå tillbaka till sådant du har sparat och se vad du provade.</div>
+    <div class="card"><div id="historyList"></div></div>
+  </section>
+
+  <section id="patterns" class="page">
+    <div class="section-title">Mönster</div>
+    <div class="sub">LUMORA-visning, men för Vardagskompassen: återkommande områden baserat på din egen historik.</div>
+    <div class="card"><div id="patternList"></div></div>
+    <div class="card"><h3>Per barn</h3><div id="childPatternList"></div></div>
+  </section>
+
+  <section id="follow" class="page">
+    <div class="section-title">Uppföljning</div>
+    <div class="sub">Efter en situation skapas en första uppföljning och en veckouppföljning.</div>
+    <div class="card"><div id="followList"></div></div>
+  </section>
+
+  <section id="reminders" class="page">
+    <div class="section-title">Påminnelser</div>
+    <div class="sub">Planera en liten sak du vill komma ihåg.</div>
+    <div class="card"><div id="reminderList"></div></div>
+    <div class="card">
+      <h3>Ny påminnelse</h3>
+      <div class="field"><label>Vad vill du bli påmind om?</label><input id="remText" class="input" placeholder="Ex. Följ upp läggningen"></div>
+      <div class="field"><label>Datum</label><input id="remDate" class="input" type="date"></div>
+      <button class="primary" onclick="addReminder()">Spara påminnelse</button>
+    </div>
+  </section>
 </div>
-<div class="panel" style="margin-top:16px"><h2>Din LUMORA-översikt</h2><div class="stats"><div class="stat"><span class="muted">Barn</span><strong id="sChildren">0</strong></div><div class="stat"><span class="muted">Situationer</span><strong id="sEvents">0</strong></div><div class="stat"><span class="muted">Uppföljningar</span><strong id="sFollow">0</strong></div><div class="stat"><span class="muted">Påminnelser</span><strong id="sRem">0</strong></div></div></div>
-<div class="panel"><h2>Senaste situation</h2><div id="latest" class="muted">Inget sparat ännu.</div></div>
-</main></section>
-
-<section id="flow" class="flow"><div class="flowbar"><button class="back" onclick="goHome()">← Tillbaka</button><div id="flowTitle" style="font-weight:800;margin-top:10px"></div><div class="steps"><div class="step active" id="st1"><div class="dot">1</div>Just nu</div><div class="step" id="st2"><div class="dot">2</div>När det lugnat sig</div><div class="step" id="st3"><div class="dot">3</div>Efteråt</div><div class="step" id="st4"><div class="dot">4</div>Nästa gång</div></div></div><main>
-<div id="stage1" class="stage active"><div class="panel"><h2>🧘 Börja här</h2><p class="muted">När känslorna är starka behöver du inte lösa allt på en gång.</p><div class="advice"><b>1. Stanna upp.</b><br>Ta ett andetag och sänk tempot.<br><br><b>2. Sänk din röst.</b><br>Prata lugnt och med få ord.<br><br><b>3. Försök inte lösa konflikten just nu.</b></div><div class="advice good"><b>Vad kan jag säga?</b><br>”Jag ser att du är jättearg. Jag är här. Vi kan prata när det känns lugnare.”</div><button class="btn" onclick="nextStage(2)">Nästa steg: När det har lugnat sig →</button></div></div>
-<div id="stage2" class="stage"><div class="panel"><h2>🌿 När det har lugnat sig</h2><p class="muted">Låt oss reflektera tillsammans.</p><div class="choice" onclick="sel(this)">Vad hände precis innan?</div><div class="choice" onclick="sel(this)">Vad gjorde barnet?</div><div class="choice" onclick="sel(this)">Vad gjorde jag?</div><div class="choice" onclick="sel(this)">Vad verkade barnet behöva?</div><div class="choice" onclick="sel(this)">Vad kan vi göra annorlunda nästa gång?</div><br><button class="btn" onclick="nextStage(3)">Nästa steg →</button></div></div>
-<div id="stage3" class="stage"><div class="panel"><h2>💚 Efteråt</h2><p class="muted">Stärk relationen igen. Små saker gör stor skillnad.</p><div class="advice good">”Tack för att du lugnade dig. Jag är fortfarande här.”</div><label>Min reflektion<textarea id="reflection" class="text" placeholder="Vad lärde jag mig om situationen?"></textarea></label><br><button class="btn" onclick="nextStage(4)">Nästa steg →</button></div></div>
-<div id="stage4" class="stage"><div class="panel"><h2>🌱 Nästa gång</h2><p class="muted">Välj en liten sak att prova nästa gång.</p><div class="choice" onclick="sel(this)">Jag ska sänka rösten tidigare.</div><div class="choice" onclick="sel(this)">Jag ska ge barnet mer utrymme.</div><div class="choice" onclick="sel(this)">Jag ska förbereda barnet innan situationen.</div><div class="choice" onclick="sel(this)">Jag ska ta en paus om jag själv blir för upprörd.</div><label>Min plan<textarea id="plan" class="text" placeholder="Min plan till nästa gång..."></textarea></label><br><button class="btn" onclick="finishFlow()">Spara och skapa uppföljning ✓</button></div></div>
-</main></section>
-
-<section id="dashboard" class="section"><main><div class="tabs"><button class="tab active" data-tab="overview">Översikt</button><button class="tab" data-tab="children">Barn</button><button class="tab" data-tab="history">Historik</button><button class="tab" data-tab="patterns">Mönster</button><button class="tab" data-tab="follow">Uppföljning</button><button class="tab" data-tab="reminders">Påminnelser</button></div>
-<div id="overview" class="dash active"><div class="panel"><h2>Översikt</h2><div class="stats"><div class="stat"><span class="muted">Barn</span><strong id="dChildren">0</strong></div><div class="stat"><span class="muted">Situationer</span><strong id="dEvents">0</strong></div><div class="stat"><span class="muted">Öppna uppföljningar</span><strong id="dFollow">0</strong></div><div class="stat"><span class="muted">Påminnelser</span><strong id="dRem">0</strong></div></div></div></div>
-<div id="children" class="dash" style="display:none"><div class="panel"><h2>Barnprofiler</h2><div id="childrenList"></div></div><div class="panel"><h2>Lägg till barn</h2><div class="formgrid"><label>Namn/smeknamn<input id="childName" class="input"></label><label>Ålder<input id="childAge" class="input" type="number"></label></div><label>Anteckning<textarea id="childNote" class="text"></textarea></label><br><button class="btn" onclick="addChild()">Spara barnprofil</button></div></div>
-<div id="history" class="dash" style="display:none"><div class="panel"><h2>Historik</h2><div id="historyList"></div></div></div>
-<div id="patterns" class="dash" style="display:none"><div class="panel"><h2>Mönster över tid</h2><p class="muted">Visar bara mönster från sådant du själv har sparat. Det är ett reflektionsstöd, inte en diagnos.</p><div id="patternList"></div></div></div>
-<div id="follow" class="dash" style="display:none"><div class="panel"><h2>Uppföljning</h2><div id="followList"></div></div></div>
-<div id="reminders" class="dash" style="display:none"><div class="panel"><h2>Påminnelser</h2><div id="reminderList"></div></div><div class="panel"><h2>Ny påminnelse</h2><label>Text<input id="remText" class="input"></label><label>Datum<input id="remDate" class="input" type="date"></label><br><button class="btn" onclick="addReminder()">Spara påminnelse</button></div></div>
-</main></section>
-
-<div class="modal" id="modal"><div class="modalbox" id="modalBox"></div></div>
 
 <script>
-const KEY='lumora_clean_v1';
-let db=load();let current={};
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||{children:[],events:[],reminders:[],followups:[]}}catch(e){return {children:[],events:[],reminders:[],followups:[]}}}
-function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
-function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
-function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function fmt(d){return new Date(d).toLocaleDateString('sv-SE',{year:'numeric',month:'short',day:'numeric'})}
-function show(section){document.querySelectorAll('.section,.flow').forEach(x=>x.classList.remove('active'));document.getElementById(section).classList.add('active');window.scrollTo(0,0)}
-function goHome(){show('home')}
-function startFlow(title,emoji){current={title,emoji,started:new Date().toISOString(),reflection:'',plan:''};document.getElementById('flowTitle').textContent=emoji+' '+title;document.querySelectorAll('.stage').forEach(x=>x.classList.remove('active'));document.getElementById('stage1').classList.add('active');for(let i=1;i<=4;i++)document.getElementById('st'+i).classList.toggle('active',i===1);show('flow')}
-function nextStage(n){document.querySelectorAll('.stage').forEach(x=>x.classList.remove('active'));document.getElementById('stage'+n).classList.add('active');for(let i=1;i<=4;i++)document.getElementById('st'+i).classList.toggle('active',i===n);window.scrollTo(0,0)}
-function sel(el){el.classList.toggle('selected')}
-function finishFlow(){current.reflection=document.getElementById('reflection').value;current.plan=document.getElementById('plan').value;current.completed=new Date().toISOString();const e={id:id(),title:current.title,emoji:current.emoji,reflection:current.reflection,plan:current.plan,date:current.completed};db.events.unshift(e);db.followups.unshift({id:id(),eventId:e.id,when:new Date(Date.now()+86400000).toISOString(),type:'Första uppföljning',done:false});db.followups.push({id:id(),eventId:e.id,when:new Date(Date.now()+7*86400000).toISOString(),type:'Veckouppföljning',done:false});save();openDashboard('follow');alert('Sparat! LUMORA har skapat två uppföljningar.');}
-function openDashboard(tab){show('dashboard');document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.querySelectorAll('.dash').forEach(x=>x.style.display=x.id===tab?'block':'none');render()}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>openDashboard(b.dataset.tab));
-function addChild(){const n=document.getElementById('childName').value.trim();if(!n){alert('Skriv ett namn eller smeknamn.');return}db.children.push({id:id(),name:n,age:document.getElementById('childAge').value,note:document.getElementById('childNote').value});document.getElementById('childName').value='';document.getElementById('childAge').value='';document.getElementById('childNote').value='';save()}
-function delChild(cid){if(confirm('Ta bort barnprofilen?')){db.children=db.children.filter(x=>x.id!==cid);save()}}
-function addReminder(){const t=document.getElementById('remText').value.trim(),d=document.getElementById('remDate').value;if(!t||!d){alert('Fyll i text och datum.');return}db.reminders.push({id:id(),text:t,date:d,done:false});document.getElementById('remText').value='';document.getElementById('remDate').value='';save()}
-function doneFollow(fid){const f=db.followups.find(x=>x.id===fid);if(f)f.done=true;save()}
-function doneReminder(rid){const r=db.reminders.find(x=>x.id===rid);if(r)r.done=true;save()}
-function childName(cid){return db.children.find(x=>x.id===cid)?.name||'Ej kopplat barn'}
-function render(){const open=db.followups.filter(x=>!x.done).length,rem=db.reminders.filter(x=>!x.done).length;['sChildren','dChildren'].forEach(x=>document.getElementById(x).textContent=db.children.length);['sEvents','dEvents'].forEach(x=>document.getElementById(x).textContent=db.events.length);['sFollow','dFollow'].forEach(x=>document.getElementById(x).textContent=open);['sRem','dRem'].forEach(x=>document.getElementById(x).textContent=rem);const latest=db.events[0];document.getElementById('latest').innerHTML=latest?'<b>'+esc(latest.emoji)+' '+esc(latest.title)+'</b><br><span class="muted">'+fmt(latest.date)+'</span><br>'+esc(latest.plan||''):'Inget sparat ännu.';document.getElementById('childrenList').innerHTML=db.children.length?db.children.map(c=>'<div class="item"><b>'+esc(c.name)+'</b> '+(c.age?'<span class="chip">'+esc(c.age)+' år</span>':'')+'<div class="muted">'+esc(c.note||'Ingen anteckning')+'</div><br><button class="btn danger" onclick="delChild(\''+c.id+'\')">Ta bort</button></div>').join(''):'<div class="empty">Inga barnprofiler ännu.</div>';document.getElementById('historyList').innerHTML=db.events.length?db.events.map(e=>'<div class="item"><b>'+esc(e.emoji)+' '+esc(e.title)+'</b><div class="muted">'+fmt(e.date)+'</div><p>'+esc(e.reflection||'Ingen reflektion')+'</p><span class="chip">Sparad</span></div>').join(''):'<div class="empty">Ingen historik ännu.</div>';const counts={};db.events.forEach(e=>counts[e.title]=(counts[e.title]||0)+1);const total=db.events.length;document.getElementById('patternList').innerHTML=total?Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(x=>'<div class="item"><b>'+esc(x[0])+'</b><div class="progress"><i style="width:'+Math.round(x[1]/total*100)+'%"></i></div><span class="muted">'+x[1]+' av '+total+' situationer</span></div>').join(''):'<div class="empty">Spara några situationer först så kan du se återkommande mönster.</div>';const fl=db.followups.filter(f=>!f.done).sort((a,b)=>new Date(a.when)-new Date(b.when));document.getElementById('followList').innerHTML=fl.length?fl.map(f=>{const e=db.events.find(x=>x.id===f.eventId);return '<div class="item"><b>'+esc(f.type)+'</b><div>'+esc(e?.emoji||'🌿')+' '+esc(e?.title||'Situation')+'</div><div class="muted">'+fmt(f.when)+'</div><button class="btn" onclick="doneFollow(\''+f.id+'\')">Markera som gjord</button></div>'}).join(''):'<div class="empty">Inga öppna uppföljningar 🎉</div>';const rl=db.reminders.slice().sort((a,b)=>a.date.localeCompare(b.date));document.getElementById('reminderList').innerHTML=rl.length?rl.map(r=>'<div class="item"><b>'+esc(r.text)+'</b><div class="muted">'+esc(r.date)+'</div><span class="chip">'+(r.done?'Klar':'Aktiv')+'</span> '+(!r.done?'<button class="btn" onclick="doneReminder(\''+r.id+'\')">Klar</button>':'')+'</div>').join(''):'<div class="empty">Inga påminnelser.</div>'}
-function info(){document.getElementById('modalBox').innerHTML='<h2>🌿 LUMORA</h2><p class="muted">Ett steg-för-steg-stöd för föräldrar med historik, barnprofiler, mönster och uppföljning.</p><div class="advice good"><b>Integritet</b><br>Den här versionen sparar uppgifter lokalt i webbläsaren på din enhet.</div><button class="btn" onclick="document.getElementById(\'modal\').classList.remove(\'show\')">Stäng</button>';document.getElementById('modal').classList.add('show')}
-render();
-</script></body></html>
+const topics=[
+{icon:"❤️",title:"Kärlek",intro:"Visa barnet att du tycker om det och finns kvar.",color:"#FBE0E2",advice:"Du behöver inte göra allt. Välj det lilla som känns möjligt idag.",steps:[
+"Visa med ord och kroppsspråk att barnet är viktigt för dig.","Säg något positivt till barnet varje dag – även om det är något litet.","Visa närhet på det sätt som passar barnet, till exempel en kram eller att sitta nära.","Försök att visa kärlek även när barnet har gjort något du inte tycker om.","Ta en liten stund idag och visa barnet: ”Jag tycker om dig precis som du är.”"]},
+{icon:"👨‍👩‍👧",title:"Närvaro",intro:"Var tillsammans och försök vara närvarande i stunden.",color:"#E5F1EC",advice:"Vanliga vardagsstunder räknas. Det viktiga är att verkligen vara tillsammans en stund.",steps:[
+"Lägg undan mobilen en stund och försök vara helt närvarande.","Fråga barnet om något som hänt under dagen och lyssna på svaret.","Gör något enkelt tillsammans – laga mat, gå en promenad eller spela ett spel.","Försök fånga de små stunderna i vardagen i stället för att vänta på den perfekta tiden.","Bestäm dig för en liten stund idag då du bara är tillsammans med barnet."]},
+{icon:"💬",title:"Bekräftelse",intro:"Lyssna och visa att barnets känslor får finnas.",color:"#E2EEF7",advice:"Du behöver inte alltid lösa problemet. Börja med att lyssna och försöka förstå.",steps:[
+"Lyssna färdigt innan du försöker ge råd eller lösa problemet.","Sätt ord på det du tror att barnet känner: ”Det verkar som att du blev ledsen.”","Visa att känslan får finnas även om du inte håller med om allt barnet säger.","Undvik att direkt säga ”det är väl inget att vara ledsen för”.","Prova idag att säga: ”Jag förstår att det här känns jobbigt för dig.”"]},
+{icon:"🌱",title:"Självkänsla",intro:"Hjälp barnet att utveckla en trygg bild av sig själv.",color:"#E8F2DD",advice:"Visa intresse för barnet som person, inte bara för prestationer.",steps:[
+"Visa intresse för vem barnet är – inte bara för vad barnet presterar.","Uppmärksamma barnets ansträngning, inte bara resultatet.","Hjälp barnet att upptäcka saker som det själv tycker om och är bra på.","Visa att det är okej att göra misstag och försöka igen.","Säg något idag som visar barnet att du uppskattar det för den person det är."]},
+{icon:"😴",title:"Återhämtning",intro:"Barn och föräldrar behöver vila och återhämtning.",color:"#E8E5F5",advice:"Små stunder av lugn kan göra stor skillnad.",steps:[
+"Fundera på vad som brukar hjälpa barnet att varva ner.","Skapa en liten lugn stund utan krav och prestation.","Titta på om barnet får tillräckligt med sömn och pauser.","Kom ihåg att även du som förälder behöver återhämtning.","Välj en liten sak idag som gör vardagen lite lugnare för dig eller barnet."]},
+{icon:"🧭",title:"Ramar",intro:"Barn behöver tydliga och trygga gränser.",color:"#FFEFD8",advice:"En gräns kan vara tydlig samtidigt som barnets känsla får finnas.",steps:[
+"Bestäm vilka regler som verkligen är viktiga i er vardag.","Förklara lugnt och tydligt vad som gäller.","Försök vara konsekvent så att barnet vet vad det kan förvänta sig.","Bekräfta barnets känsla även när du håller fast vid en gräns.","Välj en situation idag där du kan sätta en tydlig men lugn gräns."]}
+];
+
+let db=JSON.parse(localStorage.getItem("vardagskompassen_complete")||"null")||{children:[],events:[],followups:[],reminders:[]};
+let currentTopic=null,currentStep=0;
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+const fmt=d=>new Date(d).toLocaleDateString("sv-SE",{year:"numeric",month:"short",day:"numeric"});
+function save(){localStorage.setItem("vardagskompassen_complete",JSON.stringify(db));renderAll()}
+function showPage(id){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".navbtn").forEach(x=>x.classList.toggle("active",x.dataset.page===id));
+ window.scrollTo({top:0,behavior:"instant"});
+}
+document.querySelectorAll(".navbtn").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+
+const topicsEl=document.getElementById("topics");
+topics.forEach((t,i)=>{const b=document.createElement("button");b.className="topic";b.style.background=t.color;b.innerHTML=`<span>${t.icon}</span><span>${t.title}</span><span class="arrow">›</span>`;b.onclick=()=>openTopic(i);topicsEl.appendChild(b)});
+
+function childName(id){return db.children.find(c=>c.id===id)?.name||"Okänt barn"}
+function fillChildren(selectId){
+ const s=document.getElementById(selectId);
+ if(!s)return;
+ s.innerHTML=db.children.length?db.children.map(c=>`<option value="${c.id}">${esc(c.name)}${c.age?" – "+esc(c.age)+" år":""}</option>`).join(""):"<option value=''>Lägg till barn först</option>";
+}
+function openTopic(i){currentTopic=topics[i];currentStep=0;fillChildren("topicChild");document.getElementById("topicNote").value="";renderStep();showPage("topicPage")}
+function renderStep(){
+ document.getElementById("topicIcon").textContent=currentTopic.icon;
+ document.getElementById("topicTitle").textContent=currentTopic.title;
+ document.getElementById("topicIntro").textContent=currentTopic.intro;
+ document.getElementById("stepCard").style.background=currentTopic.color;
+ document.getElementById("stepLabel").textContent=`🌿 Steg ${currentStep+1} av 5`;
+ document.getElementById("stepText").textContent=currentTopic.steps[currentStep];
+ document.getElementById("advice").textContent=currentTopic.advice;
+ document.getElementById("nextBtn").textContent=currentStep===4?"Klart ✓":"Nästa steg →";
+ document.getElementById("prevBtn").textContent=currentStep===0?"← Tillbaka":"← Föregående steg";
+}
+function nextStep(){if(currentStep<4){currentStep++;renderStep()}else{showPage("donePage")}}
+function previousStep(){if(currentStep>0){currentStep--;renderStep()}else{showPage("home")}}
+
+function saveTopicEvent(){
+ if(!db.children.length)return alert("Lägg först till en barnprofil under Barn.");
+ const e={id:crypto.randomUUID(),childId:document.getElementById("topicChild").value,topic:currentTopic.title,note:document.getElementById("topicNote").value.trim(),date:new Date().toISOString(),status:"Öppen",stepCompleted:currentStep+1};
+ db.events.unshift(e);
+ db.followups.unshift({id:crypto.randomUUID(),eventId:e.id,type:"Första uppföljning",when:new Date(Date.now()+86400000).toISOString(),done:false});
+ db.followups.push({id:crypto.randomUUID(),eventId:e.id,type:"Veckouppföljning",when:new Date(Date.now()+7*86400000).toISOString(),done:false});
+ save();alert("Sparat. LUMORA-liknande uppföljning har lagts till.");showPage("history");
+}
+function addChild(){
+ const name=document.getElementById("childName").value.trim();if(!name)return alert("Skriv ett namn eller smeknamn.");
+ db.children.push({id:crypto.randomUUID(),name,age:document.getElementById("childAge").value,note:document.getElementById("childNote").value.trim(),created:new Date().toISOString()});
+ document.getElementById("childName").value="";document.getElementById("childAge").value="";document.getElementById("childNote").value="";save();
+}
+function deleteChild(id){if(confirm("Ta bort barnprofilen?")){db.children=db.children.filter(c=>c.id!==id);save()}}
+function deleteEvent(id){if(confirm("Ta bort denna historikpost?")){db.events=db.events.filter(e=>e.id!==id);db.followups=db.followups.filter(f=>f.eventId!==id);save()}}
+function doneFollow(id){const f=db.followups.find(x=>x.id===id);if(f)f.done=true;save()}
+function addReminder(){
+ const text=document.getElementById("remText").value.trim(),date=document.getElementById("remDate").value;if(!text||!date)return alert("Fyll i text och datum.");
+ db.reminders.push({id:crypto.randomUUID(),text,date,done:false});document.getElementById("remText").value="";document.getElementById("remDate").value="";save()
+}
+function doneReminder(id){const r=db.reminders.find(x=>x.id===id);if(r)r.done=true;save()}
+function renderAll(){
+ document.getElementById("homeEvents").textContent=db.events.length;
+ document.getElementById("homeFollow").textContent=db.followups.filter(f=>!f.done).length;
+ document.getElementById("childrenList").innerHTML=db.children.length?db.children.map(c=>`<div class="item"><strong>${esc(c.name)} ${c.age?`<span class="chip">${esc(c.age)} år</span>`:""}</strong><div class="muted">${esc(c.note||"Ingen anteckning")}</div><div class="chips"><button class="smallbtn red" onclick="deleteChild('${c.id}')">Ta bort</button></div></div>`).join(""):"<p class='muted'>Inga barnprofiler ännu.</p>";
+ document.getElementById("historyList").innerHTML=db.events.length?db.events.map(e=>`<div class="item"><strong>${esc(e.topic)} – ${esc(childName(e.childId))}</strong><div class="muted">${fmt(e.date)} · ${esc(e.status)}</div><p>${esc(e.note||"Ingen anteckning.")}</p><span class="chip">Genomfört till steg ${e.stepCompleted} av 5</span><div class="chips"><button class="smallbtn red" onclick="deleteEvent('${e.id}')">Ta bort</button></div></div>`).join(""):"<p class='muted'>Ingen sparad historik ännu.</p>";
+ const counts={};db.events.forEach(e=>counts[e.topic]=(counts[e.topic]||0)+1);
+ const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+ document.getElementById("patternList").innerHTML=sorted.length?sorted.map(([k,v])=>`<div class="item"><strong>${esc(k)}</strong><div class="progress"><i style="width:${Math.min(100,v/db.events.length*100)}%"></i></div><div class="muted">${v} registrerade situationer</div></div>`).join(""):"<p class='muted'>Spara några situationer så kan du se återkommande områden.</p>";
+ document.getElementById("childPatternList").innerHTML=db.children.length?db.children.map(c=>{const n=db.events.filter(e=>e.childId===c.id).length;return `<div class="item"><strong>${esc(c.name)}</strong><div class="muted">${n} sparade situationer</div></div>`}).join(""):"<p class='muted'>Lägg till barnprofiler för att se mönster per barn.</p>";
+ const fl=db.followups.filter(f=>!f.done).sort((a,b)=>new Date(a.when)-new Date(b.when));
+ document.getElementById("followList").innerHTML=fl.length?fl.map(f=>{const e=db.events.find(x=>x.id===f.eventId);return `<div class="item"><strong>${esc(f.type)} – ${e?esc(e.topic):"situation"}</strong><div class="muted">${fmt(f.when)} · ${e?esc(childName(e.childId)):""}</div>${e?`<p>${esc(e.note||"")}</p>`:""}<button class="smallbtn green" onclick="doneFollow('${f.id}')">Markera som gjord</button></div>`}).join(""):"<p class='muted'>Inga öppna uppföljningar 🎉</p>";
+ const rl=db.reminders.slice().sort((a,b)=>a.date.localeCompare(b.date));
+ document.getElementById("reminderList").innerHTML=rl.length?rl.map(r=>`<div class="item"><strong>${esc(r.text)}</strong><div class="muted">${esc(r.date)}</div><span class="chip">${r.done?"Klar":"Aktiv"}</span> ${!r.done?`<button class="smallbtn green" onclick="doneReminder('${r.id}')">Markera klar</button>`:""}</div>`).join(""):"<p class='muted'>Inga påminnelser ännu.</p>";
+}
+renderAll();
+</script>
+</body>
+</html>
