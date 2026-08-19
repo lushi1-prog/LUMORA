@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#163f3a">
+<title>LUMORA 2.0</title>
+<style>
+:root{--ink:#173b3a;--muted:#657775;--bg:#f7f8f5;--card:#fff;--line:#dfe7e2;--brand:#3f927d;--brand2:#24685c;--soft:#e6f1ec;--gold:#e9b65b;--danger:#c95b5b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:860px;margin:auto;padding:14px 14px 90px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 14px}.brand{display:flex;align-items:center;gap:10px}.logo{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#dff1e9,#c7e5db);display:grid;place-items:center;font-size:27px}.brand b{font-size:24px;letter-spacing:.3px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:1px}
+.iconbtn{border:1px solid var(--line);background:white;border-radius:13px;padding:9px 11px;color:var(--ink)}
+.nav{display:flex;gap:7px;overflow:auto;padding:2px 0 13px;scrollbar-width:none}.nav button{white-space:nowrap;border:0;background:#e8efeb;color:var(--ink);padding:9px 12px;border-radius:14px;font-weight:750}.nav button.active{background:var(--brand);color:#fff}
+.page{display:none}.page.active{display:block}.hero{background:linear-gradient(135deg,#eaf4ef,#dceee7);border-radius:28px;padding:24px;margin-bottom:16px}.hero h1{font-size:34px;line-height:1.05;margin:8px 0}.hero p{color:#46605d;line-height:1.45;margin:0}.eyebrow{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--brand2)}
+.section{font-size:21px;font-weight:800;margin:22px 2px 8px}.muted{color:var(--muted);line-height:1.45}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.situation{border:0;border-radius:22px;min-height:132px;padding:17px;text-align:left;background:white;box-shadow:0 3px 14px rgba(23,59,58,.06);display:flex;flex-direction:column;justify-content:space-between;transition:.15s}.situation:hover{transform:translateY(-2px)}.situation .emoji{font-size:31px}.situation strong{font-size:17px;line-height:1.25}.situation small{color:var(--muted);margin-top:4px}.arrow{align-self:flex-end;color:var(--brand);font-size:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin:12px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.stat{background:#f0f6f2;border-radius:16px;padding:12px}.stat b{display:block;font-size:25px;margin-top:3px}.stat span{font-size:11px;color:var(--muted)}
+.back{border:0;background:transparent;color:var(--ink);padding:8px 0;font-weight:700}.flowhead{text-align:center}.flowemoji{font-size:58px}.flowtitle{font-size:28px;font-weight:850;margin:5px 0}.progress{height:8px;background:#e4ece8;border-radius:99px;overflow:hidden;margin:15px 0}.progress i{display:block;height:100%;background:var(--brand);transition:.25s}.stepbox{background:#eaf4ef;border-radius:24px;padding:22px;margin:14px 0}.stepbox .label{font-weight:850}.stepbox .text{font-size:20px;line-height:1.45;margin-top:10px}.question{background:#fff8e8;border-radius:19px;padding:17px}.question b{display:block;margin-bottom:7px}
+.primary,.secondary{width:100%;min-height:54px;border-radius:16px;font-weight:800;margin-top:10px}.primary{border:0;background:var(--brand);color:#fff}.secondary{border:2px solid var(--brand);background:#fff;color:var(--brand)}
+.field{margin-top:11px}.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:5px}.input,.textarea,.select{width:100%;border:1px solid #ccd9d4;border-radius:12px;padding:11px;background:#fff;color:var(--ink)}.textarea{min-height:92px;resize:vertical}
+.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:10px}.tabs button{border:0;border-radius:13px;padding:9px 12px;background:#e8efeb;color:var(--ink);white-space:nowrap}.tabs button.active{background:var(--ink);color:#fff}
+.item{border:1px solid var(--line);border-radius:17px;padding:14px;margin:9px 0;background:#fff}.item strong{display:block}.chip{display:inline-block;background:#e5f1ec;color:#2e655b;border-radius:99px;padding:4px 8px;font-size:11px;margin:4px 3px 0 0}.small{border:0;border-radius:10px;padding:8px 10px;background:#e8efeb;color:var(--ink);font-weight:700;margin:7px 5px 0 0}.small.green{background:var(--brand);color:#fff}.small.red{background:#f8e6e6;color:#9b4444}
+.notice{padding:13px 15px;background:#fff7df;border-radius:16px;margin:12px 0}.empty{text-align:center;padding:28px 12px;color:var(--muted)}.checkrow{display:flex;gap:9px;align-items:flex-start;padding:8px 0}.checkrow input{margin-top:4px}.mini-chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:12px}.bar{flex:1;background:#9fcfbe;border-radius:7px 7px 2px 2px;min-height:6px;position:relative}.bar span{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted)}
+
+.responseChoices{display:grid;gap:9px;margin:14px 0}
+.responseChoice{width:100%;border:1px solid var(--line);background:#fff;border-radius:15px;padding:13px 14px;text-align:left;color:var(--ink);cursor:pointer;box-shadow:0 2px 8px rgba(23,59,58,.04)}
+.responseChoice:hover{border-color:var(--brand);transform:translateY(-1px)}
+.responseChoice.selected{border:2px solid var(--brand);background:var(--soft);padding:12px 13px}
+.responseChoice b{display:block;font-size:13px;margin-bottom:4px}
+.responseChoice span{display:block;line-height:1.4}
+.choiceHint{font-size:12px;color:var(--muted);margin-top:6px}
+
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#173b3a;color:white;padding:12px 16px;border-radius:13px;opacity:0;pointer-events:none;transition:.2s;z-index:99}.toast.show{opacity:1}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr 1fr}.hero h1{font-size:30px}}
+
+.choiceHint{background:#f5f8f6;border-radius:14px;padding:11px 12px;color:#526865;line-height:1.4;margin:9px 0 12px}
+.responseChoice{width:100%;text-align:left;border:2px solid #e1e9e5;background:#fff;border-radius:17px;padding:14px 15px;margin:7px 0;color:var(--ink);transition:.15s}
+.responseChoice:hover{border-color:#9bc5b7;transform:translateY(-1px)}
+.responseChoice.selected{border-color:var(--brand);background:#edf7f2;box-shadow:0 0 0 2px rgba(63,146,125,.08)}
+.responseChoice b{display:block;color:var(--brand2);font-size:13px;margin-bottom:4px}
+.responseChoice span{display:block;line-height:1.42;font-size:16px}
+.choiceFeedback{margin-top:12px;background:#eef7f2;border-left:4px solid var(--brand);border-radius:12px;padding:12px 13px;line-height:1.45}
+.smallnote{font-size:13px;color:var(--muted);line-height:1.4}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header"><div class="brand"><div class="logo">✦</div><div><b>LUMORA</b><small>Små steg. Enklare vardag.</small></div></div><button class="iconbtn" onclick="showPage('profile')">👤</button></header>
+<nav class="nav" id="nav">
+<button data-page="home" class="active">Hem</button><button data-page="profile">Barn</button><button data-page="history">Historik</button><button data-page="patterns">Mönster</button><button data-page="follow">Uppföljning</button><button data-page="reminders">Påminnelser</button>
+</nav>
+
+<section id="home" class="page active">
+<div class="hero"><div class="eyebrow">LUMORA</div><h1>Vad händer just nu?</h1><p>Välj situationen som ligger närmast det du möter. Du får konkreta steg, reflektion och en enkel plan framåt.</p></div>
+<div class="card"><div class="stats"><div class="stat"><span>Barn</span><b id="sChildren">0</b></div><div class="stat"><span>Situationer</span><b id="sEvents">0</b></div><div class="stat"><span>Uppföljningar</span><b id="sFollow">0</b></div><div class="stat"><span>Påminnelser</span><b id="sRem">0</b></div></div></div>
+<div class="section">Välj en situation</div><div class="muted">Du kan alltid gå tillbaka och följa upp senare.</div>
+<div id="situations" class="grid" style="margin-top:12px"></div>
+<div class="card"><b>✨ Dagens lilla steg</b><p class="muted" id="dailyTip"></p></div>
+</section>
+
+<section id="flow" class="page">
+<button class="back" onclick="showPage('home')">← Till LUMORA</button>
+<div class="flowhead"><div class="flowemoji" id="flowEmoji"></div><div class="flowtitle" id="flowTitle"></div><div class="muted" id="flowIntro"></div></div>
+<div class="progress"><i id="flowProgress"></i></div>
+<div class="stepbox"><div class="label" id="stepLabel"></div><div class="text" id="stepText"></div></div>
+<div class="question"><b id="questionTitle"></b><span class="muted" id="questionText"></span></div>
+<div id="flowExtra"></div>
+<button id="nextFlow" class="primary" onclick="nextFlowStep()">Nästa steg →</button>
+<button class="secondary" onclick="prevFlowStep()">← Tillbaka</button>
+</section>
+
+<section id="profile" class="page"><div class="section">👶 Barn & profiler</div><div class="muted">Skapa enkla profiler så historik och uppföljning blir lättare att förstå.</div><div class="card" id="childrenList"></div><div class="card"><b>Lägg till barn</b><div class="field"><label>Namn / smeknamn</label><input id="cName" class="input" placeholder="Ex. Alex"></div><div class="field"><label>Ålder</label><input id="cAge" class="input" type="number" min="0" max="25"></div><div class="field"><label>Vad är viktigt att komma ihåg?</label><textarea id="cNote" class="textarea"></textarea></div><button class="primary" onclick="addChild()">Spara barnprofil</button></div></section>
+
+<section id="history" class="page"><div class="section">📚 Historik</div><div class="muted">Gå tillbaka, se vad som hände och vad du valde att prova.</div><div class="tabs"><button class="active" onclick="historyFilter='all';renderHistory()">Alla</button><button onclick="historyFilter='open';renderHistory()">Öppna</button><button onclick="historyFilter='done';renderHistory()">Avslutade</button></div><div id="historyList"></div></section>
+
+<section id="patterns" class="page"><div class="section">📊 Mönster</div><div class="muted">LUMORA hjälper dig att se återkommande områden i din egen historik.</div><div class="card" id="patternList"></div><div class="card"><b>Över tid</b><div class="mini-chart" id="chart"></div></div><div class="card"><b>💡 LUMORA-insikt</b><p id="insight" class="muted"></p></div></section>
+
+<section id="follow" class="page"><div class="section">🎯 Uppföljning</div><div class="muted">Det viktiga är inte att allt blev perfekt – utan vad du upptäcker nästa gång.</div><div id="followList"></div></section>
+
+<section id="reminders" class="page"><div class="section">🔔 Påminnelser</div><div class="muted">Lägg in något litet du vill komma ihåg. Du kan markera det som klart när du vill.</div><div id="reminderList"></div><div class="card"><b>Ny påminnelse</b><div class="field"><label>Vad?</label><input id="rText" class="input" placeholder="Ex. Följ upp läggningen"></div><div class="field"><label>Datum</label><input id="rDate" class="input" type="date"></div><button class="primary" onclick="addReminder()">Spara påminnelse</button></div></section>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const S=[
+["😤", "Mitt barn får ett utbrott", "När känslorna blir stora och det är svårt att nå fram.", ["Stanna upp och gör situationen lugnare innan du försöker lösa den.", "Sänk ditt eget tempo och använd få, tydliga ord.", "Bekräfta känslan utan att ge efter för allt beteende.", "När det lugnat sig: hjälp barnet att förstå vad som hände.", "Välj en liten sak att prova nästa gång och följ upp hur det gick."], [["Ge barnet lite mer utrymme och minska intrycken runt omkring.", "Använd en lugn röst och korta meningar.", "Bekräfta att känslan är stark utan att börja diskutera.", "Flytta fokus till trygghet och det som behöver hända just nu.", "Vänta med att lösa problemet tills känslorna har sjunkit."], ["Stanna nära och hjälp barnet att komma ner i varv.", "Ge barnet två enkla alternativ som båda fungerar.", "Upprepa lugnt vad som gäller utan att argumentera.", "Bekräfta känslan och sätt samtidigt en tydlig gräns.", "Ta en kort paus tillsammans om situationen tillåter det."], ["Jag ser att du är jättearg. Vi tar en sak i taget.", "Du behöver inte lösa det nu. Jag stannar här.", "Jag hör att du inte vill. Vi pratar när det känns lugnare.", "Du får vara arg, men jag låter dig inte slå eller skada någon.", "Vi pausar nu och försöker igen när det har blivit lugnare."], ["Försök upptäcka vad som hjälpte barnet att lugna sig.", "Lägg märke till om du själv kan sänka tempot tidigare nästa gång.", "Fundera på om en tydligare förvarning hade hjälpt.", "Välj en gräns som du vill hålla på samma sätt nästa gång.", "Bestäm en liten förändring i miljön eller rutinen att prova."], ["Följ upp hur barnet upplevde situationen när ni båda är lugna.", "Prata kort om vad som hjälpte och vad som blev svårt.", "Bekräfta att det gick över och uppmärksamma det som fungerade.", "Bestäm tillsammans en sak ni kan prova nästa gång.", "Låt situationen bli ett tillfälle att reparera relationen och börja om."]]],
+["📱", "Vi bråkar om mobilen/skärmen", "När skärmen blir en återkommande konflikt.", ["Bestäm först vad konflikten egentligen handlar om.", "Var tydlig med vad som gäller och när.", "Bekräfta protesten utan att fastna i en lång diskussion.", "Prata om alternativ när barnet är lugnt.", "Bestäm en enkel plan som går att upprepa nästa gång."], [["Fundera på vad som brukar starta konflikten kring skärmen.", "Se om övergången från skärm till nästa aktivitet är problemet.", "Lägg märke till när på dagen konflikterna blir vanligast.", "Ta reda på om reglerna är otydliga eller olika från gång till gång.", "Fundera på om barnet saknar något annat när skärmen ska bort."], ["Ge en tydlig förvarning innan skärmen ska stängas av.", "Använd en enkel och återkommande skärmrutin.", "Ge barnet ett val mellan två nästa aktiviteter.", "Bekräfta protesten utan att förhandla om regeln i stunden.", "Bestäm i förväg vad som händer när tiden är slut."], ["Nu är tiden slut. Du kan välja att stänga av själv eller att jag hjälper dig.", "Jag förstår att du vill fortsätta. Vi håller ändå fast vid tiden.", "Du kan välja om vi går direkt till kvällsmat eller tar en kort paus först.", "Vi pratar om skärmtiden senare. Just nu stänger vi av.", "Jag hör att du är besviken. Regeln gäller även när det känns svårt."], ["Bestäm en tydlig start och sluttid som går att hålla.", "Använd samma avslutningsrutin några dagar i rad.", "Fundera på om barnet behöver mer förvarning inför avslutet.", "Se om nästa aktivitet kan göras mer lockande och tydlig.", "Följ upp om regeln känns rimlig för hela familjen."], ["Följ upp efter några dagar om konflikterna blivit lättare.", "Fråga barnet vad som gör avslutet lättare.", "Se om samma rutin fungerar olika bra vid olika tider.", "Justera en del av planen i taget.", "Bestäm tillsammans vad ni vill fortsätta med nästa vecka."]]],
+["🛏️", "Läggningen fungerar inte", "När kvällarna blir långa, stressiga eller konfliktfyllda.", ["Börja med att skapa lugn före läggningen.", "Gör rutinen kort, tydlig och förutsägbar.", "Bekräfta att det kan vara svårt att avsluta dagen.", "Håll fast vid det viktiga utan att göra kvällen till en maktkamp.", "Välj en sak att ändra och prova samma rutin några kvällar."], [["Se vad som brukar hända den sista timmen före läggning.", "Lägg märke till om barnet är trött, uppvarvat eller oroligt.", "Fundera på om rutinen innehåller för många steg.", "Se om avslutet av lek, skärm eller annat blir den svåraste delen.", "Lägg märke till när kvällen brukar börja kännas stressig."], ["Börja kvällsrutinen lite tidigare och sänk tempot.", "Gör rutinen kort och använd samma ordning varje kväll.", "Ge barnet två små val inom rutinen.", "Ge en tydlig förvarning innan varje större övergång.", "Avsluta diskussionen om läggningen och återgå lugnt till rutinen."], ["Nu börjar vår lugna kvällsrutin. Först tandborstning, sedan sängen.", "Du kan välja pyjamas först eller tandborstning först.", "Om fem minuter avslutar vi det här och går vidare till läggningen.", "Jag vet att du gärna vill fortsätta. Nu är det dags att sova.", "Vi behöver inte vara överens om läggningen. Jag hjälper dig genom rutinen."], ["Välj en del av rutinen som ni vill göra enklare.", "Testa samma ordning och ungefär samma tid några kvällar.", "Fundera på om skärm eller aktivitet behöver avslutas tidigare.", "Prova att ge barnet mer delaktighet i små delar av rutinen.", "Bestäm hur du vill bemöta protester utan att börja om hela rutinen."], ["Följ upp efter några kvällar vad som blivit lättare.", "Fråga barnet vilken del av rutinen som känns bäst.", "Se om tidigare start påverkar konflikterna.", "Utvärdera om rutinen är tillräckligt tydlig och enkel.", "Välj en förändring att behålla och en att prova vidare."]]],
+["🏫", "Mitt barn vill inte gå till skolan", "När skolan väcker motstånd, oro eller konflikter.", ["Försök förstå vad som händer bakom motståndet.", "Lyssna utan att direkt pressa fram en lösning.", "Dela upp morgonen i små, möjliga steg.", "Ta hjälp av skolan när det behövs.", "Följ upp vad som blev lite lättare och vad som fortfarande är svårt."], [["Försök förstå när motståndet börjar på morgonen.", "Lägg märke till om det finns oro inför en viss del av skoldagen.", "Fråga vad som känns svårast utan att kräva en lösning direkt.", "Se om sömn, stress eller morgonrutinen påverkar.", "Lägg märke till om motståndet ser likadant ut varje dag."], ["Dela upp morgonen i ett litet steg i taget.", "Bekräfta oron och fokusera sedan på nästa möjliga steg.", "Ge barnet två konkreta val som båda leder mot skolan.", "Skapa en tydlig morgonrutin som barnet känner igen.", "Ta kontakt med skolan för att hitta en konkret lösning tillsammans."], ["Jag ser att det här känns svårt. Vi tar bara nästa steg.", "Du behöver inte lösa hela skoldagen nu. Vi börjar med att klä på oss.", "Vill du gå ut genom dörren nu eller om fem minuter?", "Vi följer vår morgonrutin steg för steg.", "Jag kontaktar skolan så att vi kan hjälpas åt med det som är svårt."], ["Fundera på vilket litet steg som faktiskt fungerade.", "Lägg märke till vad som gjorde morgonen lite lättare.", "Följ upp med skolan vad som händer under dagen.", "Se om samma strategi fungerar flera morgnar i rad.", "Välj nästa lilla steg utifrån det barnet redan klarar."], ["Följ upp hur barnet upplevde skoldagen efteråt.", "Stäm av med skolan vad som fungerade.", "Fråga vad som gjorde morgonen lättare eller svårare.", "Följ upp om oron förändras över några dagar.", "Justera planen tillsammans om problemen fortsätter."]]],
+["💬", "Mitt barn vill inte prata", "När barnet drar sig undan eller stänger av.", ["Välj ett lugnt tillfälle i stället för att pressa fram ett samtal.", "Visa att du finns kvar även när barnet inte vill prata.", "Ställ en enkel fråga och ge tid.", "Lyssna mer än du förklarar.", "Låt barnet veta att det kan komma tillbaka till dig senare."], [["Lägg märke till när barnet verkar mest öppet för kontakt.", "Se om barnet drar sig undan efter vissa situationer.", "Fundera på om dina frågor blir för många eller för stora.", "Lägg märke till om barnet visar något med sitt beteende i stället.", "Se om en gemensam aktivitet gör det lättare att vara nära."], ["Ge barnet tid utan att lämna det helt ensamt med situationen.", "Ställ en enkel fråga som går att svara kort på.", "Visa att du finns kvar även om barnet inte vill prata.", "Prata bredvid barnet under en lugn aktivitet.", "Fråga om barnet hellre vill prata nu eller senare."], ["Du behöver inte prata nu. Jag finns här när du vill.", "Är det något som känns jobbigt just idag?", "Vill du berätta med ord, skriva eller bara vara en stund?", "Vi kan prata medan vi gör något annat om du vill.", "Jag frågar igen senare, och du behöver inte bestämma allt nu."], ["Ge mer tid mellan frågorna.", "Prova kortare och mer konkreta frågor.", "Använd fler stunder av vardaglig kontakt utan att fråga om problemet.", "Se om barnet själv tar mer initiativ när pressen minskar.", "Bestäm hur du kan visa att dörren alltid är öppen."], ["Följ upp senare utan att börja om med många frågor.", "Se om barnet själv kommer tillbaka till samtalet.", "Fråga om sättet ni pratade på kändes okej.", "Fortsätt skapa lugna stunder tillsammans.", "Ta hjälp av en annan trygg vuxen om barnet önskar det."]]],
+["😟", "Mitt barn verkar ledset", "När du märker förändringar i humör eller beteende.", ["Stanna upp och lägg märke till förändringen.", "Visa att du har sett barnet utan att kräva ett svar.", "Fråga enkelt hur det är och lyssna.", "Fundera på vad barnet kan behöva just nu.", "Följ upp senare i stället för att försöka lösa allt på en gång."], [["Lägg märke till vad som har förändrats jämfört med vanligt.", "Se om ledsenheten kommer vid vissa tider eller situationer.", "Fundera på om något har hänt i skolan, hemma eller bland kompisar.", "Lägg märke till om barnet söker mer närhet eller mer avskildhet.", "Se vilka stunder barnet verkar må lite bättre i."], ["Var nära utan att kräva att barnet ska berätta.", "Fråga enkelt hur dagen har varit.", "Erbjud en lugn aktivitet tillsammans.", "Bekräfta att du ser att barnet inte verkar må bra.", "Ge barnet möjlighet att själv välja när ni pratar."], ["Jag har märkt att du verkar ledsen. Jag finns här.", "Vill du berätta hur det känns, eller vill du bara vara med mig?", "Ska vi göra något lugnt tillsammans en stund?", "Du behöver inte förklara allt. Jag vill bara att du vet att jag ser dig.", "Om du vill prata senare så lyssnar jag."], ["Fortsätt vara uppmärksam på förändringen utan att kontrollera barnet.", "Skapa en återkommande stund där ni kan prata om hur det är.", "Se om mer närhet eller mer egen tid verkar hjälpa.", "Följ upp om något särskilt verkar påverka humöret.", "Fundera på om någon annan trygg vuxen kan vara ett stöd."], ["Fråga efter några dagar hur barnet själv tycker att det är.", "Följ upp om förändringen kvarstår eller minskar.", "Berätta att du fortsätter finnas tillgänglig.", "Prata om vad som har hjälpt barnet att må bättre.", "Sök mer stöd om ledsenheten blir långvarig eller allvarlig."]]],
+["🏠", "Vi bråkar mycket hemma", "När konflikterna börjar påverka hela vardagen.", ["Identifiera när konflikterna brukar börja.", "Välj en konflikt att arbeta med först.", "Försök sänka temperaturen innan ni löser sakfrågan.", "Bestäm vad du själv kan göra annorlunda.", "Följ upp efter några dagar och se om mönstret förändrats."], [["Lägg märke till vilka situationer som oftast leder till bråk.", "Se om samma personer eller tider återkommer i konflikterna.", "Fundera på vad som händer precis innan konflikten eskalerar.", "Lägg märke till hur du själv brukar reagera när konflikten börjar.", "Välj en återkommande konflikt som ni kan fokusera på först."], ["Sänk tempot innan ni försöker lösa sakfrågan.", "Använd färre ord när konflikten är som starkast.", "Ta en paus och återkom till frågan när alla är lugnare.", "Bekräfta varandras perspektiv utan att behöva vara överens.", "Bestäm en enkel regel för hur ni tar pauser vid bråk."], ["Vi behöver inte lösa allt nu. Vi tar en paus och återkommer.", "Jag hör vad du säger. Jag vill prata om det när vi är lugnare.", "Jag vill förstå dig innan jag bestämmer hur vi går vidare.", "Vi tycker olika, men vi kan prata utan att skrika på varandra.", "Jag tar en paus nu och kommer tillbaka om en stund."], ["Välj en konkret situation där du vill göra annorlunda.", "Bestäm en tid då ni kan prata när det är lugnt.", "Fundera på vilka ord som brukar öka konflikten och undvik dem.", "Skapa en enkel gemensam rutin för de återkommande konflikterna.", "Lägg märke till och förstärk de stunder då familjen lyckas lösa saker lugnt."], ["Följ upp om just den valda konflikten blivit lättare.", "Prata om vad var och en tyckte fungerade.", "Se om konflikterna blir kortare eller mindre intensiva.", "Bestäm om samma strategi ska fortsätta en vecka till.", "Välj nästa återkommande situation först när den första känns mer hanterbar."]]],
+["🔥", "Jag håller på att tappa tålamodet", "När du själv blir överbelastad som förälder.", ["Stanna upp och lägg märke till dina egna signaler.", "Ta en kort paus om det är möjligt och säkert.", "Sänk kraven på dig själv i stunden.", "Gå tillbaka när du är lugnare och reparera om det behövs.", "Fundera på vad som skulle ge dig mer återhämtning framåt."], [["Lägg märke till kroppens signaler innan du blir riktigt arg.", "Se vilka situationer som snabbast får ditt tålamod att ta slut.", "Fundera på om du är trött, stressad eller har för höga krav just då.", "Lägg märke till vilka tankar du får precis innan du reagerar.", "Identifiera en tidpunkt då du brukar behöva mer återhämtning."], ["Ta en kort paus om barnet är tryggt och det är möjligt.", "Sänk rösten och prata långsammare.", "Förenkla kraven till det viktigaste just i stunden.", "Be en annan vuxen om avlastning om det finns möjlighet.", "Skjut upp en diskussion tills du har mer kontroll."], ["Jag är för arg just nu. Jag behöver en kort paus.", "Jag vill inte höja rösten. Vi tar det lugnt.", "Just nu fokuserar vi bara på det viktigaste.", "Kan du hjälpa mig en stund så att jag får landa?", "Jag återkommer till det här när jag har lugnat mig."], ["Bestäm vilken tidig signal du vill reagera på nästa gång.", "Planera en kort återhämtning under dagen.", "Fundera på vilket krav du kan sänka utan att släppa det viktiga.", "Bestäm vem du kan be om stöd innan du blir överbelastad.", "Fundera på hur du kan reparera om du redan har reagerat för starkt."], ["Följ upp vad som hände utan att döma dig själv.", "Se om pausen eller den nya strategin hjälpte.", "Prata med barnet om situationen när ni båda är lugna.", "Välj en liten förändring som du vill fortsätta med.", "Sök stöd om du ofta känner att du tappar kontrollen."]]],
+["👥", "Mitt barn har problem med kompisar", "När relationer, konflikter eller utanförskap blir svårt.", ["Lyssna på barnets version utan att direkt ta över.", "Bekräfta att det kan göra ont att hamna utanför.", "Hjälp barnet skilja mellan det som går att påverka och inte.", "Prata om ett konkret nästa steg.", "Följ upp hur barnet upplever situationen senare."], [["Lyssna efter vad barnet själv tycker är det största problemet.", "Lägg märke till om det handlar om en konflikt eller återkommande utanförskap.", "Fråga när situationerna brukar uppstå.", "Se om barnet har någon trygg kompis eller vuxen omkring sig.", "Fundera på vad barnet vill ha hjälp med och vad det vill göra själv."], ["Lyssna utan att direkt ta över problemet.", "Bekräfta att det kan göra ont att känna sig utanför.", "Hjälp barnet välja en situation att börja med.", "Prata om ett konkret sätt att ta kontakt eller sätta en gräns.", "Ta kontakt med skolan om barnet behöver hjälp av vuxna."], ["Jag förstår att det där kan göra ont. Berätta hur du upplevde det.", "Vill du att jag bara lyssnar eller vill du att vi tänker på en lösning?", "Vi kan börja med den situation som känns svårast.", "Du kan prova att fråga om du får vara med, om det känns tryggt.", "Om du vill kan jag hjälpa dig att prata med en vuxen i skolan."], ["Fokusera på en relation eller situation i taget.", "Stärk barnets möjlighet att söka kontakt på ett tryggt sätt.", "Öva på en enkel mening barnet kan använda.", "Följ upp hur barnet upplevde nästa kontakt med kompisarna.", "Se om skolan behöver vara mer delaktig."], ["Fråga hur barnet tycker att relationerna fungerar efter några dagar.", "Följ upp om någon konkret situation blivit bättre.", "Prata om vad som hjälpte barnet att känna sig tryggare.", "Stäm av med skolan om problemet fortsätter.", "Bestäm tillsammans vad nästa steg ska vara."]]],
+["❤️", "Jag känner mig som en dålig förälder", "När skuld och självkritik tar över.", ["Stanna upp och skilj på en svår situation och vem du är som förälder.", "Fundera på vad du faktiskt försöker göra bra.", "Om du gjorde fel: reparera hellre än att fastna i skuld.", "Välj en liten sak du vill göra annorlunda.", "Kom ihåg att relationer byggs över tid – inte av en perfekt dag."], [["Skilj mellan det som hände och bilden av dig själv som förälder.", "Lägg märke till vad du faktiskt gjorde för att försöka hjälpa.", "Fundera på vad som blev svårt just i den situationen.", "Se om du ställer högre krav på dig själv än på andra föräldrar.", "Lägg märke till något som fungerade, även om resten blev svårt."], ["Ge dig själv en paus från självkritiken och titta på situationen konkret.", "Fundera på vad du vill reparera i relationen.", "Välj en liten sak du kan göra annorlunda nästa gång.", "Prata med någon du litar på om situationen.", "Acceptera att en svår stund inte behöver avgöra resten av dagen."], ["Det blev inte som jag ville, men jag kan försöka igen.", "Jag gjorde fel i den här situationen och kan reparera det.", "Jag behöver inte vara perfekt för att vara en trygg förälder.", "Jag kan be om ursäkt och samtidigt fortsätta sätta gränser.", "Jag kan välja en liten sak att göra annorlunda nästa gång."], ["Reparera det som blev fel i stället för att fastna i skuld.", "Välj en konkret förändring som är möjlig att hålla.", "Påminn dig om sådant du redan gör som fungerar.", "Be om stöd när du märker att du inte räcker till själv.", "Ge förändringen tid och bedöm dig själv utifrån helheten."], ["Följ upp hur relationen känns efter att du har reparerat.", "Lägg märke till om den lilla förändringen gör skillnad.", "Prata med barnet om vad som kändes bra efteråt.", "Fortsätt använda det som fungerar och ändra en sak i taget.", "Påminn dig om att tryggt föräldraskap byggs över tid."]]]
+];
+
+let db=JSON.parse(localStorage.getItem("lumora_magic_v1")||"null")||{children:[],events:[],followups:[],reminders:[]};
+let current=null,step=0,historyFilter="all",selectedChoices=[null,null,null,null,null];
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+const childName=id=>db.children.find(c=>c.id===id)?.name||"Ej valt";
+const fmt=d=>new Date(d).toLocaleDateString("sv-SE",{day:"numeric",month:"short",year:"numeric"});
+function persist(){localStorage.setItem("lumora_magic_v1",JSON.stringify(db));renderAll()}
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1900)}
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"instant"});renderAll()}
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+
+document.getElementById("situations").innerHTML=S.map((x,i)=>`<button class="situation" onclick="openSituation(${i})"><span class="emoji">${x[0]}</span><strong>${esc(x[1])}</strong><small>${esc(x[2])}</small><span class="arrow">›</span></button>`).join("");
+document.getElementById("dailyTip").textContent=["Det behöver inte bli perfekt. Börja med en sak som går att göra idag.","En lugn förälder behöver inte vara en perfekt förälder.","Små återkommande förändringar blir ofta mer värdefulla än stora engångsinsatser.","Du kan alltid börja om i nästa stund."][new Date().getDate()%4];
+
+function openSituation(i){current=S[i];step=0;selectedChoices=[null,null,null,null,null];renderFlow();showPage("flow")}
+function renderFlow(){
+document.getElementById("flowEmoji").textContent=current[0];
+document.getElementById("flowTitle").textContent=current[1];
+document.getElementById("flowIntro").textContent=current[2];
+document.getElementById("stepLabel").textContent=`Steg ${step+1} av 5`;
+document.getElementById("stepText").textContent=current[3][step];
+document.getElementById("flowProgress").style.width=((step+1)/5*100)+"%";
+
+const qs=[
+["Vad känner du igen?","Välj det som känns mest likt det som händer hemma hos er."],
+["Vad kan du prova?","Här finns fem olika sätt. Inget är rätt eller fel – välj det som känns möjligt just nu."],
+["Vad kan du säga eller göra?","Välj det som låter mest som du och som passar ditt barn."],
+["Vad vill du prova nästa gång?","Välj en liten sak som känns realistisk att testa."],
+["Spara och följ upp","Välj hur du vill följa upp situationen och spara sedan."]
+][step];
+
+document.getElementById("questionTitle").textContent=qs[0];
+document.getElementById("questionText").textContent=qs[1];
+
+const labels=[
+"🟢 Lugna",
+"🔵 Vara tydlig",
+"🟡 Lyssna",
+"🟣 Ge ett val",
+"🟠 Ta en paus"
+];
+
+let extra="";
+if(step<5){
+  const list=current[4][step];
+  const chosen=selectedChoices[step];
+  const feedback = chosen===null ? "" :
+    `<div class="choiceFeedback"><b>Du valde ${labels[chosen].replace(/^[^ ]+ /,"")}</b><br>
+    Bra. Det viktigaste är att välja något som känns möjligt att göra i vardagen.</div>`;
+  extra=`<div class="card"><b>Fem olika sätt att prova</b>
+  <div class="choiceHint">Alla fem är lika okej. Det finns inget facit. Välj det som känns mest möjligt för dig just nu.</div>
+  <div class="responseChoices">${list.map((text,i)=>`<button type="button" class="responseChoice ${chosen===i?"selected":""}" onclick="selectChoice(${i})"><b>${labels[i]}</b><span>${esc(text)}</span></button>`).join("")}</div>
+  ${feedback}</div>`;
+}
+if(step===4){
+  const followChoices=[
+    "Följ upp nästa dag och se vad som blev annorlunda.",
+    "Följ upp efter några dagar och se vad som har förändrats.",
+    "Följ upp efter ungefär en vecka och se om strategin håller.",
+    "Följ upp efter två veckor och se om ett nytt mönster har vuxit fram.",
+    "Spara situationen och återkom till den när du själv tycker att det är dags."
+  ];
+  extra=`<div class="card"><b>Fem enkla sätt att följa upp</b><div class="choiceHint">Välj det som passar er bäst. Du behöver inte göra det perfekt.</div><div class="responseChoices">${followChoices.map((text,i)=>`<button type="button" class="responseChoice ${selectedChoices[step]===i?"selected":""}" onclick="selectChoice(${i})"><b>${labels[i]}</b><span>${esc(text)}</span></button>`).join("")}</div>
+  <div class="field"><label>Barn</label><select id="flowChild" class="select">${db.children.length?db.children.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join(""):"<option value=''>Lägg till barn under Barn</option>"}</select></div>
+  <div class="field"><label>Vad hände?</label><textarea id="flowNote" class="textarea" placeholder="Skriv några ord om vad som hände. Det behöver inte vara perfekt."></textarea></div>
+  <div class="field"><label>Mitt nästa lilla steg</label><textarea id="flowPlan" class="textarea" placeholder="Ex. Nästa gång ska jag ge en förvarning innan jag avslutar."></textarea></div>
+  </div>`;
+}
+document.getElementById("flowExtra").innerHTML=extra;
+document.getElementById("nextFlow").textContent=step===4?"💾 Spara & skapa uppföljning":"Nästa steg →";
+}
+
+function selectChoice(i){
+  selectedChoices[step]=i;
+  renderFlow();
+}
+function nextFlowStep(){
+if(selectedChoices[step]===null){
+toast("Välj ett av de fem alternativen först.");
+return;
+}
+if(step<4){step++;renderFlow();}else saveEvent()
+}
+function prevFlowStep(){if(step>0){step--;renderFlow()}else showPage("home")}
+function saveEvent(){
+if(!db.children.length){toast("Lägg först till en barnprofil.");showPage("profile");return}
+const followDays=[1,3,7,14,null];
+const followLabels=["Första uppföljning","Uppföljning efter 3 dagar","Veckouppföljning","Uppföljning efter 2 veckor","Ingen bestämd uppföljning"];
+const followChoice=selectedChoices[4];
+const e={id:crypto.randomUUID(),childId:document.getElementById("flowChild").value,topic:current[1],note:document.getElementById("flowNote").value.trim(),plan:document.getElementById("flowPlan").value.trim(),choices:[...selectedChoices],followChoice:followChoice,date:new Date().toISOString(),done:false};
+db.events.unshift(e);
+if(followDays[followChoice]!==null){
+  db.followups.unshift({id:crypto.randomUUID(),eventId:e.id,type:followLabels[followChoice],when:new Date(Date.now()+followDays[followChoice]*86400000).toISOString(),done:false});
+}
+persist();toast("Sparat! En uppföljning är skapad.");showPage("follow");
+}
+function addChild(){const n=document.getElementById("cName").value.trim();if(!n){toast("Skriv ett namn eller smeknamn.");return}db.children.push({id:crypto.randomUUID(),name:n,age:document.getElementById("cAge").value,note:document.getElementById("cNote").value.trim()});document.getElementById("cName").value="";document.getElementById("cAge").value="";document.getElementById("cNote").value="";persist();toast("Barnprofil sparad.")}
+function delChild(id){if(confirm("Ta bort barnprofilen? Historiken ligger kvar.")){db.children=db.children.filter(c=>c.id!==id);persist()}}
+function delEvent(id){if(confirm("Ta bort situationen och dess uppföljningar?")){db.events=db.events.filter(e=>e.id!==id);db.followups=db.followups.filter(f=>f.eventId!==id);persist()}}
+function completeFollow(id){const f=db.followups.find(x=>x.id===id);if(f)f.done=true;persist();toast("Uppföljning markerad som klar.")}
+function addReminder(){const t=document.getElementById("rText").value.trim(),d=document.getElementById("rDate").value;if(!t||!d){toast("Fyll i text och datum.");return}db.reminders.push({id:crypto.randomUUID(),text:t,date:d,done:false});document.getElementById("rText").value="";document.getElementById("rDate").value="";persist();toast("Påminnelse sparad.")}
+function completeReminder(id){const r=db.reminders.find(x=>x.id===id);if(r)r.done=true;persist();toast("Klart!")}
+function renderAll(){
+document.getElementById("sChildren").textContent=db.children.length;document.getElementById("sEvents").textContent=db.events.length;document.getElementById("sFollow").textContent=db.followups.filter(x=>!x.done).length;document.getElementById("sRem").textContent=db.reminders.filter(x=>!x.done).length;
+renderChildren();renderHistory();renderPatterns();renderFollow();renderReminders();
+}
+function renderChildren(){document.getElementById("childrenList").innerHTML=db.children.length?db.children.map(c=>`<div class="item"><strong>👤 ${esc(c.name)} ${c.age?`<span class="chip">${esc(c.age)} år</span>`:""}</strong><div class="muted">${esc(c.note||"Ingen anteckning")}</div><button class="small red" onclick="delChild('${c.id}')">Ta bort</button></div>`).join(""):`<div class="empty">Inga barnprofiler ännu.<br>Lägg till den första nedan.</div>`}
+function renderHistory(){let a=db.events.filter(e=>historyFilter==="all"||historyFilter==="open"?!e.done:e.done);document.getElementById("historyList").innerHTML=a.length?a.map(e=>`<div class="item"><strong>${esc(e.topic)}</strong><div class="muted">${esc(childName(e.childId))} · ${fmt(e.date)}</div>${e.note?`<p>${esc(e.note)}</p>`:""}${e.plan?`<div class="notice"><b>Nästa steg:</b><br>${esc(e.plan)}</div>`:""}<span class="chip">${e.done?"Avslutad":"Pågående"}</span><br><button class="small red" onclick="delEvent('${e.id}')">Ta bort</button></div>`).join(""):`<div class="empty">Ingen historik i den här vyn ännu.</div>`}
+function renderPatterns(){
+const counts={};db.events.forEach(e=>counts[e.topic]=(counts[e.topic]||0)+1);const rows=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+document.getElementById("patternList").innerHTML=rows.length?rows.map(([k,v])=>`<div class="item"><strong>${esc(k)}</strong><div class="progress"><i style="width:${Math.min(100,v/db.events.length*100)}%"></i></div><span class="muted">${v} sparad${v===1?"":"e"} situation${v===1?"":"er"}</span></div>`).join(""):`<div class="empty">Spara några situationer så börjar LUMORA visa mönster.</div>`;
+const days={};db.events.forEach(e=>{const d=e.date.slice(0,10);days[d]=(days[d]||0)+1});const vals=Object.entries(days).sort((a,b)=>a[0].localeCompare(b[0])).slice(-7);const max=Math.max(1,...vals.map(x=>x[1]));document.getElementById("chart").innerHTML=vals.length?vals.map(x=>`<div class="bar" style="height:${Math.max(8,x[1]/max*90)}px"><span>${x[0].slice(5)}</span></div>`).join(""):"<span class='muted'>Ingen data ännu.</span>";
+document.getElementById("insight").textContent=rows.length?`Ditt vanligaste område just nu är “${rows[0][0]}”. Det kan vara ett bra ställe att börja med nästa lilla förändring.`:"När du sparar situationer kan du upptäcka vad som återkommer och välja vad du vill fokusera på.";
+}
+function renderFollow(){const a=db.followups.filter(f=>!f.done).sort((x,y)=>new Date(x.when)-new Date(y.when));document.getElementById("followList").innerHTML=a.length?a.map(f=>{const e=db.events.find(x=>x.id===f.eventId);return `<div class="item"><strong>🎯 ${esc(f.type)}</strong><div class="muted">${e?esc(e.topic):"Situation"} · ${e?esc(childName(e.childId)):""} · ${fmt(f.when)}</div>${e?.plan?`<p>${esc(e.plan)}</p>`:""}<button class="small green" onclick="completeFollow('${f.id}')">Markera klar</button></div>`}).join(""):`<div class="card empty">Inga öppna uppföljningar. 🎉</div>`}
+function renderReminders(){const a=db.reminders.slice().sort((x,y)=>x.date.localeCompare(y.date));document.getElementById("reminderList").innerHTML=a.length?a.map(r=>`<div class="item"><strong>🔔 ${esc(r.text)}</strong><div class="muted">${esc(r.date)}</div><span class="chip">${r.done?"Klar":"Aktiv"}</span>${!r.done?`<br><button class="small green" onclick="completeReminder('${r.id}')">Markera klar</button>`:""}</div>`).join(""):`<div class="card empty">Inga påminnelser ännu.</div>`}
+renderAll();
+</script>
+</body></html>
