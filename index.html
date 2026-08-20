@@ -94,7 +94,26 @@ nav button.active{background:var(--brand);color:white}
     img,video,iframe,canvas{max-width:100%;height:auto}
     pre,code{max-width:100%;overflow-x:auto}
   }
-</style>
+@media (max-width: 600px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .stat {
+    padding: 12px;
+    min-height: 70px;
+  }
+
+  .stat span {
+    font-size: 15px;
+  }
+
+  .stat b {
+    font-size: 28px;
+  }
+}</style>
 </head>
 <body>
 <div class="app">
