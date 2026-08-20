@@ -1,58 +1,1078 @@
-✦
-LUMORA
-Stöd i vardagen för föräldrar
-Hem
-Barn
-Historik
-Mönster
-Uppföljning
-Påminnelser
-❤️ Stöd
-🎬 Video
-💛 Mående
-💬 Säg så här
-LUMORA
-Vad händer just nu?
-Välj den situation som känns mest lik det du möter hemma. LUMORA hjälper dig sedan steg för steg.
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#17443e">
+<title>LUMORA 10</title>
+<style>
+:root{--ink:#173b38;--brand:#398b77;--soft:#e8f3ee;--bg:#f7f8f6;--line:#dce6e1;--muted:#667873;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+.app{max-width:900px;margin:auto;padding:14px 14px 80px}
+header{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.logo{width:46px;height:46px;border-radius:15px;background:#dceee7;display:grid;place-items:center;font-size:25px}
+.brand{font-size:24px;font-weight:800}
+.tag{font-size:11px;color:var(--muted);margin-top:2px}
+nav{display:flex;gap:7px;overflow:auto;padding:4px 0 12px}
+nav button{border:0;background:#e8efeb;color:var(--ink);border-radius:13px;padding:9px 12px;font-weight:700;white-space:nowrap;cursor:pointer}
+nav button.active{background:var(--brand);color:white}
+.page{display:none}
+.page.active{display:block}
+.hero{background:linear-gradient(135deg,#eaf5f0,#dceee7);padding:25px;border-radius:27px}
+.hero h1{font-size:31px;margin:8px 0}
+.muted{color:var(--muted);line-height:1.5}
+.section{font-size:22px;font-weight:800;margin:21px 2px 7px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:12px}
+.card,.item,.word{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:16px;margin:11px 0}
+.tile{border:0;background:white;border-radius:20px;padding:16px;min-height:145px;text-align:left;box-shadow:0 3px 12px #173b380c;cursor:pointer;color:var(--ink)}
+.tile .emoji{font-size:29px}
+.tile strong{display:block;font-size:17px;margin:8px 0 5px}
+.tile small{color:var(--muted);line-height:1.4}
+.chip{display:inline-block;background:#e5f1ec;border-radius:99px;padding:4px 8px;font-size:11px;margin-top:8px}
+.btn{width:100%;min-height:51px;border-radius:14px;font-weight:800;font-size:15px;cursor:pointer;margin-top:9px}
+.primary{border:0;background:var(--brand);color:white}
+.secondary{border:2px solid var(--brand);background:white;color:var(--brand)}
+.back{border:0;background:transparent;color:var(--ink);font-weight:800;padding:8px 0;cursor:pointer}
+.flow{text-align:center}
+.flow .emoji{font-size:52px}
+.flow h1{font-size:28px}
+.progress{height:8px;background:#e2ebe7;border-radius:99px;overflow:hidden;margin:15px 0}
+.progress i{display:block;height:100%;background:var(--brand)}
+.step{background:var(--soft);padding:19px;border-radius:21px;text-align:left}
+.step b{font-size:13px}
+.step p{font-size:19px;line-height:1.45;margin-bottom:0}
+.example{background:#fff8e8;border-radius:19px;padding:16px;text-align:left;margin-top:12px}
+.input,.textarea,.select{width:100%;border:1px solid #ccd9d4;border-radius:11px;padding:11px;background:white;color:var(--ink);font:inherit}
+.textarea{min-height:90px;resize:vertical}
+.field{margin-top:11px}
+.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:5px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:#eff6f2;border-radius:15px;padding:10px}
+.stat span{font-size:11px;color:var(--muted)}
+.stat b{display:block;font-size:23px}
+.moodbtn{border:1px solid var(--line);background:white;border-radius:17px;padding:14px;font-weight:700;min-height:78px;cursor:pointer}
+.moodbtn.active{background:var(--soft);border:2px solid var(--brand)}
+.quote{background:var(--soft);border-radius:15px;padding:13px;margin-top:9px;font-weight:650}
+.support{background:#fff8e8;border-radius:18px;padding:15px;margin-top:12px}
+.video-card{background:#fff;border:1px solid var(--line);border-radius:21px;padding:12px;margin:11px 0}
+.video-screen{position:relative;min-height:185px;border-radius:17px;background:linear-gradient(135deg,#dfeee8,#f9e8c8);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.characters{display:flex;align-items:center;gap:16px;font-size:43px;padding:25px}
+.bubble{font-size:12px;line-height:1.35;background:#fff;padding:11px;border-radius:15px;max-width:220px}
+.play{position:absolute;right:12px;bottom:12px;width:42px;height:42px;border-radius:50%;background:var(--brand);color:white;display:grid;place-items:center}
+.empty{text-align:center;color:var(--muted);padding:25px}
+.small{border:0;background:#e8efeb;border-radius:10px;padding:8px 10px;font-weight:700;margin-top:8px;cursor:pointer}
 
-Barn
-0
-Sparade
-0
-Att följa upp
-0
-Påminnelser
-0
-Välj en situation
-Varje situation har fem exempel och fem enkla steg.
+@media(max-width:700px){
+body{font-size:16px}
+.app{width:100%;max-width:680px;padding:12px 12px 28px}
+header{gap:10px;margin-bottom:14px}
+.brand{font-size:28px}
+.tag{font-size:14px}
+nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px;overflow:visible}
+nav button{min-height:58px;padding:10px 8px;font-size:15px;line-height:1.15}
+.hero{padding:20px;border-radius:24px}
+.hero h1{font-size:30px;line-height:1.08}
+.hero p{font-size:17px;line-height:1.45}
+.section{font-size:23px;margin-top:18px}
+.muted{font-size:16px;line-height:1.45}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{min-width:0;padding:14px;border-radius:18px}
+.stat span{font-size:14px}
+.stat b{font-size:30px;line-height:1.1;margin-top:3px}
+.grid{grid-template-columns:1fr;gap:10px}
+.tile{width:100%;min-width:0;padding:18px;border-radius:20px}
+.tile strong{font-size:18px}
+.tile small{font-size:15px;line-height:1.4}
+.card,.hero,.item,.word,.support,.flow,.example{max-width:100%;overflow-wrap:anywhere}
+.btn{width:100%;min-height:54px}
+.input,.textarea,.select{width:100%;font-size:16px}
+}
 
-😤
-Mitt barn får ett utbrott
-När barnet blir väldigt argt eller ledset och det känns som att ingenting du säger hjälper. Här får du hjälp att först lugna situationen och sedan förstå vad som kan ligga bakom.5 exempel + 5 steg
-📱
-Vi bråkar om mobilen/skärmen
-När mobilen, surfplattan eller tv:n ofta leder till bråk. Du får hjälp att sätta tydliga gränser utan att göra varje avslut till en stor konflikt.5 exempel + 5 steg
-🛏️
-Läggningen fungerar inte
-När det är dags att sova men barnet inte vill, och kvällen lätt blir en kamp. Här får du enkla idéer för att skapa en lugnare kväll och en tydligare rutin.5 exempel + 5 steg
-🏫
-Mitt barn vill inte gå till skolan
-När barnet inte vill gå till skolan eller verkar må dåligt inför skoldagen. Du får hjälp att förstå vad du kan göra hemma och när det kan vara bra att ta kontakt med skolan.5 exempel + 5 steg
-💬
-Mitt barn vill inte prata
-När du märker att barnet inte vill berätta vad som hänt eller hur det mår. Här får du tips på hur du kan närma dig barnet utan att pressa fram ett svar.5 exempel + 5 steg
-😟
-Mitt barn verkar ledset
-När barnet verkar mer ledset, tyst eller annorlunda än vanligt. Du får hjälp att lägga märke till förändringar och fundera på vilket stöd barnet kan behöva.5 exempel + 5 steg
-🏠
-Vi bråkar mycket hemma
-När det ofta blir bråk hemma och du känner att samma situationer upprepas. Här får du hjälp att hitta små förändringar som kan göra vardagen lugnare.5 exempel + 5 steg
-🔥
-Jag håller på att tappa tålamodet
-När du är trött, stressad eller känner att tålamodet håller på att ta slut. Du får hjälp att stanna upp, ta hand om dig själv och hitta ett lugnare sätt att agera.5 exempel + 5 steg
-👥
-Mitt barn har problem med kompisar
-När barnet har svårt med kompisar, känner sig utanför eller ofta hamnar i konflikter. Här får du hjälp att förstå hur du kan stötta utan att ta över.5 exempel + 5 steg
-❤️
-Jag känner mig som en dålig förälder
-När du känner att du inte räcker till eller ångrar hur du reagerat. Här får du hjälp att släppa lite av skulden och fokusera på vad du kan göra annorlunda nästa gång.5 exempel + 5 steg
+@media(min-width:701px){
+.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+<div class="logo">✦</div>
+<div>
+<div class="brand">LUMORA</div>
+<div class="tag">Stöd i vardagen för föräldrar</div>
+</div>
+</header>
+
+<nav id="nav">
+<button data-page="home" class="active">Hem</button>
+<button data-page="children">Barn</button>
+<button data-page="history">Historik</button>
+<button data-page="patterns">Mönster</button>
+<button data-page="follow">Uppföljning</button>
+<button data-page="reminders">Påminnelser</button>
+<button data-page="support">❤️ Stöd</button>
+<button data-page="videos">🎬 Video</button>
+<button data-page="mood">💛 Mående</button>
+<button data-page="words">💬 Säg så här</button>
+</nav>
+
+<section id="home" class="page active">
+
+<div class="hero">
+<b>LUMORA</b>
+<h1>Vad händer just nu?</h1>
+<p>Välj den situation som känns mest lik det du möter hemma. LUMORA hjälper dig sedan steg för steg.</p>
+</div>
+
+<div class="card">
+<div class="stats">
+<div class="stat">
+<span>Barn</span>
+<b id="nChildren">0</b>
+</div>
+
+<div class="stat">
+<span>Sparade</span>
+<b id="nEvents">0</b>
+</div>
+
+<div class="stat">
+<span>Att följa upp</span>
+<b id="nFollow">0</b>
+</div>
+
+<div class="stat">
+<span>Påminnelser</span>
+<b id="nRem">0</b>
+</div>
+</div>
+</div>
+
+<div class="section">Välj en situation</div>
+<p class="muted">Varje situation har fem exempel och fem enkla steg.</p>
+<div id="situations" class="grid"></div>
+
+</section>
+
+<section id="examples" class="page">
+<button class="back" onclick="show('home')">← Tillbaka</button>
+<div class="section" id="exampleTitle"></div>
+<p class="muted">Välj det exempel som bäst beskriver det som händer hemma. Det finns inget rätt eller fel svar.</p>
+<div id="exampleList"></div>
+</section>
+
+<section id="flow" class="page">
+
+<button class="back" onclick="show('examples')">← Tillbaka</button>
+
+<div class="card">
+<b>Du behöver inte lösa allt på en gång.</b>
+<p class="muted">LUMORA hjälper dig att ta ett litet steg i taget.</p>
+</div>
+
+<div class="flow">
+<div class="emoji" id="flowEmoji"></div>
+<h1 id="flowTitle"></h1>
+<p class="muted" id="flowExample"></p>
+</div>
+
+<div id="videoPreview"></div>
+
+<div class="progress">
+<i id="progressBar"></i>
+</div>
+
+<div class="step">
+<b id="stepNumber"></b>
+<p id="stepText"></p>
+</div>
+
+<div class="example">
+<b id="questionTitle"></b>
+<p class="muted" id="questionText"></p>
+</div>
+
+<div class="card">
+<span class="chip">Varför kan detta hjälpa?</span>
+<p class="muted" id="whyText"></p>
+</div>
+
+<div id="saveArea"></div>
+
+<button class="btn primary" id="nextBtn" onclick="nextStep()">Nästa steg →</button>
+<button class="btn secondary" onclick="previousStep()">← Föregående</button>
+
+</section>
+
+<section id="children" class="page">
+
+<div class="section">👶 Barn</div>
+<p class="muted">Skapa en enkel profil. Du kan ändra informationen senare.</p>
+
+<div id="childList"></div>
+
+<div class="card">
+<b>Lägg till barn</b>
+
+<div class="field">
+<label>Namn eller smeknamn</label>
+<input id="childName" class="input">
+</div>
+
+<div class="field">
+<label>Ålder</label>
+<input id="childAge" class="input" type="number">
+</div>
+
+<div class="field">
+<label>Vad är viktigt att komma ihåg?</label>
+<textarea id="childNote" class="textarea"></textarea>
+</div>
+
+<button class="btn primary" onclick="addChild()">Spara barn</button>
+</div>
+
+</section>
+
+<section id="history" class="page">
+<div class="section">📚 Historik</div>
+<p class="muted">Här sparas situationer du själv har valt att följa upp.</p>
+<div id="historyList"></div>
+</section>
+
+<section id="patterns" class="page">
+<div class="section">📊 Mönster</div>
+<p class="muted">LUMORA visar återkommande områden i din egen historik. Det är en hjälp för reflektion, inte en diagnos.</p>
+<div id="patternList"></div>
+</section>
+
+<section id="follow" class="page">
+<div class="section">🎯 Uppföljning</div>
+<p class="muted">Se vad du ville prova och vad du vill göra nästa gång.</p>
+<div id="followList"></div>
+</section>
+
+<section id="reminders" class="page">
+
+<div class="section">🔔 Påminnelser</div>
+<div id="reminderList"></div>
+
+<div class="card">
+<b>Ny påminnelse</b>
+
+<div class="field">
+<label>Vad vill du bli påmind om?</label>
+<input id="remText" class="input" placeholder="Följ upp läggningen">
+</div>
+
+<div class="field">
+<label>Datum</label>
+<input id="remDate" class="input" type="date">
+</div>
+
+<button class="btn primary" onclick="addReminder()">Spara påminnelse</button>
+</div>
+
+</section>
+
+<section id="support" class="page">
+
+<div class="section">❤️ Behöver du prata med någon?</div>
+<p class="muted">Du behöver inte lösa allt själv. Välj det som ligger närmast.</p>
+
+<div class="card">
+
+<button class="btn primary" onclick="support('prata')">💬 Jag behöver prata med någon</button>
+
+<button class="btn secondary" onclick="support('barn')">👶 Jag är orolig för mitt barn</button>
+
+<button class="btn secondary" onclick="support('skola')">🏫 Det handlar om skolan</button>
+
+<button class="btn secondary" onclick="support('familj')">👨‍👩‍👧 Det är mycket konflikter hemma</button>
+
+<button class="btn secondary" onclick="support('akut')">🚨 Situationen känns akut</button>
+
+</div>
+
+<div id="supportResult"></div>
+
+</section>
+
+<section id="videos" class="page">
+
+<div class="section">🎬 LUMORA Video</div>
+
+<p class="muted">
+Korta animerade vardagssituationer. I prototypen visas enkla scener. Senare kan de bli riktiga animerade filmer med dialog och berättarröst.
+</p>
+
+<div id="videoList"></div>
+
+</section>
+
+<section id="mood" class="page">
+
+<div class="section">💛 Hur känns det just nu?</div>
+
+<p class="muted">
+Det finns inget rätt eller fel svar. Att stanna upp kan hjälpa dig att välja nästa steg.
+</p>
+
+<div class="card">
+<b>Hur känns det för dig?</b>
+<div id="parentMood" class="grid"></div>
+</div>
+
+<div class="card">
+<b>Hur verkar barnet må?</b>
+<div id="childMood" class="grid"></div>
+</div>
+
+<div id="moodSaved"></div>
+
+</section>
+
+<section id="words" class="page">
+
+<div class="section">💬 Vad kan jag säga?</div>
+
+<p class="muted">
+I en pressad situation är det inte alltid lätt att hitta orden. Här får du enkla exempel som du kan anpassa.
+</p>
+
+<div id="wordsList"></div>
+
+</section>
+
+</div>
+
+<script>
+
+const S=[
+
+["😤","Mitt barn får ett utbrott",
+"När barnet blir väldigt argt eller ledset och det känns som att ingenting du säger hjälper. Här får du hjälp att först lugna situationen och sedan förstå vad som kan ligga bakom.",
+[
+"Barnet skriker och blir argt när jag säger nej.",
+"Barnet kastar saker eller slår när det blir väldigt argt.",
+"Barnet får ett stort utbrott när skärmen ska stängas av.",
+"Barnet blir argt när en lek eller aktivitet måste ta slut.",
+"Barnet blir helt överväldigat och går inte att nå just då."
+]],
+
+["📱","Vi bråkar om mobilen/skärmen",
+"När mobilen, surfplattan eller tv:n ofta leder till bråk. Du får hjälp att sätta tydliga gränser utan att göra varje avslut till en stor konflikt.",
+[
+"Barnet vägrar lämna ifrån sig mobilen när tiden är slut.",
+"Det blir bråk varje gång skärmen ska stängas av.",
+"Barnet smyger med mobilen eller använder den längre än vi kommit överens om.",
+"Jag vet inte hur mycket skärmtid som är rimligt för mitt barn.",
+"Jag och mitt barn har olika syn på vilka regler som ska gälla."
+]],
+
+["🛏️","Läggningen fungerar inte",
+"När det är dags att sova men barnet inte vill, och kvällen lätt blir en kamp. Här får du enkla idéer för att skapa en lugnare kväll och en tydligare rutin.",
+[
+"Barnet vägrar gå och lägga sig.",
+"Barnet hittar nya saker att göra varje gång det är dags att sova.",
+"Barnet blir argt när jag lämnar rummet.",
+"Barnet vill ha mobilen eller skärmen vid läggningen.",
+"Kvällarna slutar ofta med att både jag och barnet är helt slut."
+]],
+
+["🏫","Mitt barn vill inte gå till skolan",
+"När barnet inte vill gå till skolan eller verkar må dåligt inför skoldagen. Du får hjälp att förstå vad du kan göra hemma och när det kan vara bra att ta kontakt med skolan.",
+[
+"Barnet vägrar gå till skolan på morgonen.",
+"Barnet har återkommande ont i magen eller mår dåligt inför skolan.",
+"Barnet har börjat vara hemma från skolan oftare.",
+"Barnet säger att det inte har någon att vara med.",
+"Jag misstänker att något i skolan gör barnet oroligt eller otryggt."
+]],
+
+["💬","Mitt barn vill inte prata",
+"När du märker att barnet inte vill berätta vad som hänt eller hur det mår. Här får du tips på hur du kan närma dig barnet utan att pressa fram ett svar.",
+[
+"Barnet svarar bara 'vet inte' när jag frågar.",
+"Barnet går undan när jag försöker prata om något svårt.",
+"Barnet blir argt när jag ställer frågor.",
+"Jag märker att något verkar vara fel men barnet vill inte berätta.",
+"Barnet pratar lättare med andra än med mig."
+]],
+
+["😟","Mitt barn verkar ledset",
+"När barnet verkar mer ledset, tyst eller annorlunda än vanligt. Du får hjälp att lägga märke till förändringar och fundera på vilket stöd barnet kan behöva.",
+[
+"Barnet verkar ledset utan att kunna säga varför.",
+"Barnet har blivit mer tyst eller drar sig undan.",
+"Barnet gråter lättare än tidigare.",
+"Barnet har slutat vilja göra sådant som brukar vara roligt.",
+"Jag är osäker på om det är en vanlig period eller något jag behöver ta på allvar."
+]],
+
+["🏠","Vi bråkar mycket hemma",
+"När det ofta blir bråk hemma och du känner att samma situationer upprepas. Här får du hjälp att hitta små förändringar som kan göra vardagen lugnare.",
+[
+"Jag och mitt barn hamnar ofta i samma konflikt.",
+"Små saker blir snabbt stora bråk.",
+"Jag känner att jag tjatar hela tiden.",
+"Jag och den andra föräldern har olika regler eller sätt att göra saker.",
+"Det känns som att hela familjen går på tå hemma."
+]],
+
+["🔥","Jag håller på att tappa tålamodet",
+"När du är trött, stressad eller känner att tålamodet håller på att ta slut. Du får hjälp att stanna upp, ta hand om dig själv och hitta ett lugnare sätt att agera.",
+[
+"Jag känner att jag snart kommer att skrika.",
+"Jag blir arg mycket snabbare än jag brukar.",
+"Jag känner mig helt slut och får ingen återhämtning.",
+"Jag har dåligt samvete efter att jag blivit arg på mitt barn.",
+"Jag känner att jag inte vet hur jag ska orka fortsätta just nu."
+]],
+
+["👥","Mitt barn har problem med kompisar",
+"När barnet har svårt med kompisar, känner sig utanför eller ofta hamnar i konflikter. Här får du hjälp att förstå hur du kan stötta utan att ta över.",
+[
+"Mitt barn säger att ingen vill vara med.",
+"Mitt barn hamnar ofta i konflikter med kompisar.",
+"Mitt barn blir retat eller känner sig utanför.",
+"Mitt barn vill inte längre gå till aktiviteter på grund av andra barn.",
+"Jag vet inte hur mycket jag ska lägga mig i mitt barns kompisproblem."
+]],
+
+["❤️","Jag känner mig som en dålig förälder",
+"När du känner att du inte räcker till eller ångrar hur du reagerat. Här får du hjälp att släppa lite av skulden och fokusera på vad du kan göra annorlunda nästa gång.",
+[
+"Jag känner att jag aldrig gör tillräckligt som förälder.",
+"Jag jämför mig med andra föräldrar och känner mig sämre.",
+"Jag har gjort något jag ångrar och vet inte hur jag ska reparera det.",
+"Jag och mitt barn har haft många konflikter och jag känner skuld.",
+"Jag känner mig ensam i föräldraskapet och behöver prata med någon."
+]]
+
+];
+
+const steps=[
+
+"Stanna upp och förstå vad som händer. Försök först att se vad som händer precis nu. Vad gör barnet? Vad gör du? Vad hände precis innan?",
+
+"Sänk tempot och gör situationen lite lugnare. När känslorna är starka är det svårt att lösa problemet. Försök därför först att lugna situationen.",
+
+"Välj ett konkret sätt att agera eller prata. Du behöver inte hitta den perfekta lösningen. Välj en enkel sak du kan säga eller göra just nu.",
+
+"Tänk efter vad du själv vill prova nästa gång. Fundera på vad som fungerade, vad som inte fungerade och vad du vill göra lite annorlunda nästa gång.",
+
+"Spara en enkel plan och bestäm vad du vill följa upp. Skriv ner det viktigaste så att du kan komma tillbaka senare och se om något har förändrats."
+
+];
+
+const qs=[
+
+["Vad behöver du lägga märke till?","Beskriv vad som händer utan att lägga skuld på dig själv eller barnet."],
+
+["Vad kan hjälpa just nu?","Tänk på vad som kan göra situationen lite lugnare. Det behöver inte lösa allt på en gång."],
+
+["Vad kan du säga eller göra?","Välj några enkla ord eller en liten handling som du tror kan hjälpa."],
+
+["Vad vill du göra annorlunda?","Välj en liten förändring som känns möjlig att prova hemma."],
+
+["Spara och följ upp","Skriv kort vad som hände och vad du vill prova."]
+
+];
+
+const why=[
+
+"Att först förstå situationen gör det lättare att välja hur du vill agera.",
+
+"När känslorna är starka är det ofta svårt att lyssna och tänka. En lugnare situation gör nästa steg lättare.",
+
+"En enkel och tydlig mening kan vara lättare för både dig och barnet att ta in än många förklaringar.",
+
+"Små förändringar som går att upprepa är ofta lättare att få in i vardagen än stora förändringar.",
+
+"När du sparar och följer upp kan du se vad som faktiskt hjälpte just er."
+
+];
+
+const EMPTY_DB={
+children:[],
+events:[],
+follow:[],
+reminders:[]
+};
+
+function loadDB(){
+
+const keys=["lumora10","lumora9","lumora"];
+
+for(const key of keys){
+
+try{
+
+const raw=localStorage.getItem(key);
+
+if(raw){
+
+const data=JSON.parse(raw);
+
+if(data && typeof data === "object"){
+
+const clean={
+children:Array.isArray(data.children)?data.children:[],
+events:Array.isArray(data.events)?data.events:[],
+follow:Array.isArray(data.follow)?data.follow:[],
+reminders:Array.isArray(data.reminders)?data.reminders:[]
+};
+
+localStorage.setItem("lumora10",JSON.stringify(clean));
+
+return clean;
+
+}
+
+}
+
+}catch(e){}
+
+}
+
+return {...EMPTY_DB};
+
+}
+
+let db=loadDB();
+let si=0,ei=0,step=0;
+
+const $=id=>document.getElementById(id);
+
+const esc=x=>String(x??"").replace(/[&<>"']/g,m=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[m]));
+
+function save(){
+
+localStorage.setItem("lumora10",JSON.stringify(db));
+renderAll();
+
+}
+
+function show(id){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+const p=$(id);
+
+if(p)p.classList.add("active");
+
+document.querySelectorAll("nav button").forEach(b=>
+b.classList.toggle("active",b.dataset.page===id)
+);
+
+window.scrollTo(0,0);
+
+renderAll();
+
+}
+
+document.querySelectorAll("nav button").forEach(b=>
+b.addEventListener("click",()=>show(b.dataset.page))
+);
+
+function openSituation(i){
+
+si=i;
+
+$("exampleTitle").textContent=S[i][1];
+
+$("exampleList").innerHTML=S[i][3].map((x,j)=>
+`<button class="tile" style="width:100%;min-height:92px;margin:7px 0" onclick="openExample(${j})">
+<strong>Exempel ${j+1}</strong>
+<small>${esc(x)}</small>
+</button>`
+).join("");
+
+show("examples");
+
+}
+
+function openExample(i){
+
+ei=i;
+step=0;
+renderFlow();
+show("flow");
+
+}
+
+function renderFlow(){
+
+const s=S[si];
+
+$("flowEmoji").textContent=s[0];
+$("flowTitle").textContent=s[1];
+$("flowExample").textContent=s[3][ei];
+
+$("stepNumber").textContent="Steg "+(step+1)+" av 5";
+$("stepText").textContent=steps[step];
+
+$("questionTitle").textContent=qs[step][0];
+$("questionText").textContent=qs[step][1];
+
+$("whyText").textContent=why[step];
+
+$("progressBar").style.width=((step+1)/5*100)+"%";
+
+$("nextBtn").textContent=
+step===4
+?"💾 Spara & skapa uppföljning"
+:"Nästa steg →";
+
+$("videoPreview").innerHTML=
+`<div class="video-card">
+<div class="video-screen">
+<div class="characters">
+<span>🧑</span>
+<span class="bubble">"${esc(s[3][ei])}"</span>
+<span>🧒</span>
+</div>
+<div class="play">▶</div>
+</div>
+</div>`;
+
+const childOptions=
+db.children.length
+?db.children.map(c=>
+'<option value="'+c.id+'">'+esc(c.name)+'</option>'
+).join("")
+:'<option value="">Lägg till barn först</option>';
+
+const saveHtml=
+'<div class="card">'+
+'<div class="field"><label>Barn</label>'+
+'<select id="eventChild" class="select">'+childOptions+'</select></div>'+
+'<div class="field"><label>Vad hände?</label>'+
+'<textarea id="eventNote" class="textarea" placeholder="Skriv några ord..."></textarea></div>'+
+'<div class="field"><label>Min plan</label>'+
+'<textarea id="eventPlan" class="textarea" placeholder="Vad vill jag prova nästa gång?"></textarea></div>'+
+'</div>';
+
+$("saveArea").innerHTML=step===4?saveHtml:"";
+
+}
+
+function nextStep(){
+
+if(step<4){
+
+step++;
+renderFlow();
+return;
+
+}
+
+if(!db.children.length){
+
+alert("Lägg först till ett barn under Barn.");
+show("children");
+return;
+
+}
+
+const e={
+id:Date.now(),
+child:$("eventChild").value,
+topic:S[si][1],
+example:S[si][3][ei],
+note:$("eventNote").value,
+plan:$("eventPlan").value,
+date:new Date().toISOString()
+};
+
+db.events.unshift(e);
+
+db.follow.unshift({
+id:Date.now()+"f",
+event:e.id,
+done:false
+});
+
+save();
+
+show("follow");
+
+}
+
+function previousStep(){
+
+if(step>0){
+step--;
+renderFlow();
+}else{
+show("examples");
+}
+
+}
+
+function addChild(){
+
+const name=$("childName").value.trim();
+
+if(!name){
+
+alert("Skriv barnets namn eller smeknamn.");
+return;
+
+}
+
+db.children.push({
+id:Date.now(),
+name,
+age:$("childAge").value,
+note:$("childNote").value
+});
+
+$("childName").value="";
+$("childAge").value="";
+$("childNote").value="";
+
+save();
+
+}
+
+function addReminder(){
+
+const text=$("remText").value.trim();
+const date=$("remDate").value;
+
+if(!text||!date){
+
+alert("Fyll i text och datum.");
+return;
+
+}
+
+db.reminders.push({
+id:Date.now(),
+text,
+date,
+done:false
+});
+
+$("remText").value="";
+$("remDate").value="";
+
+save();
+
+}
+
+function completeFollow(id){
+
+const f=db.follow.find(x=>String(x.id)===String(id));
+
+if(f)f.done=true;
+
+save();
+
+}
+
+function completeReminder(id){
+
+const r=db.reminders.find(x=>String(x.id)===String(id));
+
+if(r)r.done=true;
+
+save();
+
+}
+
+function renderAll(){
+
+$("nChildren").textContent=db.children.length;
+
+$("nEvents").textContent=db.events.length;
+
+$("nFollow").textContent=
+db.follow.filter(x=>!x.done).length;
+
+$("nRem").textContent=
+db.reminders.filter(x=>!x.done).length;
+
+$("situations").innerHTML=
+S.map((s,i)=>
+`<button class="tile" onclick="openSituation(${i})">
+<span class="emoji">${s[0]}</span>
+<strong>${s[1]}</strong>
+<small>${s[2]}</small>
+<span class="chip">5 exempel + 5 steg</span>
+</button>`
+).join("");
+
+$("childList").innerHTML=
+db.children.length
+?db.children.map(c=>
+`<div class="item">
+<b>👤 ${esc(c.name)}</b>
+${c.age?` <span class="chip">${esc(c.age)} år</span>`:""}
+<p class="muted">${esc(c.note)}</p>
+</div>`
+).join("")
+:'<div class="empty">Inga barn ännu.</div>';
+
+$("historyList").innerHTML=
+db.events.length
+?db.events.map(e=>
+`<div class="item">
+<b>${esc(e.topic)}</b>
+<p class="muted">
+${esc(e.example)} · ${new Date(e.date).toLocaleDateString("sv-SE")}
+</p>
+<p>${esc(e.note)}</p>
+<span class="chip">
+Plan: ${esc(e.plan||"Ej angiven")}
+</span>
+</div>`
+).join("")
+:'<div class="empty">Ingen historik ännu.</div>';
+
+const counts={};
+
+db.events.forEach(e=>
+counts[e.topic]=(counts[e.topic]||0)+1
+);
+
+$("patternList").innerHTML=
+Object.entries(counts)
+.sort((a,b)=>b[1]-a[1])
+.map(([k,v])=>
+`<div class="item">
+<b>${esc(k)}</b>
+<p class="muted">
+Du har sparat ${v} situation${v===1?"":"er"} inom detta område.
+Det kan vara något du vill följa lite extra.
+</p>
+</div>`
+).join("")
+||
+'<div class="empty">Spara några situationer så visas möjliga mönster.</div>';
+
+$("followList").innerHTML=
+db.follow
+.filter(f=>!f.done)
+.map(f=>{
+
+const e=db.events.find(x=>x.id==f.event);
+
+return `<div class="item">
+<b>🎯 Följ upp: ${esc(e?.topic||"situation")}</b>
+<p class="muted">${esc(e?.plan||"Du har ingen plan sparad.")}</p>
+<button class="small" onclick="completeFollow('${f.id}')">
+Markera som klar
+</button>
+</div>`;
+
+})
+.join("")
+||
+'<div class="empty">Inga öppna uppföljningar. 🎉</div>';
+
+$("reminderList").innerHTML=
+db.reminders.map(r=>
+`<div class="item">
+<b>🔔 ${esc(r.text)}</b>
+<p class="muted">${esc(r.date)}</p>
+${
+r.done
+?'<span class="chip">Klar</span>'
+:`<button class="small" onclick="completeReminder('${r.id}')">Markera klar</button>`
+}
+</div>`
+).join("")
+||
+'<div class="empty">Inga påminnelser.</div>';
+
+renderVideos();
+renderMoods();
+renderWords();
+
+}
+
+function renderVideos(){
+
+$("videoList").innerHTML=
+S.map((s,i)=>
+`<div class="video-card">
+<b>${s[0]} ${s[1]}</b>
+<div class="video-screen">
+<div class="characters">
+<span>🧑</span>
+<span class="bubble">"${esc(s[3][0])}"</span>
+<span>🧒</span>
+</div>
+<div class="play">▶</div>
+</div>
+<p class="muted">${esc(s[2])}</p>
+<button class="btn secondary" onclick="openSituation(${i})">
+Gå till situationen
+</button>
+</div>`
+).join("");
+
+}
+
+const moods=[
+["😌","Lugn"],
+["🙂","Okej"],
+["😟","Orolig"],
+["😠","Frustrerad"],
+["😫","Helt slut"]
+];
+
+function mood(type,val){
+
+const x=JSON.parse(
+localStorage.getItem("lumoraMood")||'{"p":"","c":""}'
+);
+
+x[type]=val;
+
+localStorage.setItem(
+"lumoraMood",
+JSON.stringify(x)
+);
+
+renderMoods();
+
+}
+
+function renderMoods(){
+
+const x=JSON.parse(
+localStorage.getItem("lumoraMood")||'{"p":"","c":""}'
+);
+
+$("parentMood").innerHTML=
+moods.map(m=>
+`<button class="moodbtn ${x.p===m[1]?"active":""}"
+onclick="mood('p','${m[1]}')">
+${m[0]}<br>${m[1]}
+</button>`
+).join("");
+
+$("childMood").innerHTML=
+moods.map(m=>
+`<button class="moodbtn ${x.c===m[1]?"active":""}"
+onclick="mood('c','${m[1]}')">
+${m[0]}<br>${m[1]}
+</button>`
+).join("");
+
+$("moodSaved").innerHTML=
+x.p||x.c
+?'<div class="support"><b>Sparat för stunden.</b><p class="muted">Du kan ändra känslan när den förändras.</p></div>'
+:"";
+
+}
+
+const words=[
+
+["😤","När barnet är argt",
+"Jag ser att du är arg. Jag lyssnar när du är redo. Vi behöver fortfarande hålla den här gränsen.",
+"Du behöver inte sluta vara arg. Jag hjälper dig igenom det."],
+
+["📱","När skärmen ska stängas",
+"Jag vet att du vill fortsätta. Det är svårt att sluta när man har roligt. Nu är tiden slut.",
+"Vill du stänga av själv eller vill du att jag hjälper dig?"],
+
+["🛏️","När barnet inte vill sova",
+"Jag hör att du inte vill gå och lägga dig. Nu börjar vår kvällsrutin och jag hjälper dig.",
+"Vi behöver inte lösa allt nu. Vi tar en sak i taget."],
+
+["💬","När barnet inte vill prata",
+"Du behöver inte berätta allt nu. Jag finns här när du vill prata.",
+"Jag tänker inte pressa dig. Jag vill bara att du ska veta att jag finns här."],
+
+["🏫","När barnet inte vill gå till skolan",
+"Jag hör att det känns jobbigt. Vi behöver försöka förstå vad som gör det svårt.",
+"Du behöver inte lösa allt själv. Vi kan prata med skolan tillsammans."]
+
+];
+
+function renderWords(){
+
+$("wordsList").innerHTML=
+words.map(w=>
+`<div class="word">
+<b>${w[0]} ${w[1]}</b>
+<div class="quote">"${w[2]}"</div>
+<div class="quote">"${w[3]}"</div>
+</div>`
+).join("");
+
+}
+
+function support(t){
+
+const d={
+
+prata:[
+"💬 Prata med någon",
+"Börja med kommunens stöd eller vården beroende på vad du behöver hjälp med."
+],
+
+barn:[
+"👶 Oro för barnets mående",
+"Om du är orolig för barnets mående kan du söka råd hos vården, elevhälsan eller annan professionell verksamhet."
+],
+
+skola:[
+"🏫 Skolan",
+"Börja med skolan eller elevhälsan. Berätta vad du ser hemma och fråga hur ni kan samarbeta."
+],
+
+familj:[
+"👨‍👩‍👧 Konflikter hemma",
+"Kommunens socialtjänst kan ge råd om vilket familjestöd som finns där du bor."
+],
+
+akut:[
+"🚨 Akut",
+"Om det finns omedelbar fara för liv eller hälsa ska du söka akut hjälp."
+]
+
+}[t];
+
+$("supportResult").innerHTML=
+`<div class="support">
+<b>${d[0]}</b>
+<p class="muted">${d[1]}</p>
+<p class="muted">
+<b>Viktigt:</b> LUMORA ersätter inte vård, skola eller professionellt stöd.
+</p>
+<a href="https://www.1177.se/" target="_blank" rel="noopener">1177</a>
+</div>`;
+
+}
+
+renderAll();
+
+window.addEventListener("pageshow",()=>{
+db=loadDB();
+renderAll();
+});
+
+window.addEventListener("storage",()=>{
+db=loadDB();
+renderAll();
+});
+
+</script>
+
+</body>
+</html>
