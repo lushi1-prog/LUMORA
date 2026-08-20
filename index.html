@@ -4,13 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#17443e">
-<title>LUMORA 10</title>
+<title>LUMORA 10 – scrollfix v2</title>
 <style>
 :root{--ink:#173b38;--brand:#398b77;--soft:#e8f3ee;--bg:#f7f8f6;--line:#dce6e1;--muted:#667873;--white:#fff}
 *{box-sizing:border-box}
-html{min-height:100%;height:auto;overflow-y:auto;overflow-x:hidden;scroll-behavior:auto}
-body{margin:0;min-height:100vh;height:auto;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
-.app{height:auto;min-height:100vh;overflow:visible}
+html{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  height:auto !important;
+  overflow-x:hidden !important;
+  overflow-y:scroll !important;
+  scroll-behavior:auto;
+}
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100vh;
+  height:auto !important;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden !important;
+  overflow-y:visible !important;
+  -webkit-overflow-scrolling:touch;
+}
+.app{
+  position:relative;
+  width:100%;
+  height:auto !important;
+  min-height:100vh;
+  overflow:visible !important;
+}
 .app{max-width:900px;margin:auto;padding:14px 14px 80px}
 header{display:flex;align-items:center;gap:11px;margin-bottom:12px}
 .logo{width:46px;height:46px;border-radius:15px;background:#dceee7;display:grid;place-items:center;font-size:25px}
@@ -98,7 +125,7 @@ nav button.active{background:var(--brand);color:white}
   }
 </style>
 </head>
-<body>
+<body id="top">
 <div class="app">
 <header><div class="logo">✦</div><div><div class="brand">LUMORA</div><div class="tag">Stöd i vardagen för föräldrar</div></div></header>
 
@@ -199,17 +226,34 @@ let si=0,ei=0,step=0;
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function save(){localStorage.setItem("lumora9",JSON.stringify(db));renderAll()}
+function forceTop(){
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+  window.scrollTo(0,0);
+}
 function show(id){
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  const p=$(id); if(p)p.classList.add("active");
  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
- window.scrollTo(0,0); renderAll();
+ forceTop();
+ renderAll();
+ requestAnimationFrame(()=>forceTop());
+ setTimeout(forceTop,50);
+ setTimeout(forceTop,150);
 }
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));
 
-// Förhindra att webbläsaren återställer en gammal scrollposition vid omladdning.
+// LUMORA ska alltid använda sidans vanliga dokument-scroll.
 if("scrollRestoration" in history){history.scrollRestoration="manual"}
-window.addEventListener("load",()=>{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0});
+window.addEventListener("load",()=>{forceTop();setTimeout(forceTop,100);setTimeout(forceTop,300)});
+window.addEventListener("pageshow",()=>{forceTop();setTimeout(forceTop,100)});
+
+// Gör Home-knappen extra tydlig: ett tryck tar alltid till början.
+document.addEventListener("keydown",e=>{
+ if(e.key==="Home" && !["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)){
+   e.preventDefault();forceTop();
+ }
+});
 
 function openSituation(i){
  si=i;
