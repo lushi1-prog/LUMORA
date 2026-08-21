@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#17443e">
-<title>LUMORA</title>
+<title>LUMORA 1 – stöd i vardagen</title>
 <style>
 :root{--ink:#173b38;--brand:#398b77;--soft:#e8f3ee;--bg:#f7f8f6;--line:#dce6e1;--muted:#667873;--white:#fff}
 *{box-sizing:border-box}
@@ -187,117 +187,145 @@ body{
 }
 
 
-/* ===== LUMORA – STABIL SCROLL ===== */
-html, body{
+/* ===== LUMORA – TOPPMENY SKA GÅ ATT SCROLLA ÅT SIDAN ===== */
+nav{
   width:100%!important;
   max-width:100%!important;
-  min-height:100%!important;
-  height:auto!important;
-  overflow-x:hidden!important;
-  overflow-y:auto!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
   -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-x!important;
+  overscroll-behavior-x:contain!important;
+  scrollbar-width:none!important;
+  cursor:grab!important;
 }
-body{position:relative!important}
+nav:active{cursor:grabbing!important}
+nav button{
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+}
+@media(max-width:760px){
+  nav{
+    padding-left:2px!important;
+    padding-right:2px!important;
+    scroll-snap-type:x proximity!important;
+  }
+  nav a{scroll-snap-align:start!important}
+}
+/* Håll själva sidan inom skärmen – det är bara toppmenyn som får sidscroll */
+html,body{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
 .app{
   width:100%!important;
   max-width:900px!important;
   min-width:0!important;
-  height:auto!important;
-  min-height:100vh!important;
-  overflow:visible!important;
 }
-.page{max-height:none!important;overflow:visible!important}
 
-/* Toppmenyn kan scrollas åt höger/vänster utan att stoppa vanlig sidscroll. */
-.lumora-nav-wrap{
-  position:relative!important;
-  width:100%!important;
-  max-width:100%!important;
-  display:flex!important;
-  align-items:center!important;
-  gap:4px!important;
-}
-.lumora-nav-wrap nav{
-  flex:1 1 auto!important;
-  min-width:0!important;
-  width:auto!important;
-  max-width:none!important;
-  display:flex!important;
-  gap:7px!important;
-  overflow-x:auto!important;
-  overflow-y:hidden!important;
-  -webkit-overflow-scrolling:touch!important;
-  touch-action:auto!important;
-  overscroll-behavior-x:contain!important;
-  scrollbar-width:none!important;
-  padding:4px 2px 12px!important;
-}
-.lumora-nav-wrap nav::-webkit-scrollbar{display:none!important}
-.lumora-nav-wrap nav button{
-  flex:0 0 auto!important;
-  white-space:nowrap!important;
-}
-.lumora-nav-arrow{
-  flex:0 0 38px!important;
-  width:38px!important;
-  height:38px!important;
-  border:0!important;
-  border-radius:12px!important;
-  background:#e8efeb!important;
-  color:var(--ink)!important;
-  font-size:20px!important;
-  font-weight:800!important;
-  cursor:pointer!important;
-  z-index:10!important;
+
+/* Statistik längre ner på startsidan */
+.stats-lower{
+  margin-top:22px!important;
+  margin-bottom:18px!important;
 }
 @media(max-width:600px){
-  .lumora-nav-arrow{
-    flex-basis:34px!important;
-    width:34px!important;
-    height:36px!important;
-    font-size:18px!important;
+  .stats-lower{
+    margin-top:18px!important;
+    padding:12px!important;
   }
-  .lumora-nav-wrap nav{padding-bottom:10px!important}
 }
+
+
+/* LUMORA: översikten ska inte ligga högt upp på startsidan */
+.stats-heading{
+  margin-top:32px!important;
+  margin-bottom:10px!important;
+}
+.stats-lower{
+  margin-top:0!important;
+  margin-bottom:35px!important;
+}
+
+
+/* ===== LUMORA – samma stabila upplägg som Vardagskompassen ===== */
+html,body{margin:0;padding:0;width:100%;min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:#f6f8f6;color:#183c38;font-family:Arial,Helvetica,sans-serif;line-height:1.55;position:relative}
+.app{width:100%;max-width:1050px;min-width:0;margin:0 auto;padding:14px 16px 70px}
+header{display:flex;align-items:center;gap:11px;padding:4px 0 12px;margin-bottom:0}
+.logo{width:48px;height:48px;border-radius:16px;background:#dceee8;display:grid;place-items:center;font-size:26px;flex:0 0 48px}
+.brand{font-size:25px;font-weight:800;letter-spacing:-.3px}.tag{font-size:13px;color:#657a75}
+nav#nav{display:flex!important;gap:7px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:4px 0 13px!important;margin:0!important;scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x!important;overscroll-behavior-x:contain!important;position:relative!important;z-index:100!important;pointer-events:auto!important}
+nav#nav::-webkit-scrollbar{display:none}
+nav#nav a{flex:0 0 auto!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;border:0!important;background:#e8efec!important;color:#183c38!important;border-radius:14px!important;padding:10px 13px!important;font-weight:700!important;min-height:44px!important;cursor:pointer!important;pointer-events:auto!important;position:relative!important;z-index:101!important;touch-action:manipulation!important;text-decoration:none!important;user-select:none!important;-webkit-user-select:none!important}
+nav#nav a.active{background:#3f8f7d!important;color:#fff!important}
+.page{display:none}.page.active{display:block}
+.hero{background:linear-gradient(135deg,#eaf6f1,#dceee8)!important;border-radius:27px!important;padding:25px!important;margin:7px 0 20px!important}
+.hero h1{font-size:34px;line-height:1.08;margin:7px 0 11px}.hero p{font-size:17px;max-width:780px;margin:0;color:#31534e}
+.section{font-size:24px;font-weight:800;margin:21px 0 7px}
+.muted{color:#657a75;line-height:1.55}
+.card,.chatbox,.flow,.step,.example,.support{border-radius:22px!important}
+.btn{min-height:52px!important;border-radius:15px!important;font-weight:800!important;cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important}
+input,textarea,select{pointer-events:auto!important;position:relative!important;z-index:5!important}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#eff6f2;border-radius:15px;padding:10px}.stat span{font-size:11px;color:#657a75}.stat b{display:block;font-size:23px}
+.contact-section{margin-top:34px;background:linear-gradient(135deg,#eef7f4,#eef5fb);border:1px solid #dce7e3;border-radius:26px;padding:24px}
+.contact-section h2{font-size:27px;margin:5px 0 8px}.contact-section .intro{color:#4e6863;line-height:1.6}
+.contact-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}
+.contact-card{background:#fff;border:1px solid #dce7e3;border-radius:18px;padding:16px;text-decoration:none;color:#183c38;display:block;min-height:150px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.contact-card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(24,60,56,.08)}.contact-icon{font-size:25px}.contact-card strong{display:block;margin:6px 0}.contact-card span{font-size:13px;color:#657a75}
+footer.copyright{margin-top:28px}
+#lumoraTopButton{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border:0;border-radius:50%;background:#3f8f7d;color:#fff;font-size:24px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.15);z-index:1000;display:none;cursor:pointer}
+#lumoraTopButton.show{display:block}
+@media(max-width:760px){.app{padding-left:12px;padding-right:12px}.hero{padding:20px!important}.hero h1{font-size:30px}.stats{grid-template-columns:repeat(2,1fr)}.contact-grid{grid-template-columns:1fr 1fr}.contact-card{min-height:0}.chat-input-row{flex-direction:column!important}.chat-input-row .btn{width:100%!important}.chatbox{overflow:visible!important}}
+@media(max-width:430px){.app{padding-left:9px;padding-right:9px}.brand{font-size:22px}.hero h1{font-size:27px}.section{font-size:22px}.contact-grid{grid-template-columns:1fr}.contact-section{padding:16px}.contact-section h2{font-size:23px}}
+
+/* Native fallback: menyn fungerar även om JavaScript av någon anledning inte laddas. */
+.page:target{display:block!important}
+.page:target ~ .page.active{display:none!important}
+nav#nav a:focus-visible{outline:3px solid #3f8f7d;outline-offset:2px}
 </style>
 </head>
 <body>
 <div class="app">
 <header><div class="logo">✦</div><div><div class="brand">LUMORA</div><div class="tag">Stöd i vardagen för föräldrar</div></div></header>
 
-<div class="lumora-nav-wrap">
-<button class="lumora-nav-arrow" id="lumoraNavLeft" type="button" aria-label="Visa tidigare menyknappar">‹</button>
-<nav id="nav">
-<button data-page="home" class="active">Hem</button>
-<button data-page="ask">🤖 Fråga LUMORA</button>
-<button data-page="children">Barn</button>
-<button data-page="history">Historik</button>
-<button data-page="patterns">Mönster</button>
-<button data-page="follow">Uppföljning</button>
-<button data-page="reminders">Påminnelser</button>
-<button data-page="support">❤️ Stöd</button>
-<button data-page="videos">🎬 Video</button>
-<button data-page="mood">💛 Mående</button>
-<button data-page="words">💬 Säg så här</button>
+<nav id="nav" aria-label="Huvudmeny">
+<a href="#home" data-page="home" class="active">Hem</a>
+<a href="#ask" data-page="ask">💬 Chatta med LUMORA</a>
+<a href="#children" data-page="children">Barn</a>
+<a href="#history" data-page="history">Historik</a>
+<a href="#patterns" data-page="patterns">Mönster</a>
+<a href="#follow" data-page="follow">Uppföljning</a>
+<a href="#reminders" data-page="reminders">Påminnelser</a>
+<a href="#support" data-page="support">❤️ Stöd</a>
+<a href="#videos" data-page="videos">🎬 Video</a>
+<a href="#mood" data-page="mood">💛 Mående</a>
+<a href="#words" data-page="words">💬 Säg så här</a>
 </nav>
-<button class="lumora-nav-arrow" id="lumoraNavRight" type="button" aria-label="Visa fler menyknappar">›</button>
-</div>
 
 <section id="home" class="page active">
 <div class="hero"><b>LUMORA</b><h1>Vad händer just nu?</h1><p>Välj den situation som känns mest lik det du möter hemma. Du kan också skriva en helt egen fråga till LUMORA.</p></div>
-<div class="card"><div class="stats">
+<div class="section">Välj en situation</div>
+<p class="muted">Välj det som ligger närmast det du möter hemma. Här finns både vanliga vardagssituationer och sådant som kan kännas mer oroande.</p>
+<div id="situations" class="grid"></div>
+
+<button class="btn primary" onclick="show('ask')">💬 Chatta med LUMORA</button>
+
+<!-- Översikten ligger medvetet LÄNGST NER på startsidan -->
+<div class="section stats-heading">Din översikt</div>
+<div class="card stats-lower">
+<div class="stats">
 <div class="stat"><span>Barn</span><b id="nChildren">0</b></div>
 <div class="stat"><span>Sparade</span><b id="nEvents">0</b></div>
 <div class="stat"><span>Att följa upp</span><b id="nFollow">0</b></div>
 <div class="stat"><span>Påminnelser</span><b id="nRem">0</b></div>
-</div></div>
-<div class="section">Välj en situation</div><p class="muted">Varje situation har fem exempel och fem enkla steg.</p>
-<div id="situations" class="grid"></div>
-<button class="btn primary" onclick="show('ask')">🤖 Fråga LUMORA</button>
+</div>
+</div>
 </section>
 
 <section id="ask" class="page">
-<div class="section">🤖 Fråga LUMORA</div>
+<div class="section">💬 Chatta med LUMORA</div>
 <p class="muted">Skriv din fråga precis som du skulle ställa den till en person. LUMORA försöker hitta ett relevant svar och ger enkla råd för vardagen.</p>
 <div class="chatbox">
 <div class="quick">
@@ -305,6 +333,9 @@ body{position:relative!important}
 <button onclick="quickAsk('Vi bråkar hela tiden om mobilen. Hur gör jag?')">Skärm</button>
 <button onclick="quickAsk('Mitt barn vill inte gå till skolan. Vad kan jag göra?')">Skola</button>
 <button onclick="quickAsk('Mitt barn vill inte prata med mig. Hur kan jag närma mig?')">Prata</button>
+<button onclick="quickAsk('Mina barn slåss och bråkar. Hur ska jag göra?')">Barnen slåss</button>
+<button onclick="quickAsk('Jag är orolig att mitt barn använder droger. Hur ska jag prata om det?')">Droger</button>
+<button onclick="quickAsk('Det blir bråk om läxor, mat och andra vardagssaker. Vad kan jag göra?')">Vardagsbråk</button>
 </div>
 <div id="chatMessages" class="chat-messages"></div>
 <div class="chat-input-row">
@@ -350,6 +381,19 @@ body{position:relative!important}
 <section id="mood" class="page"><div class="section">💛 Hur känns det just nu?</div><p class="muted">Det finns inget rätt eller fel svar. Att stanna upp kan hjälpa dig att välja nästa steg.</p><div class="card"><b>Hur känns det för dig?</b><div id="parentMood" class="grid"></div></div><div class="card"><b>Hur verkar barnet må?</b><div id="childMood" class="grid"></div></div><div id="moodSaved"></div></section>
 <section id="words" class="page"><div class="section">💬 Vad kan jag säga?</div><p class="muted">Enkla exempel som du kan anpassa till din egen situation.</p><div id="wordsList"></div></section>
 
+<section class="contact-section" id="contact">
+<div class="small">❤️ När du behöver mer stöd</div>
+<h2>Ta kontakt vid behov – du är inte ensam</h2>
+<p class="intro">Ibland räcker det inte med egna lösningar. Då kan det vara bra att prata med någon som kan hjälpa dig vidare.</p>
+<div class="contact-grid">
+<a class="contact-card" href="tel:1177"><div class="contact-icon">🏥</div><strong>Vårdcentral</strong><span>För oro, stress, mående och frågor om hälsa. Ring 1177 om du behöver vägledning.</span></a>
+<a class="contact-card" href="tel:1177"><div class="contact-icon">🧠</div><strong>BUP</strong><span>Vid oro för ett barns eller en ungdoms psykiska mående. Ring 1177 för vägledning.</span></a>
+<a class="contact-card" href="#support" onclick="show('support');return false;"><div class="contact-icon">💬</div><strong>Föräldrasupport</strong><span>För råd och stöd i föräldraskapet. Du behöver inte lösa allt själv.</span></a>
+<a class="contact-card" href="tel:116111"><div class="contact-icon">❤️</div><strong>BRIS</strong><span>Stöd för barn och unga. Ring 116 111.</span></a>
+<a class="contact-card" href="#support" onclick="show('support');return false;"><div class="contact-icon">🤝</div><strong>Socialtjänsten</strong><span>För råd och stöd vid svåra situationer i familjen eller oro för ett barn.</span></a>
+</div>
+</section>
+
 <footer class="copyright"><strong>© 2026 Perparim Haziri</strong><div>Materialet får inte kopieras, ändras, återpubliceras eller användas som eget material utan tillstånd.</div></footer>
 </div>
 
@@ -361,6 +405,10 @@ const S=[
 ["🏫","Mitt barn vill inte gå till skolan","När barnet inte vill gå till skolan eller verkar må dåligt inför skoldagen.",["Barnet vägrar gå till skolan på morgonen.","Barnet har återkommande ont i magen eller mår dåligt inför skolan.","Barnet har börjat vara hemma från skolan oftare.","Barnet säger att det inte har någon att vara med.","Jag misstänker att något i skolan gör barnet oroligt eller otryggt."]],
 ["💬","Mitt barn vill inte prata","När du märker att barnet inte vill berätta vad som hänt eller hur det mår.",["Barnet svarar bara 'vet inte' när jag frågar.","Barnet går undan när jag försöker prata om något svårt.","Barnet blir argt när jag ställer frågor.","Jag märker att något verkar vara fel men barnet vill inte berätta.","Barnet pratar lättare med andra än med mig."]],
 ["😟","Mitt barn verkar ledset","När barnet verkar mer ledset, tyst eller annorlunda än vanligt.",["Barnet verkar ledset utan att kunna säga varför.","Barnet har blivit mer tyst eller drar sig undan.","Barnet gråter lättare än tidigare.","Barnet har slutat vilja göra sådant som brukar vara roligt.","Jag är osäker på om det är en vanlig period eller något jag behöver ta på allvar."]],
+["🥊","Barnen slåss eller bråkar","När syskon eller andra barn hamnar i fysiska bråk. Fokus är först på trygghet, sedan på att förstå vad som hände och hjälpa barnen vidare.",["Barnen slår eller knuffar varandra.","Samma bråk kommer tillbaka nästan varje dag.","Ett barn retar eller provocerar det andra.","Barnen börjar bråka när de är trötta.","Jag vet inte hur jag ska ingripa utan att allt blir värre."]],
+["💊","Jag är orolig för droger","När du misstänker att ett barn eller en ungdom använder alkohol eller droger, eller när du har hittat något som gör dig orolig.",["Jag misstänker att mitt barn använder cannabis.","Jag har hittat något hemma som jag tror kan vara en drog.","Mitt barn har förändrats och jag är orolig för alkohol eller droger.","Jag vet inte hur jag ska fråga utan att barnet stänger av.","Jag är rädd att mitt barn hamnat i fel umgänge."]],
+["🏠","Vanliga vardagsbråk","När vardagen fastnar i tjat, stress eller små konflikter. Små förändringar kan ibland göra stor skillnad.",["Det blir tjat om att klä på sig på morgonen.","Vi bråkar om läxor eller skolarbete.","Barnet vill inte hjälpa till hemma.","Det blir konflikter kring mat och måltider.","Alla är trötta och det blir lätt bråk."]],
+["🤥","När barnet ljuger","När du misstänker att barnet inte berättar hela sanningen. Försök förstå vad som ligger bakom innan samtalet blir ett förhör.",["Barnet säger något som jag vet inte stämmer.","Barnet skyller på någon annan.","Barnet ljuger om skärm eller kompisar.","Jag blir så arg att barnet slutar prata.","Jag vill bygga mer förtroende."]],
 ["🏠","Vi bråkar mycket hemma","När det ofta blir bråk hemma och du känner att samma situationer upprepas.",["Jag och mitt barn hamnar ofta i samma konflikt.","Små saker blir snabbt stora bråk.","Jag känner att jag tjatar hela tiden.","Jag och den andra föräldern har olika regler eller sätt att göra saker.","Det känns som att hela familjen går på tå hemma."]],
 ["🔥","Jag håller på att tappa tålamodet","När du är trött, stressad eller känner att tålamodet håller på att ta slut.",["Jag känner att jag snart kommer att skrika.","Jag blir arg mycket snabbare än jag brukar.","Jag känner mig helt slut och får ingen återhämtning.","Jag har dåligt samvete efter att jag blivit arg på mitt barn.","Jag känner att jag inte vet hur jag ska orka fortsätta just nu."]],
 ["👥","Mitt barn har problem med kompisar","När barnet har svårt med kompisar, känner sig utanför eller ofta hamnar i konflikter.",["Mitt barn säger att ingen vill vara med.","Mitt barn hamnar ofta i konflikter med kompisar.","Mitt barn blir retat eller känner sig utanför.","Mitt barn vill inte längre gå till aktiviteter på grund av andra barn.","Jag vet inte hur mycket jag ska lägga mig i mitt barns kompisproblem."]],
@@ -370,13 +418,47 @@ const steps=["Stanna upp och förstå vad som händer. Vad gör barnet? Vad gör
 const qs=[["Vad behöver du lägga märke till?","Beskriv vad som händer utan att lägga skuld på dig själv eller barnet."],["Vad kan hjälpa just nu?","Tänk på vad som kan göra situationen lite lugnare."],["Vad kan du säga eller göra?","Välj några enkla ord eller en liten handling som du tror kan hjälpa."],["Vad vill du göra annorlunda?","Välj en liten förändring som känns möjlig att prova hemma."],["Spara och följ upp","Skriv kort vad som hände och vad du vill prova."]];
 const why=["Att först förstå situationen gör det lättare att välja hur du vill agera.","När känslorna är starka är det ofta svårt att lyssna och tänka.","En enkel och tydlig mening kan vara lättare att ta in än många förklaringar.","Små förändringar som går att upprepa är ofta lättare än stora förändringar.","När du sparar och följer upp kan du se vad som faktiskt hjälpte."];
 
-let db=JSON.parse(localStorage.getItem("lumora10")||"null")||{children:[],events:[],follow:[],reminders:[]};
+let db;
+try{
+  const raw=localStorage.getItem("lumora10");
+  db=raw?JSON.parse(raw):null;
+}catch(e){
+  db=null;
+  try{localStorage.removeItem("lumora10")}catch(_){}
+}
+if(!db || typeof db!=="object") db={children:[],events:[],follow:[],reminders:[]};
+db.children=Array.isArray(db.children)?db.children:[];
+db.events=Array.isArray(db.events)?db.events:[];
+db.follow=Array.isArray(db.follow)?db.follow:[];
+db.reminders=Array.isArray(db.reminders)?db.reminders:[];
 let si=0,ei=0,step=0;
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function save(){localStorage.setItem("lumora10",JSON.stringify(db));renderAll()}
-function show(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));$(id)?.classList.add("active");document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo(0,0);renderAll()}
-document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));
+function show(id){
+  const page=$(id);
+  if(!page) return;
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  page.classList.add("active");
+  document.querySelectorAll("#nav [data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  try{history.replaceState(null,"","#"+id)}catch(e){location.hash=id}
+  window.scrollTo({top:0,left:0,behavior:"auto"});
+  try{renderAll()}catch(e){console.warn("LUMORA renderAll:",e)}
+}
+function setupNavigation(){
+  document.querySelectorAll("#nav [data-page]").forEach(function(link){
+    if(link.dataset.navReady==="1") return;
+    link.dataset.navReady="1";
+    link.addEventListener("click",function(e){
+      const id=link.dataset.page;
+      try{e.preventDefault();show(id)}catch(err){console.warn(err);}
+    },{passive:false});
+  });
+  const id=location.hash.replace("#","");
+  if(id && $(id)) show(id);
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",setupNavigation); else setupNavigation();
+window.addEventListener("load",setupNavigation);
 
 function openSituation(i){si=i;$("exampleTitle").textContent=S[i][1];$("exampleList").innerHTML=S[i][3].map((x,j)=>`<button class="tile" style="width:100%;min-height:92px;margin:7px 0" onclick="openExample(${j})"><strong>Exempel ${j+1}</strong><small>${esc(x)}</small></button>`).join("");show("examples")}
 function openExample(i){ei=i;step=0;renderFlow();show("flow")}
@@ -390,7 +472,7 @@ function completeReminder(id){let r=db.reminders.find(x=>String(x.id)===String(i
 
 function renderAll(){
 $("nChildren").textContent=db.children.length;$("nEvents").textContent=db.events.length;$("nFollow").textContent=db.follow.filter(x=>!x.done).length;$("nRem").textContent=db.reminders.filter(x=>!x.done).length;
-$("situations").innerHTML=S.map((s,i)=>`<button class="tile" onclick="openSituation(${i})"><span class="emoji">${s[0]}</span><strong>${s[1]}</strong><small>${s[2]}</small><span class="chip">5 exempel + 5 steg</span></button>`).join("");
+$("situations").innerHTML=S.map((s,i)=>`<button class="tile" onclick="openSituation(${i})"><span class="emoji">${s[0]}</span><strong>${s[1]}</strong><small>${s[2]}</small></button>`).join("");
 $("childList").innerHTML=db.children.length?db.children.map(c=>`<div class="item"><b>👤 ${esc(c.name)}</b>${c.age?`<span class="chip">${esc(c.age)} år</span>`:""}<p class="muted">${esc(c.note)}</p></div>`).join(""):'<div class="card">Inga barn ännu.</div>';
 $("historyList").innerHTML=db.events.length?db.events.map(e=>`<div class="item"><b>${esc(e.topic)}</b><p class="muted">${esc(e.example)} · ${new Date(e.date).toLocaleDateString("sv-SE")}</p><p>${esc(e.note)}</p><span class="chip">Plan: ${esc(e.plan||"Ej angiven")}</span></div>`).join(""):'<div class="card">Ingen historik ännu.</div>';
 let counts={};db.events.forEach(e=>counts[e.topic]=(counts[e.topic]||0)+1);$("patternList").innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="item"><b>${esc(k)}</b><p class="muted">Du har sparat ${v} situation${v===1?"":"er"} inom detta område.</p></div>`).join("")||'<div class="card">Spara några situationer så visas möjliga mönster.</div>';
@@ -414,6 +496,9 @@ const answerBank=[
 {keys:["skola","skolvägra","vill inte gå","ont i magen"],title:"När barnet inte vill gå till skolan",body:"Försök först förstå vad som gör skolan svår. Ta barnets signaler på allvar utan att dra slutsatser för snabbt.\n\nProva först:\n• Fråga lugnt när barnet har det lättare.\n• Lägg märke till när problemen börjar.\n• Ta kontakt med skolan om problemen fortsätter eller påverkar vardagen.\n\nDu kan säga: \"Jag ser att det här är jobbigt. Du behöver inte lösa det ensam. Vi ska försöka förstå vad som händer.\""},
 {keys:["prata","berätta","tyst","vill inte prata"],title:"När barnet inte vill prata",body:"Du behöver inte få fram ett svar direkt. Visa att du finns där och lämna en öppning för barnet att komma tillbaka.\n\nProva först:\n• Ställ en enkel fråga i stället för många.\n• Acceptera om barnet behöver tid.\n• Försök prata under en lugn stund, till exempel på en promenad eller i bilen.\n\nDu kan säga: \"Du behöver inte berätta allt nu. Jag finns här när du vill prata.\""},
 {keys:["ledsen","deprimerad","gråter","orolig"],title:"När barnet verkar ledset eller oroligt",body:"Lägg märke till förändringar över tid. Försök vara nära och lyssna utan att direkt försöka lösa allt.\n\nProva först:\n• Fråga hur dagen varit och lyssna.\n• Fortsätt med vanliga rutiner så långt det går.\n• Sök mer stöd om förändringen håller i sig, blir starkare eller påverkar vardagen mycket.\n\nDu kan säga: \"Jag har märkt att du verkar ha det jobbigt. Jag vill gärna förstå och hjälpa dig.\""},
+{keys:["droger","knark","cannabis","hasch","marijuana","amfetamin","kokain","ecstasy","tabletter","narkotika","missbruk"],title:"När du är orolig för droger",body:"Försök att inte börja med anklagelser. Om du misstänker droger är det viktigt att ta oron på allvar, men ett tecken i sig bevisar inte att barnet använder droger.\n\nProva först:\n• Välj en lugn stund och prata utan publik.\n• Beskriv det du faktiskt har märkt, i stället för att gissa.\n• Lyssna på barnets bild och ställ öppna frågor.\n• Var tydlig med att du vill hjälpa och att du inte ger upp kontakten.\n• Om oron kvarstår, ta hjälp av skola, socialtjänst, vård eller annan professionell verksamhet.\n\nDu kan säga: \"Jag är orolig för dig och jag vill förstå vad som händer. Jag tänker inte skälla på dig. Jag vill hjälpa dig.\"\n\nOm barnet blir allvarligt påverkat, medvetslöst eller får svårt att andas ska du söka akut vård direkt."},
+{keys:["slåss","slåssar","slår varandra","syskonbråk","syskon","knuffas","fysiskt bråk"],title:"När barnen slåss eller bråkar",body:"När barn slåss är första uppgiften att skapa trygghet. Försök skilja barnen åt lugnt om det behövs. Vänta med att reda ut vem som hade rätt tills alla har lugnat sig.\n\nProva först:\n• Stoppa slag och knuffar lugnt och tydligt.\n• Ge barnen lite avstånd om de behöver lugna sig.\n• Prata med ett barn i taget först.\n• Hjälp dem senare att sätta ord på vad som hände och vad de behöver nästa gång.\n• Om samma barn ofta blir slaget eller bråken blir farliga, sök mer stöd.\n\nDu kan säga: \"Jag låter er inte slåss. Vi tar en paus nu och pratar när alla har lugnat sig.\""},
+{keys:["läxa","läxor","morgon","klä på","mat","middag","plocka","städa","vardag","tjatar","tjat"],title:"När vanliga vardagssaker blir till bråk",body:"Många konflikter handlar om små saker som upprepas varje dag. Försök välja en sak i taget och gör förväntningen tydlig.\n\nProva först:\n• Bestäm vad som är viktigast just nu.\n• Ge korta och tydliga instruktioner.\n• Ge barnet lite tid att ställa om.\n• Uppmärksamma när barnet faktiskt gör det du bett om.\n\nDu kan säga: \"Vi tar en sak i taget. Först klär vi på oss, sedan tar vi nästa steg.\""},
 {keys:["bråkar","konflikt","tjatar","familjen"],title:"När det blir mycket konflikter hemma",body:"Försök välja en konflikt i taget. Om allt blir en diskussion blir det lätt att både barn och vuxen tappar ork.\n\nProva först:\n• Välj den viktigaste gränsen.\n• Säg vad du vill ska hända i stället för att bara säga nej.\n• Försök uppmärksamma när det faktiskt fungerar.\n\nDu kan säga: \"Vi fastnar ofta i samma bråk. Jag vill prova ett annat sätt tillsammans med dig.\""},
 {keys:["tålamod","skriker","orkar inte","slut","dålig förälder"],title:"När du själv börjar tappa tålamodet",body:"Att vara trött och pressad betyder inte att du är en dålig förälder. Försök skapa en liten paus innan du reagerar om situationen är trygg.\n\nProva först:\n• Ta några lugna andetag.\n• Sänk rösten i stället för att höja den.\n• Be om hjälp eller avlösning om du kan.\n• Om du gjort fel, försök reparera efteråt.\n\nDu kan säga: \"Jag blev för arg. Det var inte bra. Jag vill försöka göra annorlunda nu.\""},
 {keys:["kompis","utanför","mobbning","retad"],title:"När barnet har problem med kompisar",body:"Lyssna först på barnets bild innan du bestämmer vad som behöver göras. Försök förstå om det handlar om en konflikt, upprepade kränkningar eller att barnet känner sig ensamt.\n\nProva först:\n• Fråga vad som hände och hur barnet upplevde det.\n• Hjälp barnet att sätta ord på vad det behöver.\n• Ta kontakt med skolan om det handlar om upprepade problem där.\n\nDu kan säga: \"Jag vill förstå vad som händer. Du behöver inte lösa det ensam.\""}
@@ -498,86 +583,43 @@ addMsg("Hej! 👋 Skriv vad du funderar på så försöker jag hjälpa dig. Du k
 })();
 
 
-/* ===== LUMORA – MUS/TOUCH FÖR HORISONTELL TOPPMENY ===== */
+/* Navigationen använder vanlig horisontell scroll – inga drag-events behövs för att kunna klicka. */
 (function(){
-  function initTopNavScroll(){
-    const nav=document.querySelector("nav");
-    if(!nav || nav.dataset.sideScrollReady==="1") return;
-    nav.dataset.sideScrollReady="1";
-
-    /* Musens hjul kan användas för att flytta toppmenyn åt sidan. */
-    nav.addEventListener("wheel",function(e){
-      if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){
-        const max=nav.scrollWidth-nav.clientWidth;
-        if(max>2){
-          e.preventDefault();
-          nav.scrollLeft += e.deltaY;
-        }
-      }
-    },{passive:false});
-
-    /* Dra toppmenyn med mus, precis som på mobil. */
-    let down=false,startX=0,startScroll=0;
-    nav.addEventListener("pointerdown",e=>{
-      if(e.pointerType==="mouse"){
-        down=true; startX=e.clientX; startScroll=nav.scrollLeft;
-        nav.setPointerCapture?.(e.pointerId);
-      }
+  function setup(){
+    document.querySelectorAll('#nav button[data-page]').forEach(function(btn){
+      btn.type='button';
+      btn.addEventListener('click',function(e){
+        e.preventDefault(); e.stopPropagation();
+        var id=btn.getAttribute('data-page');
+        if(typeof show==='function'){ show(id); }
+      },false);
     });
-    nav.addEventListener("pointermove",e=>{
-      if(!down) return;
-      nav.scrollLeft=startScroll-(e.clientX-startX);
-    });
-    nav.addEventListener("pointerup",()=>{down=false});
-    nav.addEventListener("pointercancel",()=>{down=false});
+    var nav=document.getElementById('nav');
+    if(nav && !nav.dataset.dragReady){
+      nav.dataset.dragReady='1';
+      nav.addEventListener('wheel',function(e){
+        if(Math.abs(e.deltaY)>Math.abs(e.deltaX) && nav.scrollWidth>nav.clientWidth){e.preventDefault();nav.scrollLeft+=e.deltaY;}
+      },{passive:false});
+    }
   }
-
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",initTopNavScroll);
-  }else{
-    initTopNavScroll();
-  }
-  window.addEventListener("load",initTopNavScroll);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup); else setup();
 })();
 
-
-/* ===== LUMORA – MENYSCROLL MED PILAR ===== */
+/* Enkel hjälp på dator: mushjulet kan flytta toppmenyn i sidled när musen ligger över den. */
 (function(){
-  function initLumoraNav(){
+  function setupNavWheel(){
     const nav=document.getElementById("nav");
-    const left=document.getElementById("lumoraNavLeft");
-    const right=document.getElementById("lumoraNavRight");
-    if(!nav || !left || !right || nav.dataset.navReady==="1") return;
-    nav.dataset.navReady="1";
-
-    const step=()=>Math.max(180,Math.floor(nav.clientWidth*0.72));
-
-    left.addEventListener("click",()=>nav.scrollBy({left:-step(),behavior:"smooth"}));
-    right.addEventListener("click",()=>nav.scrollBy({left:step(),behavior:"smooth"}));
-
-    /* Mushjul över menyn flyttar den åt sidan. */
-    nav.addEventListener("wheel",e=>{
+    if(!nav || nav.dataset.wheelReady==="1") return;
+    nav.dataset.wheelReady="1";
+    nav.addEventListener("wheel",function(e){
       if(Math.abs(e.deltaY)>Math.abs(e.deltaX) && nav.scrollWidth>nav.clientWidth){
-        e.preventDefault();
-        nav.scrollLeft += e.deltaY;
+        e.preventDefault(); nav.scrollLeft += e.deltaY;
       }
     },{passive:false});
-
-    const update=()=>{
-      const max=nav.scrollWidth-nav.clientWidth;
-      left.style.visibility=nav.scrollLeft>2 ? "visible":"hidden";
-      right.style.visibility=nav.scrollLeft<max-2 ? "visible":"hidden";
-    };
-    nav.addEventListener("scroll",update,{passive:true});
-    window.addEventListener("resize",update);
-    setTimeout(update,50);
   }
-
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",initLumoraNav);
-  else initLumoraNav();
-  window.addEventListener("load",initLumoraNav);
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",setupNavWheel); else setupNavWheel();
+  window.addEventListener("load",setupNavWheel);
 })();
-
 </script>
 </body>
 </html>
