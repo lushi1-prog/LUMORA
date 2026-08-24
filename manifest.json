@@ -1,0 +1,27 @@
+# LUMORA 1 – app-ready
+
+Mobilanpassad prototyp för PWA/Capacitor.
+
+## Ingår
+- Klickbar navigation på mobil och dator
+- Horisontell scroll i toppmenyn
+- Chatta med LUMORA
+- Situationbank med vardag, skärm, skola, bråk/slåss, droger, alkohol, nikotin, oro, mobbning, nätet m.m.
+- Historik, mönster, uppföljning, påminnelser, barn, mående och Säg så här
+- Ta kontakt vid behov med 1177/112
+- Integritetssida
+- PWA/service worker
+
+## Viktigt före App Store
+Detta är en app-ready prototyp, inte en färdig App Store-inlämning. Riktig AI ska kopplas via en säker backend; API-nyckel ska aldrig ligga i appen. GDPR, barnuppgifter, säkerhet, tillgänglighet och test på riktiga iPhone/Android-enheter ska gås igenom före publicering.
+
+
+## V3
+Varje situation har nu fem enkla, konkreta steg på detaljsidan. De visas inte på översiktskorten.
+
+
+## V4
+- Tydligare fem steg i varje situation
+- Varje steg visas som ett eget läsbart block
+- Kontaktkorten under "Ta kontakt vid behov" är klickbara och öppnar/stänger kontaktinformationen
+- Mobilanpassad kontaktlayout
