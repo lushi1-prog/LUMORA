@@ -1,721 +1,302 @@
-<!doctype html>
-<html lang="sv">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#17443e">
-<title>LUMORA 1 – stöd i vardagen</title>
-<style>
-:root{--ink:#173b38;--brand:#398b77;--soft:#e8f3ee;--bg:#f7f8f6;--line:#dce6e1;--muted:#667873;--white:#fff}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
-.app{width:100%;max-width:900px;margin:auto;padding:14px 14px 55px}
-header{display:flex;align-items:center;gap:11px;margin-bottom:12px}
-.logo{width:48px;height:48px;border-radius:16px;background:#dceee7;display:grid;place-items:center;font-size:29px;flex:0 0 auto}
-.brand{font-size:24px;font-weight:800}.tag{font-size:11px;color:var(--muted);margin-top:2px}
-nav{display:flex;gap:7px;overflow:auto;padding:4px 0 12px;scrollbar-width:none}
-nav::-webkit-scrollbar{display:none}
-nav button,nav a.nav-link{border:0;background:#e8efeb;color:var(--ink);border-radius:13px;padding:10px 13px;font-weight:700;white-space:nowrap;cursor:pointer;min-height:44px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-nav button.active,nav a.nav-link.active{background:var(--brand);color:white}
-.page{display:none}.page.active{display:block}
-/* Native fallback: navigation still works even if a script is blocked. */
-.page:target{display:block}
-body:has(.page:target) .page.active:not(:target){display:none}
-.hero{background:linear-gradient(135deg,#eaf5f0,#dceee7);padding:25px;border-radius:27px}
-.hero h1{font-size:31px;margin:8px 0}.hero p{line-height:1.55}
-.section{font-size:22px;font-weight:800;margin:21px 2px 7px}.muted{color:var(--muted);line-height:1.5}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
-.tile{border:0;background:white;border-radius:20px;padding:17px;min-height:150px;text-align:left;box-shadow:0 3px 12px #173b380c;cursor:pointer;color:var(--ink);pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent}
-.tile .emoji{font-size:38px;display:block;margin-bottom:5px}.tile strong{display:block;font-size:17px;margin:7px 0 5px}.tile small{color:var(--muted);line-height:1.4}
-.card,.item,.word{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:16px;margin:11px 0}
-.chip{display:inline-block;background:#e5f1ec;border-radius:99px;padding:4px 8px;font-size:11px;margin-top:8px}
-.btn{width:100%;min-height:51px;border-radius:14px;font-weight:800;font-size:15px;cursor:pointer;margin-top:9px}
-.primary{border:0;background:var(--brand);color:white}.secondary{border:2px solid var(--brand);background:white;color:var(--brand)}
-.back{border:0;background:transparent;color:var(--ink);font-weight:800;padding:8px 0;cursor:pointer}
-.flow{text-align:center}.flow .emoji{font-size:60px}.flow h1{font-size:28px}
-.progress{height:8px;background:#e2ebe7;border-radius:99px;overflow:hidden;margin:15px 0}.progress i{display:block;height:100%;background:var(--brand)}
-.step{background:var(--soft);padding:19px;border-radius:21px;text-align:left}.step b{font-size:13px}.step p{font-size:19px;line-height:1.45;margin-bottom:0}
-.example{background:#fff8e8;border-radius:19px;padding:16px;text-align:left;margin-top:12px}
-.input,.textarea,.select{width:100%;border:1px solid #ccd9d4;border-radius:12px;padding:12px;background:white;color:var(--ink);font:inherit}
-.textarea{min-height:100px;resize:vertical}.field{margin-top:11px}.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:5px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#eff6f2;border-radius:15px;padding:10px}.stat span{font-size:11px;color:var(--muted)}.stat b{display:block;font-size:23px}
-.moodbtn{border:1px solid var(--line);background:white;border-radius:17px;padding:14px;font-weight:700;min-height:78px;cursor:pointer}.moodbtn.active{background:var(--soft);border:2px solid var(--brand)}
-.quote{background:var(--soft);border-radius:15px;padding:13px;margin-top:9px;font-weight:650}
-.support{background:#fff8e8;border-radius:18px;padding:15px;margin-top:12px}
-.contact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
-.contact-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;box-shadow:0 3px 12px #173b380c;min-width:0}
-.contact-card button.contact-toggle{width:100%;border:0;background:transparent;text-align:left;padding:0;cursor:pointer;color:var(--ink);font:inherit;touch-action:manipulation}
-.contact-head{display:flex;gap:10px;align-items:flex-start}.contact-icon{font-size:27px;line-height:1;flex:0 0 auto}.contact-title{font-weight:800;font-size:17px}.contact-desc{font-size:13px;color:var(--muted);line-height:1.45;margin-top:5px}
-.contact-detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
-.contact-card.open .contact-detail{display:block}
-.contact-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.contact-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 12px;border-radius:12px;background:var(--brand);color:#fff;text-decoration:none;font-weight:800;font-size:13px;border:0;cursor:pointer}.contact-action.secondary{background:#e8efeb;color:var(--ink);border:0}
-@media(max-width:600px){.contact-grid{grid-template-columns:1fr}.contact-card{padding:16px}.contact-title{font-size:18px}.contact-icon{font-size:32px}}
+PK    i7]¥ÚVb  bJ 
+   index.html½½k“#Wv ö½EäNCºªúÁ&ŠUín²I¶¦4«‡²¢Ù»“ .€, ™`fÝ¥ªŠP8FŠ°,i4£	…,Y¦´ÁöH¡Y¯á e‡[ÿ„`ç'ø¼î33QÕœ±¥v!óæ}œ{îyßs>xk”
+Ë“¥Š¦åb~xíü'šÇéä U¬[ø@Å#øg¡Ê8Nã¼PåAkUŽ·ï´ôã4^¨ƒÖ:Q/—Y^¶¢a––*…f/“Q9=©u2TÛô£›¤I™ÄóíbÏÕÁnWµ=NÊƒa¶VyÐm9U
+µ=ÌæYîôüöî{7oÞPØ¶LÊ¹:|ôãÇO?¿íFßýÑ_EEyñí(J¢uœâ‰J?¸Î®}P”'øo?Ï²òt{;Ig}èêÆàÆýííA§£þÛ7Þ¿3xï=ø]dã²ÿ¶º3¾¡¾žôß¿7¾3¾
+?æIªúo†ê¶Ú…Ÿ‹U©àÓÛ·ß»óÞ
+øýrš”ð~<Ÿ_ûáé {µ]$˜¤“þ ËG*ß†'ç×Ö§Å0ÏæóíšÆë$ËûÅ¦6ÝGHŒçÙËíWýi2©ôüÚ œ.â|’¤ýýA<œMòl3†e¶qz}“ü†µuöÇ °íq¼Hæ'ý{9 ¾û©š¯U™ãn§Åv¡òd\7Z/^.OiÏú»;;ÿf¿â-ì¿¿³³|µ/‰We¶¿ŒG#\ÜîÍå«ˆþsëÖ¸£òÓQR,çñI<W¯öãy2I·:‹¢?„½Tùþ$^öwwMŸ œ²ÌýÝ=ì£7Ï&™Läæh4UÉdZòßÍ<%«¢¿{Y¸àö(õÞ¾’'£}ø
+ÑŸ€û£ú{ïC8ÍþN´áÚ`„§N£›Ø¾ä©ÜÙÙ9ï•ñÄiCËqwƒ¤£WXfË>­.×>xïÁ·zG| #hw"Ì>ãÍ ÎeWÒ,UÔ_¿óÌ˜‰nb†0¢Á
+`œvñÏ¸ ÿE„ž2<}ì‚ ÆjPÅ­ ø7`RvnpzoggŸÆv±„M€Ù¼Ìãåþp•Ðó2Kh7 ½ÇéR½*·Gj˜åq™d)­Áli’âAÜnÂ¬ãUQ&ã“m¡fÃÝÞ×à*ãåöÆãØLqú%ì=L6‡ïöËl5œnÇCšÅ"N“åjNSr!ÚÃ÷k VžžV-â–>·@¸%Ð,Ëè‘îD¿Ì³áìüÚõFOb|cÜíá¬¤sLhn@
+“ù<z™å³"Rk•FÉ8Š#@dYFIQ/jÔ‹~xGî—€£ª‡AêÓŸÆEÛmÔ‰Ü™Á\Ë¶~à\oªòÌ]?î ïÑ  ÛÞ½qk¤&Ý·U<¾5ÞéÊÙí”Ú»U9ï{ïÀž£é®súnXbÒ¿ƒGæœ-O	[»v{·nÁç…¢uø^õ€ëîö ëÞG8vNõiÍ9Æaøœz”ÿ³
+Ø
+OJâp«EZôsµTqÙÞëîŽóŽ!Ðì£ª= „6!hvÜÓˆÅ9V»·vô¹¢3ÓŸ«q¹OLj€æìD7ðüâ2…;îÃcZ! òb‘¬,ˆn½•,·Ç›ÓæŠ Q`õÔ";NÜmG–à¡mÀQ)ñ·E™géÄÇq‡0ÄxÇß#šë|º€cvùžß„iAþèö"u{pGÕóO{§Iiq«ÈæÉ(â·ØcHgý½mç‰h˜£N“åi@ yU¿5ÞUÃ ó÷ßw:GfsGŸËÕv‡sP¦ž `íÖn•G×0Ow<å!C°¾O.óžÔ†F²Šç<KGÎw{´å£ÊÉr·šÛà¢¡Uí\ŽQ/Ž9
+× &"¬AàÔ9§Ì¾Îéyýoï ŽÒ;îÝ¨e“\Å©lÎ@XR{j ÂR
+BY„eCƒp·˜´êŽ£$8Oú, V4lÒßR-« eoKüwß¯ÿÝ*
+;§Î¢+ˆÝ@ Ðã¥û;ì­€ZàYR¯b ÏãF¡þŽºâõûá±é«ƒÆ"Ù&érUv{Øð%îŠÎ¹‡©BÞGïn†£ï¹£ïù;[Åbƒ‹@€1&DRe§.£ IöAH€jÃP,QóÑ©»ž]Â<|ºã@Í›	kkm–“ºˆ—Å°Ð›–…Þa$ˆKo#Õx|{¼‚òV Çò‡œéôr_°wƒÖJÞéæfÂ¿™Ç“rU¯Š°ílå{w*„õ\Ï¢Q:åC¸‘\ÂZ¾Zeå%×÷†ÏMÞVpûžÀbµDùà
+'ðŽÛ÷-¿o9q¨ Àb·ßXH‚ÜÞ!”±loãÈûÃI>ÏÂïf
+w›IÇN0­›ège6™ Q«Ò™FN3=±im&3›T(394Tub<‰ž†‡o¶á°å@õõ§ÉÐ—ãß
+‰| Û[€ yètƒXBÒ¾n=RÅ0`1u4¬‰½ ²Üòpe¤Ê8™{SˆYâö 
+ý®Ã§  zÙ”¿¦!EÉ3¯y‹
+ä¨²÷IoÂêÍtÇ…wŠ¢o¨«»æ —Ë½/  Žn– é$ÖZ6 À
+3RçÃ»’æ•Í(xfÿ‹…%qÛZÚn#ÿíœúd«žR]:÷i+ŒÔb:/ìŽû68@7¤_»Ö['#•ýö$m7”RBÕ…Ç)†¹Réé2+Ú›\ÍÉÀáé°wªö bˆW01ŒÆJ©;Ý·Çï«;Ã;ýËì“
+˜ˆÅ¤yÅ9€QåÅÕlž·=íê¦ËÀöHá¬»ö*rë[ûáž×è_Ì5†ííÑ‰Å©ZxÇØI aû9Á§ÌØd÷Å»çc« ñV³Ðïêe—gQ …{“i2X¢Ë9Q³¢ ÙÈSc«ºìe	÷´A»Âï<\úÝ^€ºOTá
+ÛïïÈÎh˜ÞØi´³¨±(&§v+ïÜù7Þá"C|Ý	‘C÷>éœ¡Ê³Ï.sEäž‡ê­
+•k©… žÒUöØ8=‡¶	«šè•ôà­îñ®¾{O¬”q6~‡eÒ¯¶sÐ¡+âD=ßò>ŠŒFDBÃ®gØ`•ú«U2œ½¹ýw¿Áì·R<›
+¡;žúKíìÄì—'êÓçk’”"kªØ#Ôº-¶¡ŠqâR±¤NRÚHßn»3­7ÜÕÛY,ãöµIä‡¼öZDŽ/ß‘ÿ¹Á9ôÑ^’mÛ h§j«0­Ë°£Þ¾¾Iy_+§Åeã7l¾ôÔû}ºÁ“i°­Þm§ŒoV6mÏ3–ºjsïV
+ k4iÝ®·ÞÜ‚SNòé(ÉÙ ßg(TŽ5Ù+³¿C=™£ÐlíDz|~­unÜ®A&‘KªvÇÝr&ê§ßv7jïöÆ½ÙuÞVwÇÝ×Ê~ìônñªÐt€ÿ‰+é~zïYôñÃÿ*º=~zÿá#iñÃë×ÞŽ‹Yd˜äµ(ªHkŽa^ÿ!ìÀÈè-÷ñ9wó6vóX³Ä«÷µ[ÓWˆWïmoÇî’uÿ0ÿa ¯ù/]6H•ÃiâÔßdÚ»õÓ&Êè¿²ú~0uk8¨¾D÷_º–'ÿM“Ñ²®•ëÞûB­ÿ2¤øþ[×æP}#˜;0Ô×ý·4€ÅFß4@Ùi›Í»}ä™þ[íøÚÜê*.4
+³ùê÷IyÒ&[•Ì‚ðF¤ì³áŠÎçF‹`¸ËŽÑ
+ÿ
+WbãŸ¸úÌäú
+ŽÃ^ÎW7Äâü.Æª4žåï± z%,¾=
+àÑ,£DM´0¼Ž	úãë|‚ÓL <J°»S×æsuÞ0_³µ—
+\K›¼9ÝªP\biµ<íèÃÏŸ>zt/úôüç‹‹Ÿ~òàIôãÏ>³¬
+Ã²ºE[]
+VÎO^TÑËTlz©£­ü×õa>jèÙmÄ,ÄÃå²
+èœ¤]Nº¯Ñ; ûœÖhµÎ
+\aýuR$ƒ¹ºyßÓRRäø`Yêhš1€÷Ðq¬ÙxØ÷ iTžŒ€ïF³V„jlx^µšÅð.Žât}ñ
+ÚéüÄ 8ïh#EéM–ÇÏ²å}VÐ\P“WjD,A,Q ¬¥c
+‰üÔ‡ú}ø?KˆnÞæ·ZÇ¿­¿ãF…/¢Åg†­í
+!íX–HöÑ‘ÕM?qŒ›!qFo.N>Ê'ƒôüÿÞîŽÃS´‘ß3ÈnŠ˜@¬WL½[ÌË›Z
+Ä
+„÷xÆæ@õ¦þíŽm¤Ïž~öÙã Oþ :úÑ½è“‹?Žî={fHÃÅÃß?º÷ÄÔÛ$B™%Uß9Ç}#¡¨£o†ûwZÆéö«ê`uI	)¨#B~xa­œ1Éãò1Q<ŠN›ÌÙ¶sCæ®ž_&ààKÆ•	lš‘UY'«ð
+ûžñ­¦@­ R²áÒýWÑ2Ï^%
+¨ªÜÎY›û!ÛIÈgåB‚Bø>½x
+¨8¾øf¾Ž£"JR YÅìâ›|d	±v¤Ê~9Èc"Wðâ$%Ú6¾xãw< ácšÊþ–ˆ[ÅM‰¾R×dTº’Î!Çõ¨fV”É,š‰žä*N-/^G=,’õcæ¨™
+¯­ìb]hp©S8Ž¯îUtAG9jL˜õ£‹oñT&³ö¸˜Å’XÐE&“8š^|;)£p¯Æ¥£·
+ã²Åï„‹ß ÉP)ôzºq+ìÉÍÜ/ÓÓ&m´g\c¸¿ 7Ï
+*ô½ÒÎ›MU·Y£Ž¹AÁô™¡óâ·€<w×ŸâìºOX»ªúÕ ÙÕ›Ô½YTXæ»|³âÙç¢'¿¸øã Ÿ[ÞØ›ÃŠçÛ)†FõË=7ƒ0´ñ{ãÁøÎÆ
+½(‘ñÔ{/ê–sã²åÛÀ@H¦Ë£Dn8!»ŽîCìTBÕ4ÔØ©zI$Ë›ù ü@;LoB~UÏ¦ÆwÆ»zOD„Ü†{þ§'jŽÁˆÁyßFáÈ·@Žn½ûßæªâ6ÞQãðÃ;ƒ;ƒÞ‡Â¨œÀWM‰8Üùzi/ËTB1|ãu!®w6¸ÞÍt
+cçþ„ü@×óÚƒ¶G˜ùð	ê¥Ÿ>ýüáÑÓ'Ï<z$ÂiôÈª-Ö2zŸ›W¯õ¸bÇe|BõŽ/«4ŒP£úÑ".í÷º|áÓ6]N	†ÞÔ]9M NO^NU®t~­lÏŠñÈ£ý&€†Ý†‘Þ]·Öuc'‚ÞÜšznBLJ*Þ/PÈêN"’z¤ÌÕ›;žÞs™³/ð†›V¿\—iºž6_’ò}õ|_G	D½h0uÂ¿Å·Yyž—[áZœ07oV’[ðŠ„2&›ìºÆQØÔÖb…è{;»„@Qš1¦ÖhX/‰5iµ7½e †Ån³åï·DL«=lÒ\ü:Mä
+ÁýÁu¹7úÁu¹‹Ôþ%ëh8‹â ‡Q_—Uù¡û/0¶¿ûïÿÇ®ÃSzå½'¹­%7XmýºŒ'­Ã£àF+¨{ßæôPGyœËwò_™ÅµkàqLF -ø·ÅyoS€öAKø
+*8oP6r5>h½=Íª¥ÇÖÇ8b}¾â2ÞFâA‹~ª\Ý`¿+ß{bƒÃß|ý‹_GV”1ÌaéÕ{]
+§	,N¥›û3­ïÇyt152ËO6÷ ~J$³ “%LSåi±¹ÓêðñÅ·i ÝŒ3”¡6w"m¼\ÂîÎS8A7¹Z i1¿d:¶Ùág¯áo`ŠÊœ„MmîJ7:üîï¿ùÏÿú³ˆ°1èˆØÜ%S’6°ùñëè
+üt‚é›» ˆ==¾x­`AÈ}/™7a<ºøf ]O/¾Ø\‡ðè=¦ãã
+ìEŸŸ ån~00‡ypøÁt÷ð‹x„ýãnDL¥«»pHw?X~ ø8¡òŸ”+¹³™-¢´O
+8Ð|žÌÈô3ZE‹‹o±¢©Z,â^ôÑŠŒÙ ãŠYž¬ãºšªy)¢ùÅëIÌömžTïƒëK!ÞÜe¹-™‘;!Ýz©ÛRÜNËÌ½¤£Í¦–¢½*†Y×ÎøS4_\ÚàâõHEKáÃX([aÆ„O²á·fT˜AK%°ÄxŸg@9-ˆ—‚[ez°X€BAK¯¹vÑô¥DÁi@üæë¿ú¢gq4Ãç³2ô
+´ò&x<ÌaBØ†Œ:hù’‹ ·!Ð¼žÀöÆ°‚6OŒy´YÙLG@@àã–:ECà²=ËO†3²þÀ~ä+ –DøqõI:F©—"Ž}È:>ÁUëº!Ä(Xh3œ¨L#¹\×Š²t8 &
+0šf/Û[@µ·:Ít›;Â.ßÚÞŽ.þÚÚ´- ñZ•°äG?}òÉÑ³è	èÜYk{»%#ÏÔÕ:ü(I­Õ¬“IÙrìYÁ!¥75Ï ,xÉG¸ýùÁ€™ç‡†ÅìÐ™®9=N GË4yôñ€¬BWëá ‘ÿ­AG
+‹¸JG>å÷ºù\-‚>‚ú!)tù;RÂ’öôÔcJýÑ9BÚÁþjŠµÌÕ0)èÜ)f«97Á±˜ÇD.‰¤Á¿KÀ8ZÆóQ\|;C’“àØ
+`™+PÃ‰Œ ™!º‚(©ÒôÃøTiáÊ9N£8Î)X*	¡øLN‘91ôâ^1ko=NðHB‰}¤
+ØÒrgeÙ‹/ Q;Ž'ÑfßÅ#öc~mÏÔ†þ¿H¢,`A: ˜-²¨) –OW9õƒP÷GäP¸Rïvök6Y¦'pd	ôÅ,›#«_Ä¾ýÞƒ,óX°f‘Lx
+zf/øœÆù[^qœ4æqŠùÅë¢ 4àñh}÷W¤@é®4ÊïÁ÷HÔ7¡ï)úÂ,P<Î€z£<ô‡åE#¾«’Fÿˆ]iXä%ƒy’ó‚°“ùÅ7¯²ÿ%­Sn¹l<ÃÑë·î
+nC=}Ÿ„”òN^|ƒk‚ñ=À4ý8¾Þk0ƒú3PxŽbô…É(Õm="7µ{Ã.ñ¢3ˆ8b1ƒ÷€RÀÄ9+ Ç£zgî>µyÃ±€/qK'±ž6aËgÔÔÃá$8A–-—°;z«Ž›øš;%\’¸xÓ+)ú¦KýºÑmŽi†K?hU<
+Ü½^ ÕŸ^M ôˆ¢Ú°ì
+‡‰¾û“_(¸+aN‘*Š–sîø-Þ[¾ÒÚ8±	–à‡“ÑÅ?+<S@€ëÀn—$ˆž¯¼"L*gùýÃc ,Š²p(D «gµ.ûÔª(ßýôGmëé‚Ø–*‰W‡Œó#÷ñ(<”!¹²dçi´ µÍ5ôUât†h*,U/c”Ä“4+DøÖè­¨d¸xÚD“È ¬"ÂÍŽ›†b'*^ˆÝßýÉ_FÏŒH˜Åµ»ëIò2à3¼ì¦±zƒö¢^©ÅRÍIØ õ)œ”)¤Ô¢Ýhý"­ZŸ,íQR”f°&PŒ]
+ÀÕÁ !x%P üKê¡ÑEØ­|ñmS”Ö)€§“^-fÉ`ÌEH?™jž 4_”j%ðl„¯A³¤5{3$ãiË äýÔ ›îšfIW²ùšaƒÍüá±™>Ëæ™3#83ÑÉ+à]Bè Àú±}R/a«eK
+ÒøãÉj1PÔžà¨?ºV–†™6÷óÕ
+T}@³æê–øí6u.(€¿%äÉ’˜;ÉºÈzµa/yã»Z=¨óåô¤~8|É.²ÏÐCf0Ûu›ùvÇgÌ‘ ¹DB¹f"RËx¬S™p™Ô‰/P¾!VçH˜bBB¶,@¶¹'õ.ApûPÐT“
+'b1Aæ1BñPMà?Y>2Úò`$’ñÌAr†S …"^«{ÈöÌ›
+¬Œ0 èý2uŽ:>9´A¶ö„„(>^.C«ëÖÜ7vúZ"Êg«B÷‡DãcØx5ÑV3M8š(UÅø*Ôª^×ûù·ëÍµ¤öh/É0*ÐYd$ÉÜ˜¯p¿òØ5h ÈU
+<Ï'´4%ÌÖQ½GßL&¬£hJƒ€ažhIyø$^¤Â·‹…š¥ðóƒëüê{ìÈÐÔé]-âúý_ü1‹~õ]Þ›„=F^¸`(Ê%ý£¬Iì?™•É¤$
+=Ë€GEÉ˜þ]3r ¶ázðlUÄ6W»*[©l4"3	bY@4ô5žmä‹¡~#²ýÕßFÖR_‹pdfÄä «»&E4%ðMcTøç0kki¶©’ ÎÐ(o13Ä?˜ßßGüÖD‹6îáZHÛå{' ªß=_è~F6–nú+‰jÍW<\¤K“2òbI}ó“¢HáG¯®f0Røq®Î$8žî–A
+*rès.Ÿ4TÞT\3›çO#ë›©E¡ûë¤ ü¸x
 
-.video-card{background:#fff;border:1px solid var(--line);border-radius:21px;padding:12px;margin:11px 0}
-.video-screen{position:relative;min-height:185px;border-radius:17px;background:linear-gradient(135deg,#dfeee8,#f9e8c8);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.characters{display:flex;align-items:center;gap:16px;font-size:48px;padding:25px}.bubble{font-size:12px;line-height:1.35;background:#fff;padding:11px;border-radius:15px;max-width:220px}.play{position:absolute;right:12px;bottom:12px;width:42px;height:42px;border-radius:50%;background:var(--brand);color:white;display:grid;place-items:center}
-.small{border:0;background:#e8efeb;border-radius:10px;padding:8px 10px;font-weight:700;margin-top:8px;cursor:pointer}
-.chatbox{background:white;border:1px solid var(--line);border-radius:22px;padding:15px}
-.chat-messages{min-height:90px;max-height:430px;overflow:auto;padding:2px}
-.msg{max-width:88%;padding:12px 14px;border-radius:17px;margin:9px 0;line-height:1.5;white-space:pre-wrap}
-.msg.user{margin-left:auto;background:var(--brand);color:white;border-bottom-right-radius:5px}
-.msg.bot{margin-right:auto;background:var(--soft);border-bottom-left-radius:5px}
-.chat-input-row{display:flex;gap:8px;margin-top:10px}.chat-input-row textarea{flex:1;min-height:58px}
-.quick{display:flex;gap:7px;overflow:auto;padding:4px 0 2px}.quick button{border:1px solid var(--line);background:white;border-radius:99px;padding:8px 11px;white-space:nowrap;cursor:pointer}
-.copyright{max-width:900px;margin:42px auto 0;padding:22px 16px 8px;text-align:center;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.6}
-.copyright strong{display:block;color:var(--ink);font-size:13px;margin-bottom:6px}
-@media(max-width:600px){
- .app{padding:10px 10px 35px}.brand{font-size:22px}.hero{padding:20px;border-radius:22px}.hero h1{font-size:27px}
- .grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.tile{min-height:130px}
- .tile .emoji{font-size:42px}.flow .emoji{font-size:66px}.step p{font-size:17px}
- .chat-input-row{flex-direction:column}.chat-input-row .btn{margin-top:0}
- .copyright{font-size:11px;margin-top:30px}
-}
+iCR„ÍME˜A‘ÔÂ‡© ¡µæâCâ¨lSÊÕx®fä×eÞ‹Ý€jÈÆ,š–'C4e!’âCÐÚ=Š(Ë¿”&þæë_þ©¥s$ŽÞAXÀ¬gŠèåÝ&4õðOÆ|sü»X?*²1~ 1Fgk²íåi|EÄ«c{>êÉL-ê-T« 5“%_Z÷=vqë/þcä;íê9¡ÒŒ žtª5HœÇlªCŠˆè‘/²°õ“Ø–°OÄÉ%Zä<á\å$UÝŠ—ûË_F¾qÙ;Áº³KóÉ	n¾îæêdpH>Õ|q·†¿ÂHf
+Ø«‡ŸãnQ€-
+Ü74òWçëOä£¸\-ê‡„W
+}—V½"Cý\Àhyª¬+±ÖÐÅ»a[Å¿{_+ hkŠeïÕÝÄÞ¤k2¥ià˜WtBñ"àLã|Œ'
+í€fØpªo,4›APrá1@®
+Lºì€ÓVºï?ÙÏyŸý
+±)°™yLº×¿ç”òûX–ðOßýÑŸÃ?ÿÌÿüÊ°ªò”Óñ}ubÜøþ£Æ³UÉcþí?EGFìJµ3ß‡J«@q/Ÿ«b5¿ÜŽ„l¦Ì¿6Ñ•sP‹À?ÂxNP'crL‡é^ôéu™áNIF(Ä‰TUòfšâU(¯õ°q%¿ø;ö…08Ñ4eÃ	êO%4ao;’¶2"µYøÆ-^kt~ »Mö)‰ÀÄfÄ*`Œ>äV+M#¡TìR@†}ìƒR«´6‹ÇÁè8Á(wkmP÷áí±VÐ'šDb³FÚˆb­ã
+%%Ld÷Øµë
+ßÀ¢pÂ0úØðÄÃœ¯ë§ë DÔ™¢¢æABWéIÙ Øè:®«jðUV¢‘ë¤¢Q«îÍ‡ÙbÅeê ÕlFÑ_{®Ð%nÂÎ tv\ëëˆ…œ8ÅY‰”c„ms}pÐä¯ã,CÊfÂ $Ï Ç(SÆáúçhogïvô™ÊG’Eôiü‡Iž`Ì½§x½ÇÀ¼±|!ìkAºY¶L€V]ÁðÔ–+N†øÆ8ø¦)»³žŸ…t­ÐU†ëÄÓ•Žzz	<oã#€ý ”í‡×€þV}øôÉ³{>;:x~-:Å´mý-à#¯·º”à­¿õú#086‡1®G»»ï½·ÕÅÄ…ý-4!3‹ -Ó‰àtf³ywái4€'¾`cQ?Å|ý-ìˆ½"Ç«9=
+ÔŠ&É…'"
+ƒ1ûá™ôÐ'F˜Å	 9™à©ÊWi	#IêÁþóç[€ó9öËóß*A ?_tñíŸý%½è
+ÞMËrYô¯_ùòeOž^ßzñâ¼ë èWÿ` tÿÇŸy !—N…S¢ãkÂxp¹K5„íJàŒÆâúø-‹“YRÌÊ`ÁtÚAn˜™0¢5žˆM˜6'Ý'WDëÈ!wh>Lá B@åX
+„Þ£Æo3Ð?¥ý h€íØ6rÀ
+ñkÂMø©ðn º‹¤
+ºˆâ&œXé`®t¾¾N²ÂPPÃì‡þØ«…ì–1™KVðYáŒÃ#3£¾ŽÄ»ˆS!ËÌGHvQ‘È€>ÊfñÜì,f’Œ‘j°Â• —+ ™ej2fîÞ ÒÏþÅ ‰!àb
+1
+%FHÎ£Ø0€IÖÅ¨ž£.žÏ®+™iB‚š~$Às‘ÍâKä§,1 ÏV€¸™îÈÎ±N[ÓµéAK‚q×L†HÂù †mÀ7oáÁ)( ÝÒk
+Û@"*š¼sF{ mÙ1‡öxôªã¢¨
+£OÜæuN¦Ò–Ã{Ð;ÌgJŸ\ƒ†Í4BA.ž4.÷W¿°t%O
+ºÁ3®Pgñ"Hˆ	¦FƒA´]½‚ÿ"à`o—»å8–Ê Ç«‘]uØYæýUÒ—˜%d¶äÞ†ÿí
+rº;€ªtWžVˆÆÏÿ'ŸÏ2$¢|CQepáý4Ó2*ûrÐÀ@{&!%9}“žög)@ê…´ˆ*Â¢¶ùkú¾F*ÌàmfŽ´»{3Ú½ÙC}†àÃ¹Ë,{ÍÃ¯ÀnÂß^2CdöabûOb÷Í“u"›¤ºÈHÄ¹ƒZ7ÒVqâK²öJª­N‚,¨pÆî€
+Æµ»”£o1Å¯	hX<ÌÞæ™áàÝQÀ¹g`¹'läm/Î¯½ØÙ…¢ç­ß|ý7ß´º­ •‰¿ƒ—Oä2}ªÃ§P¥‘%Ÿhœ«Q!.CtÊ'R–¤W¥%Î	)'*G¹‘€z­îóÖ}9ê -Ì$®‚†¢Œ^¾LÕ1|¤¿™ÅQ´–öQÍq¦ÕI;Ÿ›£‘Õ,›?6iP–À@{PÐ×ÎçÁ,1”WÍ4#š•Éšt>z€NbP@1_•áçÛL˜&“”h´‰¢cšÑkVdG¯{­/º´}õ¿@gN€£j¼®g¯·Pž§[åc¼ú…B5Ï´\÷S26ã>âoò
+b—îî P
+j·
+`9	ÇkÏç®^Ið“ÅwpêŽ[l¯âbq"±ÑfOcF'A@¶¸f—XQòÉØ%š©Öú˜!·óOóÞ ÊRÐ\²˜#ºø–,Ý n
+¦³âkq’’¬ŠŒ4F‰u.D—7!Û½Ý»¿ûÙþ×ŸA‡¬Y53Rdœ¡Þ9ÑBŽªËÖLØåX²ð‹›†c'ƒ¤Èñ^,ë¶ƒUÉ¥…Ó Î>	¹p–Nb9a8<[ÞÝm¬aó1ÁÃÌX€^-Ê=´Žil¶A¼`à¢ñÃ¯¡\ÌŽÂº-@w(ŽeÛdæR#©Þ“Ÿý‹GCzºh7 h'³ÓÐ<¾„X	K,ØŒª¶ÆíQk‘åÔÜMªºáR ôç‰ß‰IÍØqØÑ€Dä’­E,áÊAç9°OÊ=ŸL•ÉûfŽVl¸(>§¾`;ôñY$uPÔg,cL´|†,…,ÊšÏde~2™8ö‹_7l‰‰æ­Ä…ÇãUvmàJ÷:>ÆÈW+>‚B[á²$ÏÌ–¦*[ÃY)ÈPE_¥xÃ¶²±ø&\UàQ  PaOÔ¡‰4Z–;Ë•î	i3Ð®é
+6
+	gTšVÎÔÝ‘t®HÉBZ«ÐÍŽüÍ×þŽð¨, ÇF
+#@t£ò¤(mˆh–Ï\LÔéTé·o¶QhÇ
+­´dUÃÕ"„C$Ÿ#g¦Qý&~F[äî[NÇË‚ çÜXµw°k¢@ÑãX(¥{?k¯Ì&0fë#÷	Lz&Ò¶¬-Ÿ¼z¼È‘d##¬Ò¾»þ’Å,ÜÚMyý§z–&´ŸûÁAoLqG0õ4iaqD¬“h|R$ÈÌX:ˆ>Îf«‚æÈÆoœÎèw³P#![ž}ÜBsb<SyíswÖZÀ›¥«ñX ˆsDÅHªXÂ@:(b€šh{fY@nñƒ CsElÔ3ºš³!q`¾é]&ÁÄQCM‹˜´þ2¿øVÎMEÊ ƒJi‹&y²Œ-¦’çOË§9.ØÐµ?uÑÂñªñ­—°ÄTéu‰#Ew„’¸‘—âù,›fsƒöØc×Õ€ÄOÜßÐÜ±‰x"ôÜ :Š^wŸcˆÎ“(¿²²êÌnp„X™gl]¢Ã‚j,L´çì‚mZ¸QeQs‹‚¡V·â[%³SÚA"*…eºç¶îŠdjHkW‹	}èHÿ€’»±“ÐJo­½Æ¾s³W+s~
+”)¬
+¬á“„®F ¾w)	­\h´›§ñˆ6ÑÈè8F$zÛß?DÒ¾ÖÁWiŒ°l­_*”ëÎrÖI´áXqWKp,zl=Ö×s`e˜›’wîÞqsžÑ=©}Y…Ñ ÿæuÀæÇ«ÍgÉ4g”[d`3K ¤Ø#
+¯8¹×	Dˆ3)Kò‘°\.dqÊ<êy T9'ïØÅTœ$’8W›0£;6ÎZÛ„—™„yššf‹%†ri„¦‰a°Hî³lMâ€9;$= â€—R²Í>Ät‹-¢sÑÆ»*	íŽžhÍ«èñB‹‚ìJA¤Þ
+Y\-—¹ZÆ…¡G¡‚FÜ‹HäseÄ;ðÌ°~Ã‹ :5(%îJëÁÔ¯;
+¢QÇ±Áv¨:âˆÂGbbû¼«-Š~(g†0ÖªW|ýLÎE`O¡áŒm˜¤Jâ»xEŸ“†ý/_kb‹¹=ø‚ÂO <ÙÈJf j{¨4­‰µÄá.ß~[Ó¹ÖýŸ×B
+à›—šKó5± â! "ŸÖÎq;´ØEÒ	Qáž€jU:q‹‰(	p o,J
+LuXVŠ -ðòu¤È«¡§*’"Î†`h	—füP.3Érä(Y^¬eH@‚Ý¦Ÿ¿®°5íùAùZŸÐ€|‘¸I:‚×ªk&E²¬¶‹…gÀHsãÀ½²3p”:†tW{ÜpºêíNÊÿ„vå®2@,wÆþ'–}hKÑŽ¡MPp’ƒ '¬ »Éø£wI ˆF‰ÝèB– I²gVƒä½N«œƒï0g´ëZQ«³ø:%+ éŸ+ WŒ¦¡æSÏßóNê†ºdÔ¦Ü§ÆE(³.¼óÖÄQê_$›“ÜÅÁ'¬ñèÓ39F³©£‰èYSðKd…„:WŒ©J—Zúö´i<&=
+JiùÎàËl5Õ•Âyö<«0öRLÔÑpöDþùÿ©7ÌÐYc*NOd‘¦$z„ó„%V},–§	 ÖèX‘¿’¯¯?Ñ»,_S=Šø%½‰;¤è³EŒÐed5ð:“Ì@
+ÈëC“ uY%ÙØÙD•nÒ‡Åe-ÒÑ&¼•œ;Ðÿ‹ÏËgB×ŒhgìÓZºÓ«ØÓÕ5
+76®§9 ƒÕÂŒaëÏ=€Un\×Y¦“Q +Ê¤B0i£”Y„Ó ï7Ú²°ËIÒQå NÅCÀÚ(ªP
+¦Ø
+×?ù
+@­÷°2Âj#½™ß«wG.ì¥ï®üX`äÆƒ9ŒÉn@v
+êÄ°§’pHÂÒ6Û
+i§0
+EÕü$¢õ¨Ô—io(é†‹¨WÛÚ™”jñ
+¹ âW…WÿÕ¿£
+†öœðf{À£å2<ùkM¬Ðj/ÉKàa2_W~¢Ý‘¹ÝKú 1å¯#TÎôƒšÑÑÁV=šõ…“Ék™'£ØmbÐØÃ$“DÄ½Änª=z
+$<ßÜ/þç 6Îå}‘Qæ½R#VÌçÙZë „9õ¯7ËxdÅK`WOà¡x5+ˆW´(þ¶
+¹	0P¥˜L”ñ„éKÒGõ bHæc?ýG÷@¹á³œ»'×µïšà¿dŽ0±•@[¬`×ÈZê¨M©Y5ËÚûZ+ç’¾»B?+IMr0‹øòFp`“9}Žlc25ŒØ¶Ìp3Ê€æÕrcˆNk~‚l›n)åÊñüùÿÃ#Ðåú>CÍfdwJ†Ú-í†š‰`†0/9*˜·™ÁIæ+ß$¤;’‰ø®¨C°'xÔWEl@àÊ´
+÷H %æ«E=Qs‹¥ÜsJI,^õ»”ÔM¡Á‡.0ªüíØò4™ee’: Ç„dlBdŽ“®
+Œv[*™(ž3QÑž‡«wšáwÎ¡´VF‘Ô‘MRÿ ø°F0N¤v{ky¶fc¾Ä²ŽS£Œ÷·ÿÀ1xp
+äUn>Ò
+Ä†ÃF~Ÿ˜-Ç™a¨ÑqŒ]ËÙTñŒS—)?³ôˆ
+é	êÍñí‰ŽQ®ŠT2/ò×#/.Ö#‹g?¢ òfcNa XÐ=híC°ˆögY£þj-¹‘ÿ®XçæÐGæÆÄ‹1†~š8¬…½‹&ÆŸP=n€¬ÌÑ­ Äj¤ÐªZñÆêlxV³06<ŽŠfjépd–Ì´­ˆU«Z;j­×2È³Ó€®ÊÄ¹±}—úhE‰Ê»„9Ü|tº×®È”ÁŠ8iB±‡y¢pÌ—!ÄEñFÒ‘
+a›—vøúÌvÔ®ØèC3Ã@Y¡ÍT¥ZûÓ†\Í®µ£­É?]Yç&sö„Éë4ö½lJâY
+F½©!ÂŸ~iœt¢A¿t•u¶ë¸S#G­W¯ÒØµ‰	•›¹19œXr}‘­:Ì»ÇôÒ¸Vÿ1sË¯uH–kßP&üI®Â`CñLcÙÑµ‡†²˜§qIèÂà¤´aÐøÚ¬ŸZE¿Þ(kü<Æƒ`ÉÀàcŽƒˆœ”"f€êŽÑfµÔp~ý™FƒÔ%•´-žË—Œû²Ô¶7ñFŠ¡®Ì€6`š"m£"^eŽ!-JeJõãŒ]«*Çi:
+PÎ•íBŠ±®âØ°/6S]ÅÕZø<ùX‹‡¾·âDÓ°†íÂI¤E²6Æ%ÀX$e4+’5=[ð­âÐÞæÙ™õêÆrH¶±Ä¡Î¯Œ¿Ó:¦ÐÄƒe?¬ÁH;Î9¢ÓHï¥£Cû’±ÉáhdrÖXisb#m(æß)ž·Žì½6}› ÆOŸ;IÛxîÚ £ÿ—¾d¦$—×]ô° 50ç|¦ƒQøstÊR#IzŸŒ/Ÿg×Edà6ã?Iÿ°Pâk´‚ÉLŠ$A/%úHg¹raCvTãðGoVõ²ÃtÄjïXa<8ŽbƒÎžÑŠ˜Âûéè(ðuÿvºIŒkM='­—ÎøâÛcö­·ø>³Í	CXÄÂÈèÝ‡wòs´ÌÛ
+D;vîB{Í`œ¬Hnù^Eš0 SG¢Í•Žˆ½n¨£I„¼èò î-I}
+ÓÀné`˜kxiÀ	¯S‰#Ö»Èi
+Í¶£ÌDpÃ«s™É9g O—ˆ5Ô¡+i sµcé«ô<7‘dÇºêv+´Æà
+–CÇ×ìqÛifhY¯	•q7:ÄC­7üåôô=mc³
+Xm“pÈÝ;#-j-õOG¥gØ×ÆIò€{*)G
+M™„)êçÆezÌÅ'y#ÌL¨‡7)t*¥iÆÞ \ì+‡6ïmñÀ±*¯™‰w˜…`Šrvã¸ØËëoVŒx¶Œµ?ƒöˆÝÍ
+•Ù¢1ú¡Pça,Âà Ø–kèë
+~ïèé“tU¨ö<Æó#v¢zU>ºØnqqÇÝVçì¬•®æsüãTg˜ê?Ñ•šYðg¬À¿LF
+ü‰ÀèÞÍ>Z$ ;]…ÿAB°£qäƒdtp8Ê†+¼ü„3x€t3-ïŸ<µ“QG7TÅðàÕÁáQ‰Pi¿º{·Õêô ”˜¢}ýù>8lm½¸>é.Û§­´ú­Ä‹å> ïü{^âŸ‡øçÿÜjmÁŸ_­2z¾…Ïß¾ñþ~ëüùâE ¯RÉe¯U»sêÁ©¨À©K -hrÉø¤=@'tS%¿7Ÿ·;çN‡˜ vJ5@qi”åþ^l%ãö[ø¤ƒNÉUžRõN
+Ÿ¯V*?9¢ŠÓõÜ¢± Šq–?ˆ‡ÓöòàpÙ£Û³xÅ ´È`-Ißép)pX„mF¶Á%Ãa}Šç&7ÿ
+gàÁÁáÀé´Ì& A›~»ƒ~£	À¾ód@©:•Bz?±œ j#Þu[­.‚žn/ãršÆ
+õ®yR¨8NßÐA‡œôð¢ßz»õ.uí`jªszN…ÓQö²ÇŸeíSª–×¥R<;]S¿·……àZçfrî6šþpç²¹ê½.ÓÖÅ9¸e¤r á­.>
+öýã<[|Ó6w@YHÚf5SxçKztz^Jnïvö#;:uöñ†#/F2{»I©Ëq0ÉA»EiZ]=œ¾Á½ø@õ€ü`¢¼á<+€—×ì±FËØÅI³€ØÛY|¥z˜Îæð‘Ç«yÙ¦Ìì¯!le3ª³E(+¢"ïÂ¾±ÀÌ–*5	+Ú	-HL‚ã¼Óöó‰vz˜›èÃEíòàèyòâùî
+¿!ÝFïô0QKþé³Ç¸Õ½E¼l·_u; ‡?ÑÙ58=ÿ°	•°È­ü'õ+äÁAëÓãs' N_Ò`¶ñUÇ^o ·ëáñ»»çöV{±ˆçóÃwN¶_uð=0é9~Òég	àbËÛ&rE ûÐÓÃìNÈ2£ðÇ@ÑaÓ¸J êR0@–G”/²]8˜T W8÷0‡ÿ‡€¼ís
+ZV*=hÉ•W”¢ÊM¡jAí
+›¼ÂJ8˜áÑ¦LØÒ¤N~nÊ¢ÚÒÓãby ­§lZ6Ñ1*ï‹˜„n«¬â¿"
+vÃ‰y¢	±ÎHl/‡‹}]Gëyäjd&Á.x}/°ì“±š¢E‡%­mD²ë®e©¦”`‰nDðvK\Ðý?º‰åšãë2"Û[Ù<a ×9xõLŒûgbï¾ èHÙépíU÷é¶,Šdˆ‚È u®Ã¤'h bõÌ]µ†|õ´ÍÒá„4£Ð=‰,yž³‚’©´¸ ¬ƒ8 X]cXŠÉÆÙ	nµÎ¾ìÀvÈ}}ÉèÐu.pwÅ™S,2˜þ„¯cæAb÷>³ŸuÀæÓIk|q 'ø Ý,e×\Êµ\=œÁÝ>¦ljáû¢ÐFe¯§Ââ]{œõu:b£¬p.–ÒÄÎ#âOˆ CáŒãýÏ¼ÈýËÑEà1ÀõË(ÇÜ*µ7Èèl…vÿó–ý>^ó•[m£©…ÜàbU9¾Q<ú}s5¦J¬äÅªd2ãb«wü›KÝ`—¯~èìž‹)÷<	îw™x°»CJe ¸4†çÉ»Þ[ÝB'ãÌnœÙ`††ý{FQUÎ
+7;þ0¸D|Ð#Çn[p¤í¨	h8²äÂšÁHý¨Œ=¿‡P¹Kó½“MŽÝÅ¸µ¢.W`ïœ·&¬F
++¯»w·§œ‡¸öŠ7±Ïä‚®ss.z¹Ý‚Ÿc*ÎØ…Ò jÖÜ|¼]1¼2˜­#Û¹Þâzw¨Z«µCÁyÁðjJrDGÏÀR6‡ÙkÑpp<ÒiVSòhÉs¡¯ÿ»ÛA‡ÄÉüáQ>ï*Ü†ÝpQÞ <f[¹¦ë¡ÆüâìÍX6Fwsä®}K×Šg8úI5õ5•1¢‘ž_ÿ{ †‹•a*‘à¨JqËšLVNwZÝß?FU{Ýró+ô›+“gôê%¯chïöúOœteFÑk
+ ‹äÅþ;m'a¼/ˆÏwÌû:A¥Ió½ä^[Üxñ\ñ(NVw¿QëSr·Þmc‹ww;ï¶oµôG”s2èMÑÏñ¿ÔµŸèÝoú•´“µx¹ÞZòªt†v¿<µãºyÚ]ÝÄ¿±›´F,—Ñ£*› m½èë·~¸»³kÿ7´nÊ¼ºlP£oÞE ßÿ1QùðÐ•“*ì Ý9õê¥îw'ì[^×OIÆÏA7çóãW4ÉãaI•¹JÖo¾þÕÏuZw7Yü`5`.þ#­ÆÎyËmŸÿÂË
+ï˜Ç'­Ãïþú[¿B'c=
+éÙ²,Fƒž¶†õæ*”Ó»î#T‡¨2Bc<!ëx¾"-pØKFç-9TÃZ3ð\q3W‡ëoß¶Â<é"‰˜·£uV{þfcR“/¯1i*z<MÎÔ‚l@\=ÕuÊÞ²éäð-.
+ƒº)=¸4/«uÒ4¤Î¦±®’¸˜­ÔbkÇ‚ ½Ú¤Ä3y,Éx7Lã3¼jÉ4Œ™žãÈB·ËÝº91jõ[-‡¢ÚÊ§ àþ}p³sJ‡ù]_EgvtŽÖ™*NvNc`ve›Ó:h+<‡õëP¯	¹÷)¼Nkü¦”€é_œ&£>&Ìí¥8v—šõÑŠbQ¢Ó#|í‚”žûÄ€âuÅ!øX’‰Ø|N»¬¿Æ­0oðú
+fåí§êe„óhË=£pç|`À–éÞ*-¦ ¨´U ²‘Ú<ôònkÜbƒv_ÁùìŽ@$ìcÀÎ"dÿÕ¦Î/íCüÂ
+z»wx»¶·½í:wwÖ6ãôf“òŸ"È‘>¼ÓvÊz°âE›LƒoÑ;Í ÁÄfU‹%ôì¦º³\Ó ,]ì¸OhLõ½zóleysNL©2c `û5ý¸Ý^ð9ƒÞ‡ŽÍ°L ÂÃ„ ÒÉ£}ð¶ÈkJô,¯	løéÙÙ[ØÄ@ïãŒg¢^9Gû3NŽZá—4ªDÕÊºƒ‰Õ®ÚË‘ŽÆGÇxL¶Èƒ“´ÿî–Sm`«¿åä~ßÚGÊ\|
+b¶CÊRó»<³³­­Ž‹cØª#¶_ 9wšNÓã¸œö0@$Ã-ÀZ°4]4jo Âj‰Ÿs)M$äAáŒì pÔvÜDpœ; ùI>\ÎX¯E@r`éÆæÆÜ¬Óq‰2CºM. ì]ýà jÞ9U=|| W¥¡)ôäÜYÛ0CB WG+£Ä¥o¼®qgÜC¼;(s@ò
+õ8æé‘ò±¯6XÞÉk
+µ‚¹ŽmÑF•a6È^MsªÞ¢¡÷^9.øåH1:ƒ*Ûä‡Ý„lò ª'Ã¹
+Ëæ’pã×Ý~ç49·µ»jmøº)»®s=?¥´±§ŽIR¯–s‰‰ûñ¨ ‚«ô‡…pÃâNò
+ÓÇ¡Ür!üu®¥ÒJnc=3®5¥ÅGú‰òcS{LBg›ã/Óº)‹²|)Þ¦
+e2ÉÅ¿H
+crñeëÚŠgf~˜¿Ž¡æLê‰"ld2ZÒþÉÆ	» ªÄ„&õÍ[R…üÓ¤”óVÄô¸Æñï'å´MÉÿ¶:w·ØKvÐúw˜¼`ÖÂðºƒVš¡/”N µ[ç²„´Aœ~lz ¦çZÐƒv2‚¼n3O±öñ.±GÑÛ9CH{:ût‚ðs„¸9Îñ ßTý³[ø‡Õ‡³”–žë·½ÕóÇ–œXhÞÁoÐ%~¯›
+zgc«‹c  N ˜è 8#r±cÊvF=ƒp[¼\ú¶Ã]xº,øÅ±VnašD‹¤[éZ‘“÷ôªÈ¦„´¯$W…lR¨¥Xt¥­0§¥Tƒ®´4„~©ï[¯ˆ¼vÜ±tåK—p7}ŒKr
+­{®N&¨…ÔKœ¦ëæ4ð$%¡£Óúi™rú$…K
+ÂÉA{!€âõÄ§»/j¼ Åó½—ø@µTYñí^UwwˆLRbñm²—ýü›(ÔÞ Ls&
+(Sµ‚Ÿn!çÑÅk]×›T¾JŠuÓ7HXžÅÍ3
+TÔø‡DúÚÍW’•|‹ àVgráÐñó®}€@PM@à9‚Dƒ: aª'Z¬ü?ýo 8#þ©	Þä.‚ôEÀhëí£ -YýÒt… 9;k=¤ au/Ý¼
+”û‘îe2èäÁ1|<IÖx¾Ï=~u9 2R>´;Ñ»QÛHÇrÓƒÃ´Šé âWiÛ‘6ãdCý2
+º”(F#€œ]I¯´+
+Ð¢S‡âä0[œºê¸Ž¤â×Ï^´ƒ gg;wwÙ´é”ËrQ÷éàxD«‰*¤ƒN¯Àª&í¸; J6 Â±Ìœ¡×~>ë®_t6£ô¬™?b÷2Eß•€JësKáìÕ.…p%){IèBU ëÕcÐ±ªèÅFW±c¹Ye
+Êä‰LÄ)¥ïR9ì:œÌè|d¨lF0So‹˜©û6 EÍ›½{à
+u$ýH_Õ5½p4‘1§2V@Í}Ö9î7î‡S‚ß§l¾ª*y¨Úh¥n¿Î·ã¬à/þcd
+PŠr—±hŠÙ®– Ñ÷´6’6ùÎé˜LÅÕrf\!e4ÚæêkÄ&®\Q¦·d8[ymé–3º¤»@u;{çäX¤ä¹Sî\öøü’ó@|íâÛå2õ]X 6ä¿qùœWÃ,@+#!JäÍXúË_ÊÆæ!¹[ÎÔ’pöSÖ†ïnÕPØÑÊ‰lnõrEh-}
+ûàéÁò'çW#.L§ ™C9Xü¥rKE[G®bÉûë÷1oA»S'6ëïNµ¨Oç
+™Mþ –##ù
+þñíü.œDõX‚¢ªÐµ«•çª•™?1éwmôFx˜ìöŸ
++À’Atëâ7_ÿÍŸµº­G«IJ±þ¿ùú¿û¯á÷Ó™:–ß”*õ)ÝlÓO0WÚÇù
+ïµçñH?Å¬ÄŸê+Gío°j¡êÜ^v‡d
+G¿“ÓZÌnQËÑ›Åi1S•P=íáY1Qvx—	£ÙðîÆ,×ÊÖá0,rZš;½Ö¾žŒ³ 3›g|c	µÕR2 Ùžèº€¾.ÄyóF+7Unxã§¦ÚÝœ%ÅlÅ'2¡!NH`n&cÂ"Ý;
+1¥Ñ0±Î­c‰y“4K ë2„ßrÐ‰HðÆ“¢l=|ë}SÞ3¡:‘æl‹šÊí
+¹D)×èŠ9Õ4–¨8æ‰uÚœ¥—vÖ»ý@Qè'ÓaÎ¤jp¸(Æéíç †‰Ž#ªF¹ÈõHª:V”«tÔ‹r"Jñïìy¥ÑZZ0/§Ñ%$÷êRõþ…I¢nÐs4ñcòžK²­žëþÃsô¹ñ)Òc?õã?)ZÃþìú#L¨©Ra‚&Zô3.&³ÀØ9Ù¢þï(N4¨Ç»E—¥¾…?¼àš`íäåè®ã9›§_]õÂ
+ÕXCÞwÚZ‚8„jˆÿ çÜõû|q îoºËA]„·9^u–X	~‘ç¿³é’Øm
+à¹œ”H:qÓ…c®ÑŒ ^"[yçôU©Ýxè]}»vØzk¹ÕùÛ‘|¢fÊÓZãŠ¶­|ÿÙ
+¯4»á÷­¢çÎ€rvcßõ„#]oÅ#Vñ˜0" ²„õ*!ÆœJ-_C%DÜ	
+GýÛ‚Uî³Š¼d8Ÿü æ£g¬«û¹s¦–ÕÈ
+ræp%Àšº~EÁdã|’¤ÛtÏ‹ýýê?HeÍ#ÊU ß4V‡íGF-†i²Œ6/Ë€×H›‚‚B’ogEµ+þ®‚äkmç¯\ŒÕ÷d£)¨XYfómn“Hãßiìæ— ÃEa.é¨Ë.ë(y…œê)¸fQ_SÜ$¶ùº,EÌ’šÖ$]`Å/¸ipk*côÃV\ÌðDˆ½rOr‡ê»?ùE¥P²8N*¥R£aAš
+íÕ[Þ]¹UjbŽ8d[£K6SQ¦§k$–&²gN©Ùl
+U>èZ§b—¶è£T9âJQ^rŠÄÎ'e«›`‚ª~«"E¢ü2@aŠRk¥:`Ø•õLœ®‘Êä†B*ÒX«‹Z}I²eó~Êè=*ž,¹€8ó“HE2JÔ³â$À™¼*’p¼øˆPM;¬£Óò"m¤žõÄðîq™,ûVîm™y.áµ_¼CW
+Xœ­È%åˆ\8×–÷1Ð¾¯0 ^ÈuÒ>ð]v›+—o<ç’ÓÜ™5á>˜×"šËñ¦C[OÖM‡B±×´ØEÌÉ9¤8CôD"SU#ñAuYÅY»÷àõµq
+ÍÝ¨»ø&Û”'–Ä‰PÜú
+Œ¤¯ƒh°
+RX¨ám’E,Ðc6âGºbüT?ž³ô"Ñ×H~N0yžrQ>_•I*ïïÄÔdÇZ9Ã E‡°B'BZçà ›U\Ç¨ ®MâW’:
+}ÓÅ3”ü¿H({—p™¸Á®gÕ‡¡ŒÚÀ‰È%w*Is¾yîœŒÜ¯Cl ¥Ù})N#à ÔWt¹/$<ã<^ðJ4ÙqZú©=á²h/eØ­¨P6Ã¥¨È°É(·”¤Î&®â´‰`ˆL•¶«3»™T uŽœ‰ÙQ
+éPT²ðí
+.Ð—8b  WRR÷4<	XÎiãFTÊ:É–4ß“œØÊIrÐØ'hÕc¬ˆBh´¤-”º¥§B™ìîÇÙ`@$ç‹Ä5u˜`So©Ýê®:Ø¯ë€ÁImV ™¼×•æ l®Ðk5T(=£Ô—IDþâŒ ]§ÞƒÖ„egPWõy„N£äîŠÍ`²!—ÒÈæR’=ú\¿Ç´C…ÉîO¹üIÈõE<âŒ¶ÈŸÐ4cðð‡—GùªL§© ºîLS-üÌ´tý/±­Ä5\Ã94ÒÖÙúÍy dÏ>©?	öF&.3ébvl	0i¤9ÞÉùÕ? œüŠ9Ç4k·”iªæx9ežàB &eþæäQ…Í²eo&C‘sä]àgë
+ÍÍ/I¦Õ<2¹	¸œÍ|GÇEØ¿š‘Ùu)'ËRBÅ„nâ·±œ4Re^',ì!úì’\cu¶UÅºl—Ý-¾\­“ß1]lxk™*xvq #À–ywÕYzJ‚—# ßˆ
+à%GÃEøm|“âŸ‡:'æõ`
+ÿËnZ
+ZUµ©Òl·¶Y ]ý£èÛ á¢qbðÒUÖªzßËÝ·K6NéDô¹¤\ôY³#¹¿®§íVÑÖ÷+—èF«J[ª¡ð¢‹»LCþüÛèižÙºÄˆîb,DÁ¢.WwÐÎ¦EÂóM§YamˆN5ë+Þ}}Ñ%ºÞçºˆÑ‘.|X)¢ý»­—
+ãrÊ}†Ì?}÷Gÿü3ÿó«èG¶€® ó#»ÞßúêÖ’Ï?(ríÕ°†)Ð]ÊoûO–m0Y[ƒ¨µÅ7__œ?/ù#âçªXÍËæ\îqxçtÄa[µ§`Ä&ºeõ|ú9
+Ê>–D»V¹l4„–n‹¢Y‘òà½¦!XÜÿ•
+$w¯T ¹ëTBv¢Î¯‰Æüî¥ÊïÇéŒÔþ™:Aakƒ £òþ×ð×1-š“jtQbÃ?¹œ0>Ãzsð¯zµœg#|Mô½"KV+&²ÑI¿6a–)BÌ9§‚LvnÒp›?ËáŒˆ¢&M.Ï<ïK-½/Ó/ÓÏè?è™~÷Gÿ^H_N¦"œ#˜„.´%q«OI›ÃŠc¤à„þ%f‡ [ÁS×uÄ9¡¹‹O¾Ve~²X(›!ÔIA§l©h®6D9^ùû/È–dª·’n%¥òH¾q=q*0 _L‚_Ì‰ù3‡W™ƒä„.±»Q.“~ôe¡Æ 
 
-/* ===== LUMORA – CHAT FIX / MOBIL ===== */
-#ask .chatbox{
-  position:relative!important;
-  z-index:5!important;
-}
-#ask #chatMessages{
-  position:relative!important;
-  z-index:1!important;
-}
-#ask .chat-input-row{
-  position:relative!important;
-  z-index:20!important;
-  display:flex!important;
-  gap:8px!important;
-  margin-top:12px!important;
-  align-items:stretch!important;
-}
-#ask #chatInput{
-  position:relative!important;
-  z-index:21!important;
-  display:block!important;
-  width:100%!important;
-  min-width:0!important;
-  min-height:60px!important;
-  padding:14px!important;
-  border:1px solid #ccd9d4!important;
-  border-radius:14px!important;
-  background:#fff!important;
-  color:var(--ink)!important;
-  font:inherit!important;
-  font-size:16px!important;
-  line-height:1.45!important;
-  resize:vertical!important;
-  pointer-events:auto!important;
-  user-select:text!important;
-  -webkit-user-select:text!important;
-  touch-action:manipulation!important;
-  cursor:text!important;
-  opacity:1!important;
-  outline:none!important;
-}
-#ask #chatInput:focus{
-  border:2px solid var(--brand)!important;
-  box-shadow:0 0 0 3px #398b7720!important;
-}
-#ask .chat-input-row .btn{
-  position:relative!important;
-  z-index:22!important;
-  width:auto!important;
-  min-width:155px!important;
-  margin-top:0!important;
-  touch-action:manipulation!important;
-}
-#ask .quick{
-  position:relative!important;
-  z-index:10!important;
-}
-@media(max-width:600px){
-  #ask .chat-input-row{
-    flex-direction:column!important;
-  }
-  #ask #chatInput{
-    width:100%!important;
-    min-height:105px!important;
-    font-size:16px!important;
-  }
-  #ask .chat-input-row .btn{
-    width:100%!important;
-    min-width:0!important;
-    min-height:52px!important;
-  }
-}
+løÅ
+¯%3¦±m:¹=µ‰óË‹W‚™TÛ–Ðµyø£â9&>“,ã¡¤.Ò?N²U¹ +(a72,W,Õ<@HcÓäìÕ¦Ì–€fœ<¢ßüºÆòà&Aá5°°ˆ¢Ôwn@7Cÿ•8þäk²ã±-…®ü;ýþ9Ùs5Qs«‡PÕ.?ç
+M€£Rô`W0$Ùü¢Ì¿¨ì&”,·’ØV™©xÎLNÃ™!MÙ!ùà;)ñÆ¼c]«ŽÐ¡åþ¿4ZÈæŸ›_ô’8ÒLh¢Lj›tš¾ôÏ)ÇìU›ÖhgË¶¶>5z…µãŸuOdt? 4®å
+o4C
+µý‰Dj¶ã4b&o?èQxSÔ u}	kƒ•8&åRI‚GÎ(¤+Ê%[!ƒ3×º”èR½º¦xÕ¦¤IX 	éBØìóß€ú–ü&¤éÇdÄ[blZœõÛ‚Cê|³†ÙÂ²F<­7é¼¾‡/ÄL<ˆ4fs®ƒí¡_µ7þaÌ,ò›+Ú:U°ëy÷;P€¹a2ÍFkŸTÊ‰q¡uOÇã`«ªt¥Î§È2ILlM·ÍÌœ>•ääj’WzO<–ØlÔéZª(v<²9’©dmÈë£JÈ¬M º,®¤'ÕEqÝ²¶†@º	bš” ×,á%…’nŽpCðà™_ÖÊ¡¨]—”K*—]ÆíeNžE®1»ÉnÖÊv›]€ìÕråºô»þå©ám­Eü¶%hñWQÒÉµ/Ãsé–±»ÖÛeÎ^Þ¶
+¦g–1ïš¬WÖÆkŒWMè|D”±5UO2
+î
+‡jY¢¨W#`bÉ®ÊI	¬Æd›ìÊÍ|I 8±ÝPÈ±(’Kh,k` xH Tm©Ø¢“H Ç4n@Åß‰•>À1*é†„Rª˜#‡‡G˜?M:R~"ˆ¡Ü2N”4ÙæÀÈ>8ií—ÅÉŒ‚®tµèj—b,¬hd´I…*EgÂžÉÞ:ÏBá‡…9yxu1jÑîck…p†ÖÊ‰„"¡AÀ˜åü.MØ°–zÎ,Žð
+Q‘t \#M…ÎiË¼uuÆ2SÛ‚SÝqyëÑ§Å"—6ºhâÍ´'8¡Ü^Jk•m1Iò9´Mºb«Wê¬­(G˜«Ë±IšC±o‰¿ªQ€°1”ZÞ54pºÆRµÈ»µâk¤ S}g±W‡?§q1œ"ÆÇyr¼ŠS$¦ñb¬ÊxAŠfÙ,¦?Ô«8Aê*åÐ@‡è_øæêÃ
+ ?±¶KJ^F3:>edTqž¿½¡IOoN„ÎMÎU¾tú[Þ‡?ðr»7¹¾¢Ý?—:n’$.T¸Ææqäõ†ócÃvLxçÆ¤’©ë‰ÊKslu™%
+C´­š:ÂÊ$AYÅ9škƒ¶r¨ñþ‚*á>]åÆÒÂPpëdô_¶dhÖ@)ÏLÅ]ôbÂr€™<úÏ!½¡Ž†ÍÙt3Zš4–Ö*Zx‡7È¯×x˜*Häybó¼ I\e…TÕ”ìþ=\í—©¥Ínì¥ù.É4Öð²&­*H7Ä«:ÇÜVr“’jð×S¦“¤´*È„¢O¦mâKýðÒ3i†
+4ÇýF9T9jóþkÑUcš-¶rCCZÖÙ ´ÔF%
+›˜ D²Ì#p%ƒ
+cõ{ösù
+[xZêkÙr¬ìýâ’ºÎeŒ¥&£’8÷"{’ùÌ9 ®	ŠK'Ôñ:3C/Ñf3æ¹ãÊÇ	#8À	…UÑ1ûQLVÕ"y\¥SÞ
+EþxIµ$a>]!k²eò†TVXNNÚÄå8j>pÔ½Â°¡ôŽ±b•4ðD²“\9)¬Èpÿ»D¬bS³ssÂçC5ú\9*‚L¬Óv©ˆ}BØÕ€2©ÒÅ“³¹znËG¨ùÅ7…\i«Ã%™©62UÐ)»ŠC®ÙÌçÑeŠ‹ÔÎj¿zà4’xMå=YD³¶g—6.1©TkE"Nÿ«=&~ P}iBS’˜Vã1Fçµtí>ý†–êÔ½u>q­xKK×B’‹´Òì˜}
+qQ*m`Ñ¡Off.¤Ê
+]J6j•”µ«rádZ`îø@äê…Æ?qqwÕESbwèQ”¤Ædz%î^kI¶Þd–6‘Ôz0žJ’dád¢°R-XÎ¯ê¦oÄ´9)|‘V&úd£C©—Üê’Óe½Ä,ÂÙU\1ãŸÄqpÑ¿HBp+ÐAGh­#W
+ˆkT{±AYdJ}š+V¦?F(á>‚3|¬vN³8Â7´P”5¶å†p©C>".,É…¾X†ÞLï¼|¹aˆ³.ø¨1
+¹5Ð*tP0a
+óÇ¨uE
+…oÈ‘sKa{1\é¼Ü&Úk£éíC›µ£–ýº@§J‘EP·6˜¨Ö¸¡©œÈxü90È±¦!.Š6¹Á€ÆÜ‚”7f¨¾á„Ø”†0—¿fÔã›[GTÂ;¤«Z#°‘”Ìµ_kãõD
+’ÚXWD¢8—ÄËž¼eË²_k`9<våDW¢Éq– *‘ÓL‹x3™É2xÌÁ
+ñk‹\5bŸœK1fJió±¦qµtókk²¡™¯O$XÕ%7§ÝµH]‘‰V
+Õm°Øz„xdJ©“¢oÊª#ó«)ðîlG˜_
+ß«WòÆNº´{=úI…øj%ø&'6em5
+”ÄP
+~‘ÿÁa¬Áv¨×—ŽmDÎGöVì8î8T<z¤$›ƒ€œÞ@"	œ”éÆKBv½*ö±©Ú:vhÐ¥Ê“xnJÂ½fšDÿú}úÒž‹ŠTÙp*]È§,Ñ¾’ŒÂ€f4/°U ubEÇ]&D-¯fü%†ÚÞôÆ™hSM,¹\ŒÐÆûŽö1?¸7RØ&Œ+#[YI¶c—>r'ð_öU„¾µ°²(VüM'üU­?XFsÂabµ Å±Ò-Ea'sÎ~³õ•ÂdXÁI%…
+—ûå<]Áqˆ9ˆ  âúŠM&\AD×:ŒpÇÂ¬U#	Àõr¢«½£§9%oÇ, ©ÖäñÇ3ÅŽ,‡¬&p¬ÖRêr®ó¦‹:ˆÑ:]ê¢Ö±0ç Ôvi2ƒBŠÞÇuUnëSZ’bLt—XzD‘u‘U£ÿ6%3¼è=`'1_Õ¹øÖó2ƒ¸9x•­7šÂ5š7ãÐÈ¿æ¬C öÔ…–ã…	õ
+å5@‰÷}¨ØÒUÔn)×_ë`b¹¶¡ES)Íœ7ˆÚ(ö:—×„.C•Y&4—âY2dü( òBÙ[|JÌMõzAõ·-"¢}w£ß.`ó2‡]®›Ç#­‚X  Ex —Ee±ZÈšË¼r	GŽ31±Nþ„Ã1ÈunþˆÌ
+d¶Ušégdƒ«—@ì'z³©mH­i’ŽÍÅ\s¥Òj;4ú²U¯Ö_¶šÐ÷Yn£N
+®
+²|j@äå‰Š<É¼Ä¬ÞXÄô)•¸¢X¬”…˜)i5ól2~W›3ÕjYëç«ë6àÂèMYµ¬‘GTÃBó®kšì¤ÅÀ†Òz…Ê\ËfêØÞ’¥ë9t\dY—»B‚ëpßœùIàW>^±³
+Dë	ÊüÀ&NÔ‚¹'’²I­
+u‡Úâr©=R§‘‰˜‚
+-GP˜ª¡‡õd42â=1mGÊÒúæ82ßè^ñ@Ð5‡ELŸä’•]»œ¼*´j-R¡]íY%]Š©Gls"u™`ª•¥
+*w¹#ØˆÁ#ïº4Í®±<k¯ÉH|òF
+MjÇ‡dÑvÚ­‘•Eb«yp{MîÑ¯u Ç*ÄI€-:z3á†Å)Ä\[ß Â\ú_´TØP#‘O{¦S
+LÆ±¡ÌT6Í*aŽóÕ¹g^ü§
+‡(3Io¶ò\“}3°WêyS7"—`%q1CbÂÑ[“è+©!Þ\‘
+ã‘‹zýþ¾§–˜/Ø> +E’×¬æ*eÒ—ç­ÙÄ‰Ý»ÀŽBÌ_n‹¹“n[cTÆÀZŸ]%BqEèÃÂ²sµ‹mh®Æâè,0Ç0‚¯›Øö	S'¢Âêxg1jFa,ÄßÌ’)†°+ôNf†1<@Žy¼ÈxË€V(ç’±È´u£xvþ‡³ÂÞh¢¨ƒì7ðtcaö3)!hØ8=²tSB÷{S›é×^÷Ê»üÃVx•e¦%N´@`¼¸š‡h_W¡TâËc¿G·Š¨»9$«iÙQ§ÉjdÒ ¯ÅÜ‰Ò¾Ï‰	ÃI2 ,aÁb+†ªäeä¸!Ë¡-æA¼†ð
 
+Àéµeæl›‹+^—Œ[üÇ\š¼ú:nYßl1uS½ä`…wS8—S–\‡Iïaâ|¢„)azh£NPÓdÄ²‘¶Ór²¼““Ké’€by¢ó_	$™MþzIÈ`ç:Pð Ö«gfîÞ@ækeîU!ôæ!}'KiÌrß®Á$DIˆ¥\\)<|$í‘vÖY8Þ]ÕË6–¢ •Yº*•è—KËÒ8ºyÉ&ô¢<Y7R.§'}€Ô}Nú¦6E QðºiOëÕN ŒÕk>¥|›I(û
+†ž•'Š×ÿÞP®TeÀ·5¼D"f#s3í4vBJYk>1Ð)jý©s$š´ãr #l‘ÛøŒÚ˜Ægæ†c
+0éº˜ŽK…|óàR&h‚z	~ä[åû Al¯XqUSÜßt-ZÀFf@Ü1ß•[Ç‘nC]ÖéˆÌäuwÊCzåŒ=­ŒÏø…$ˆERRÇ¦1!H¢R2°#ºç¢^ê®ÖUnŸ3ÆLuP(É›Âáœ‹"š{:8f¥gKû‰j6A1u×Èùs¢O:¸åF­Õ™1Éc‹"É­îFºä.0*¾˜ñ6¶š(8Û»§XkcôðWà/÷î
+27¡ní%üî}û>ÔN/¾y%›^‘
+„ïI §‰›To²j­W¶ò8fÿ@=‚/|»x2ÂG>ªjŽÀí
+6'ØyžúÀâŸ¸ »¡
+ù¬'(Ñuè®
+2Ú4+©èí]þ0z‰ÉÜX²¡úö’m¡uõ¤ät¦ŠÍ–Bƒº?¶œmáÇÈ™t
+E¯ b>6gRÒ¿é…j7+?Îñ`3ÕäüáŽedP!µ‰­«SKqH„L|tÒR´½BÌŽ%'>#{¾xUŒLHÑ
+¼Ç‰ßr ™ò{PÛa·¬ŽÖ^Š×=äïopzWt¢Àø1_ÿëI ·kœG[BíhzÍ3º†ÕÂûÚºï•QJ
+šHaÖÑõD/›˜¾
+j¹žPKöÒH.`+€»v,Ñ%QXãé§Œ±NZ¢r‘‹îœ¸™ÔÌM\jö¹°{OX¬Ô(©ë
+ÚhîÕl’Ùßsc…yE
+±õ2†‰Ê¹N*Qy² 	‚2ÔRtþTD‹&tÙ§Ô!Évc¦ÊÎUdÊòŒÃyªîÚÞªâjÁ#TÌnaì©ë—²V*×)"r¾½ç Žìr,ÒY^A&NÞ ¼f¤Í´Ît'*Ñ3ÛŠƒSQü×dn™ },óÚÅõFq©.Aî·,=o#À+a9OëæÆvÒ­VÒ¾j°«	 
+hÊ.`t-2¬ÉS\óa°{mØ LðWŒõÚäE] D¿YÌñØûÁi¼ÄD™m¤èIÅ¢W
+ÖÔxíGvðS%Œƒ31‚ß9ˆ¾%OlDX\†ÖÊ8e…<P¸èìéÓW,Cô6ØH§ÏMå‰CØ® Vcè–Œ[ñÔpÑ\ª^ï…v³ÿ–«×{AÄ‡Pu²ÒºqTY‰ZñiG1U™_:>vÁ!K¸êµ$ù­#8¼ttÎ-nX
+ÁÄÎŸwº^¹|5Ù²Ìåz”èèNÄˆ/YÅå
+z”ê
+yºœkÅ’ŒçàjPêwœ¯K£ux9ÛÖ6Ügöc9Î¸ªŽ ¥¹÷ô½[ ,!(LáU:r ˜Ø
+GcBÃdlüo9ju¤ÐND|Ðj4FTÑù'ôÚ«¶¤+èa›µ)1¬»ƒÅÔÜãÓpÒ·ø®bôæ9Ó¬âÊÙÓB«R½Â‚ÝD~®ÌlÞP\‘ó¢Ì`|Šª^‘¦vÜ æ8§’ÓnUIÿåûgMËÆ,ƒ5ê©sÎ$ø¡h< yë
+Ÿ—$ó{˜¿Ïw(Žaå”gÈ(MèÅ|J®ÍÓ¸aÒ q_û×KQý&7µ#t°IsT dbîÊ‰vìÛmIðBÀÙ*5¯êé¥dÒ,²cƒi:[•$åÄEÇÆ-Y“X±††ûõ)µŽ}¢¨‰ò§§%ø¨Ã«Œõ ¿›Á‹Qâçù…,2…¨ê}â•¡›û'rs¯‰9B®õZ­”ÉšŒ[óW’WZ•¥×Þ’c{£Á‹Òcã§X„VBÛ Úi~èX%„QâøÒšp]øj
+gPµª"‰˜½5Rs3‡Ñ
+óò4ÆèiPîOËI
+UìZRìø€Üì'¬ø‹l„Ì5¬ÂibÉ÷S_Õmä(› 4ê7&wMÌm ‹	0
+B`Li3bÙµ{”­ý•Ôo?øŠŠ
+Â£ã
+cÏÉ9X” éj>ïÃ,W ;û ´µ%½='ÇwSÄ=<'½\VCÕn§ÝYçà0}·]ö’t8_TÑžuîîöw:Ý*_]RßS¢Ø§Aãós©·‚?ýÒó‹I›
+™s
+vš¨”²‘ÿ1J_U´x	£d}0Ê†+•ì
+s—êÝm(Û-x ­à¿\Ž÷I¼ÀR
+Å$j½‹]Ó·Æ+þ½Å°c”ñGT™¶
+:ô°¢•äY¶<°¿>UÉdZzUJFðÚI›{÷+,%,õwË~øn
+Æÿªl 4`]çËÝgúû]i?3×ÐÏäVâ™Üx=Ã›…grð/^‡˜ã²=F‘SÔÆ¹±zÕË¼éÞå
+™Tj«*Ðùœ$c:é×	QGYÑw’þQl^žYÂAë¨»JBËœœ&˜úi±±–( gœqÆ·›èŸüŒîz¹63²s4ƒÄ‰çHÜùÇFï‘`N‚
+Ù·|¯9Ü€"1õjÍ´9^õÌ¤žé8Ô3€zæ„¸^i+“0ÈÑ¦â««Ij—G÷ƒ\jGM÷k!Q$±.<Åywê#!Á#Xý®Šµ¼RÞL±þË@«º¹ ‹ÉWóƒëÿ¶=UÇgÓxŸÍá,!”é?°9ëxtñúLØÅhµ8ƒÿÉý‡3”$`bÇÐÿ]fqû…lí,%€–‚¿Àp±+Ø‘´s=á}¨Ùîè³.Ó±…§~óõßü4ÂJq]N˜%)`{ßBÞ!©;ƒi:ãú$/¾€ÄÙà4§™¡ G™Ö§õe±Ý³2_¿˜–(™fì&´»™âÆºÐò5q4)0ó×ŸÿÞ½èÓ‹Ÿ~þezäFÈ¡ÿ¾œ'ö> Æ8cVqß­­ÉÈH¤d./ó8úèÁ³èã§Ÿ?;ºøé³g>§¬<ÕÔ^î†5Ìr1?;óõ%Ê(‰§+5)®p§|
+Cg!6?˜l.ntënkÿöÙM|àñVÙÊ˜°LãÙ<I2JÜzÅ(Q»õ%Ö7ÇlÌTUAWR½Ÿes˜²ïtBù–¨+SEõ-`;X²§øý¤œ¶[ ¬´:Ñ~Ï]!£ÕéDggQ«åö=À`eaz×ÅÌkºw&+ÀXàù×ÿ-¼ù²øáõn«Õñæ\Ä'ÁŒßtb» 2·^1O`¬îž7Â`/h°×½%
+äÅ=a²¸Ç­wéU„g+DSóŽ íÍ“ö`W×F( »† œPšEÄV‡Úc%fó
+,þ.üÏ}VC=R;ï…ï÷[kã0"úü¸j%ç‹½(¹+]]‰õŒtDLÉÄhž(Lâ‰ÞôðóèÞ£G_ÜûüÑÃOž9ÍŒ¨#  aÇëïJ#œ;œ§R0Á)\m…32Ôûþœ55oë~Ý¥8„¢¸xº5	60Ç¶A¹9Ó¬È³[
+””vr¹«ÑoärÅ=ÜŒÖ[çáõ °÷Zl‘»i*
 
-/* ===== LUMORA – SCROLLA HELA VÄGEN UPP ===== */
-html, body{
-  min-height:100%!important;
-  height:auto!important;
-  overflow-y:auto!important;
-  overflow-x:hidden!important;
-  scroll-behavior:smooth!important;
-}
-body{
-  position:relative!important;
-}
-#app, main, .app, .page, .container{
-  max-height:none!important;
-  height:auto!important;
-  overflow:visible!important;
-}
-@media(max-width:760px){
-  html, body{
-    overflow-y:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-  }
-}
-
-/* En tydlig knapp som alltid kan ta användaren till toppen */
-#lumoraTopButton{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:9999;
-  width:46px;
-  height:46px;
-  border:0;
-  border-radius:50%;
-  background:var(--brand,#398b77);
-  color:#fff;
-  font-size:21px;
-  font-weight:800;
-  box-shadow:0 5px 18px rgba(0,0,0,.18);
-  cursor:pointer;
-  display:none;
-}
-#lumoraTopButton.show{display:block}
-@media(max-width:600px){
-  #lumoraTopButton{
-    right:12px;
-    bottom:12px;
-    width:44px;
-    height:44px;
-  }
-}
-
-
-/* ===== LUMORA – TOPPMENY SKA GÅ ATT SCROLLA ÅT SIDAN ===== */
-nav{
-  width:100%!important;
-  max-width:100%!important;
-  overflow-x:auto!important;
-  overflow-y:hidden!important;
-  -webkit-overflow-scrolling:touch!important;
-  touch-action:pan-x!important;
-  overscroll-behavior-x:contain!important;
-  scrollbar-width:none!important;
-  cursor:grab!important;
-}
-nav:active{cursor:grabbing!important}
-nav button{
-  flex:0 0 auto!important;
-  white-space:nowrap!important;
-}
-@media(max-width:760px){
-  nav{
-    padding-left:2px!important;
-    padding-right:2px!important;
-    scroll-snap-type:x proximity!important;
-  }
-  nav button{scroll-snap-align:start!important}
-}
-/* Håll själva sidan inom skärmen – det är bara toppmenyn som får sidscroll */
-html,body{
-  width:100%!important;
-  max-width:100%!important;
-  overflow-x:hidden!important;
-}
-.app{
-  width:100%!important;
-  max-width:900px!important;
-  min-width:0!important;
-}
-
-
-/* Statistik längre ner på startsidan */
-.stats-lower{
-  margin-top:22px!important;
-  margin-bottom:18px!important;
-}
-@media(max-width:600px){
-  .stats-lower{
-    margin-top:18px!important;
-    padding:12px!important;
-  }
-}
-
-
-/* LUMORA: översikten ska inte ligga högt upp på startsidan */
-.stats-heading{
-  margin-top:32px!important;
-  margin-bottom:10px!important;
-}
-.stats-lower{
-  margin-top:0!important;
-  margin-bottom:35px!important;
-}
-
-.exampleBtn{display:block!important;width:100%!important;min-height:92px!important;margin:7px 0!important;text-align:left!important;border:1px solid var(--line)!important;background:#fff!important;color:var(--ink)!important;cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important;}
-.exampleBtn:hover,.exampleBtn:focus{border:2px solid var(--brand)!important;outline:none!important;background:var(--soft)!important;}
-
-/* ===== LUMORA V11 – TRE NIVÅER ===== */
-.level-note{margin-top:10px;padding:12px 14px;border-radius:14px;background:#f7fbf8;border:1px solid var(--line)}
-.chat-messages .msg.bot{white-space:pre-wrap}
-
-
-/* ===== LUMORA V13 – TRE NIVÅER ===== */
-.levels-panel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;text-align:left}
-.level-card{border-radius:18px;padding:15px;border:1px solid var(--line);background:white;min-width:0}
-.level-card.green{background:#eef8f1;border-color:#b8ddc2}
-.level-card.yellow{background:#fff9e8;border-color:#ead59a}
-.level-card.red{background:#fff0ef;border-color:#e8b8b3}
-.level-card b{display:block;font-size:16px;margin-bottom:7px}
-.level-card p{margin:0;line-height:1.45;font-size:14px}
-@media(max-width:700px){.levels-panel{grid-template-columns:1fr}.level-card{padding:14px}.level-card p{font-size:15px}}
-
-/* ===== LUMORA V12 – INGEN HORISONTELL SCROLL PÅ MOBIL ===== */
-html,body{max-width:100%;overflow-x:hidden!important}
-.app{width:100%;max-width:900px;overflow:visible}
-nav{max-width:100%;overflow:visible!important;flex-wrap:wrap!important;white-space:normal!important}
-nav button,nav a.nav-link{max-width:100%;white-space:normal!important;overflow-wrap:anywhere}
-.grid{width:100%;min-width:0}
-.tile{min-width:0;max-width:100%;overflow-wrap:anywhere}
-.card,.item,.word,.support,.video-card{max-width:100%;min-width:0;overflow-wrap:anywhere}
-@media(max-width:700px){
-  .app{padding-left:12px;padding-right:12px}
-  nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px!important}
-  nav button,nav a.nav-link{width:100%;min-width:0!important;padding:10px 8px!important;font-size:13px!important;text-align:center}
-  .grid{grid-template-columns:1fr!important}
-  .tile{padding:16px!important;min-height:125px!important}
-  .tile .emoji{font-size:44px!important}
-  .hero{max-width:100%;overflow-wrap:anywhere}
-  .section,.hero h1{overflow-wrap:anywhere}
-}
-@media(min-width:701px){
-  nav{flex-wrap:wrap!important}
-}
-
-@media(max-width:700px){
- #ask .chat-input-row{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
- #ask #chatInput,#ask .chat-input-row .btn{max-width:100%!important;box-sizing:border-box!important}
- .quick{max-width:100%!important;overflow-x:hidden!important;display:flex!important;flex-wrap:wrap!important}
-}
-</style>
-</head>
-<body>
-<div class="app">
-<header><div class="logo">✦</div><div><div class="brand">LUMORA</div><div class="tag">Stöd i vardagen för föräldrar</div></div></header>
-
-<nav id="nav" aria-label="LUMORA meny">
-<a href="#home" class="nav-link active" data-page="home">Hem</a>
-<a href="#ask" class="nav-link" data-page="ask">💬 Chatta med LUMORA</a>
-<a href="#children" class="nav-link" data-page="children">Barn</a>
-<a href="#history" class="nav-link" data-page="history">Historik</a>
-<a href="#patterns" class="nav-link" data-page="patterns">Mönster</a>
-<a href="#follow" class="nav-link" data-page="follow">Uppföljning</a>
-<a href="#reminders" class="nav-link" data-page="reminders">Påminnelser</a>
-<a href="#support" class="nav-link" data-page="support">❤️ Stöd</a>
-<a href="#videos" class="nav-link" data-page="videos">🎬 Video</a>
-<a href="#mood" class="nav-link" data-page="mood">💛 Mående</a>
-<a href="#words" class="nav-link" data-page="words">💬 Säg så här</a>
-</nav>
-
-<section id="home" class="page active">
-<div class="hero"><b>LUMORA</b><h1>Vad händer just nu?</h1><p>Välj den situation som känns mest lik det du möter hemma. Du kan också skriva en helt egen fråga till LUMORA.</p></div>
-<div class="section">Välj en situation</div>
-<p class="muted">Välj det som ligger närmast det du möter hemma. Här finns både vanliga vardagssituationer och sådant som kan kännas mer oroande.</p>
-<div id="situations" class="grid"></div>
-
-<div class="section" id="contactSection">📞 Ta kontakt vid behov</div>
-<p class="muted">Ibland behöver man stöd från någon annan. Det är helt okej att be om hjälp. Tryck på en ruta för mer information.</p>
-<div id="contactGrid" class="contact-grid"></div>
-
-<button class="btn primary" onclick="show('ask')">💬 Chatta med LUMORA</button>
-
-<!-- Översikten ligger medvetet LÄNGST NER på startsidan -->
-<div class="section stats-heading">Din översikt</div>
-<div class="card stats-lower">
-<div class="stats">
-<div class="stat"><span>Barn</span><b id="nChildren">0</b></div>
-<div class="stat"><span>Sparade</span><b id="nEvents">0</b></div>
-<div class="stat"><span>Att följa upp</span><b id="nFollow">0</b></div>
-<div class="stat"><span>Påminnelser</span><b id="nRem">0</b></div>
-</div>
-</div>
-</section>
-
-<section id="ask" class="page">
-<div class="section">💬 Chatta med LUMORA</div>
-<p class="muted">Skriv din fråga precis som du skulle ställa den till en person. LUMORA försöker hitta ett relevant svar och ger enkla råd för vardagen.</p>
-<div class="chatbox">
-<div class="quick">
-<button onclick="quickAsk('Mitt barn får stora utbrott. Vad kan jag göra?')">Utbrott</button>
-<button onclick="quickAsk('Vi bråkar hela tiden om mobilen. Hur gör jag?')">Skärm</button>
-<button onclick="quickAsk('Mitt barn vill inte gå till skolan. Vad kan jag göra?')">Skola</button>
-<button onclick="quickAsk('Mitt barn vill inte prata med mig. Hur kan jag närma mig?')">Prata</button>
-<button onclick="quickAsk('Mina barn slåss och bråkar. Hur ska jag göra?')">Barnen slåss</button>
-<button onclick="quickAsk('Jag är orolig att mitt barn använder droger. Hur ska jag prata om det?')">Droger</button>
-<button onclick="quickAsk('Det blir bråk om läxor, mat och andra vardagssaker. Vad kan jag göra?')">Vardagsbråk</button>
-<button onclick="quickAsk('Mitt barn vill nästan inte äta och jag är orolig. Vad kan jag göra?')">Mat</button>
-<button onclick="quickAsk('Jag är rädd att mitt barn skadar sig. Vad ska jag göra?')">Självskada</button>
-<button onclick="quickAsk('Mitt barn pressas att skicka bilder på nätet. Vad gör jag?')">Bilder</button>
-<button onclick="quickAsk('Mitt barn tar pengar hemma. Hur ska jag prata om det?')">Pengar</button>
-</div>
-<div id="chatMessages" class="chat-messages"></div>
-<div class="chat-input-row">
-<textarea id="chatInput" class="textarea" placeholder="Skriv din fråga här..."></textarea>
-<button class="btn primary" onclick="askLumora()">Chatta med LUMORA →</button><div class="muted" style="font-size:12px;margin-top:7px">LUMORA ger stöd och idéer, men ersätter inte vård eller annan professionell hjälp.</div>
-</div>
-</div>
-<div class="support"><b>ℹ️ Om svaret</b><p class="muted">Den här versionen använder en egen fråge- och svarsbank. Den ställer inte diagnoser och ersätter inte professionellt stöd.</p></div>
-</section>
-
-<section id="examples" class="page"><button class="back" onclick="show('home')">← Tillbaka</button><div class="section" id="exampleTitle"></div><p class="muted">Välj det exempel som bäst beskriver det som händer hemma.</p><div id="exampleList"></div></section>
-
-<section id="flow" class="page"><button class="back" onclick="show('examples')">← Tillbaka</button><div class="card"><b>Du behöver inte lösa allt på en gång.</b><p class="muted">LUMORA hjälper dig att ta ett litet steg i taget.</p></div>
-<div class="flow"><div class="emoji" id="flowEmoji"></div><h1 id="flowTitle"></h1><p class="muted" id="flowExample"></p></div>
-<div id="videoPreview"></div><div class="progress"><i id="progressBar"></i></div>
-<div class="step"><b id="stepNumber"></b><p id="stepText"></p></div>
-<div class="example"><b id="questionTitle"></b><p class="muted" id="questionText"></p></div>
-<div class="card"><span class="chip">Varför kan detta hjälpa?</span><p class="muted" id="whyText"></p></div>
-<div id="levelsPanel" class="levels-panel" aria-label="Tre nivåer av stöd"></div>
-<div class="level-note"><b>💬 Vill du berätta lite mer om vad som händer?</b><br><span class="muted">Du kan skriva med dina egna ord. LUMORA tar en sak i taget.</span></div>
-<div id="saveArea"></div>
-<button class="btn primary" id="nextBtn" onclick="nextStep()">Nästa steg →</button>
-<button class="btn secondary" onclick="previousStep()">← Föregående</button></section>
-
-<section id="children" class="page"><div class="section">👶 Barn</div><p class="muted">Skapa en enkel profil. Du kan ändra informationen senare.</p><div id="childList"></div><div class="card"><b>Lägg till barn</b>
-<div class="field"><label>Namn eller smeknamn</label><input id="childName" class="input"></div>
-<div class="field"><label>Ålder</label><input id="childAge" class="input" type="number"></div>
-<div class="field"><label>Vad är viktigt att komma ihåg?</label><textarea id="childNote" class="textarea"></textarea></div>
-<button class="btn primary" onclick="addChild()">Spara barn</button></div></section>
-
-<section id="history" class="page"><div class="section">📚 Historik</div><p class="muted">Här sparas situationer du själv har valt att följa upp.</p><div id="historyList"></div></section>
-<section id="patterns" class="page"><div class="section">📊 Mönster</div><p class="muted">LUMORA visar återkommande områden i din egen historik. Det är en hjälp för reflektion, inte en diagnos.</p><div id="patternList"></div></section>
-<section id="follow" class="page"><div class="section">🎯 Uppföljning</div><p class="muted">Se vad du ville prova och vad du vill göra nästa gång.</p><div id="followList"></div></section>
-<section id="reminders" class="page"><div class="section">🔔 Påminnelser</div><div id="reminderList"></div><div class="card"><b>Ny påminnelse</b><div class="field"><label>Vad vill du bli påmind om?</label><input id="remText" class="input" placeholder="Följ upp läggningen"></div><div class="field"><label>Datum</label><input id="remDate" class="input" type="date"></div><button class="btn primary" onclick="addReminder()">Spara påminnelse</button></div></section>
-
-<section id="support" class="page"><div class="section">❤️ Behöver du prata med någon?</div><p class="muted">Du behöver inte lösa allt själv.</p><div class="card">
-<button class="btn primary" onclick="support('prata')">💬 Jag behöver prata med någon</button>
-<button class="btn secondary" onclick="support('barn')">👶 Jag är orolig för mitt barn</button>
-<button class="btn secondary" onclick="support('skola')">🏫 Det handlar om skolan</button>
-<button class="btn secondary" onclick="support('familj')">👨‍👩‍👧 Det är mycket konflikter hemma</button>
-<button class="btn secondary" onclick="support('akut')">🚨 Situationen känns akut</button>
-</div><div id="supportResult"></div></section>
-
-<section id="videos" class="page"><div class="section">🎬 LUMORA Video</div><p class="muted">Korta animerade vardagssituationer. I prototypen visas enkla scener.</p><div id="videoList"></div></section>
-<section id="mood" class="page"><div class="section">💛 Hur känns det just nu?</div><p class="muted">Det finns inget rätt eller fel svar. Att stanna upp kan hjälpa dig att välja nästa steg.</p><div class="card"><b>Hur känns det för dig?</b><div id="parentMood" class="grid"></div></div><div class="card"><b>Hur verkar barnet må?</b><div id="childMood" class="grid"></div></div><div id="moodSaved"></div></section>
-<section id="words" class="page"><div class="section">💬 Vad kan jag säga?</div><p class="muted">Enkla exempel som du kan anpassa till din egen situation.</p><div id="wordsList"></div></section>
-
-<footer class="copyright"><strong>© 2026 Perparim Haziri</strong><div>Materialet får inte kopieras, ändras, återpubliceras eller användas som eget material utan tillstånd.</div></footer>
-</div>
-
-<script>
-const CONTACTS=[
- {icon:'🏥',title:'Vårdcentral / 1177',desc:'För oro kring barnets hälsa, kropp eller mående.',detail:'1177 ger sjukvårdsrådgivning och hjälper dig att hitta rätt vård. Du kan ringa dygnet runt.',actions:[['📞 Ring 1177','tel:1177'],['🌐 1177.se','https://www.1177.se/']]},
- {icon:'🧠',title:'BUP',desc:'För barn och unga som behöver mer specialiserat stöd kring psykiskt mående.',detail:'BUP har olika kontaktvägar beroende på region. Börja med 1177 om du inte vet vart du ska vända dig.',actions:[['📞 Ring 1177','tel:1177'],['🔎 Hitta vård','https://www.1177.se/hitta-vard/']]},
- {icon:'💬',title:'Föräldrasupport',desc:'För stöd i föräldrarollen, vardagsproblem och relationen mellan barn och förälder.',detail:'Kontakta kommunens föräldrastöd eller den verksamhet som finns där du bor. Lokala kontaktuppgifter kan skilja sig mellan kommuner.',actions:[]},
- {icon:'🏫',title:'Skola / elevhälsa',desc:'Vid skolfrånvaro, mobbning, oro, konflikter eller andra skolproblem.',detail:'Börja med skolan, mentor, skolkurator eller elevhälsan. Berätta vad du ser hemma och fråga hur ni kan samarbeta.',actions:[]},
- {icon:'🤝',title:'Socialtjänst',desc:'Om familjen behöver mer stöd än det egna nätverket kan ge.',detail:'Socialtjänsten i kommunen kan ge råd om vilket stöd som finns. Du kan kontakta socialtjänsten där du bor.',actions:[]},
- {icon:'🧒',title:'Bris – för barn och unga',desc:'Om barnet själv behöver prata med en vuxen utanför familjen.',detail:'Bris erbjuder stöd för barn och unga. Barn kan kontakta Bris direkt.',actions:[['📞 Ring 116 111','tel:116111'],['🌐 bris.se','https://www.bris.se/']]},
- {icon:'👮',title:'Polisen – ej akut',desc:'Vid oro, hot eller händelser som inte är akuta men där polisen behöver kontaktas.',detail:'För icke-akuta polisärenden kan du ringa 114 14. Vid akut fara ring 112.',actions:[['📞 Ring 114 14','tel:11414'],['🌐 polisen.se','https://polisen.se/']]},
- {icon:'🚨',title:'Akut',desc:'Vid livshotande tillstånd, pågående allvarlig fara eller när någon behöver akut hjälp.',detail:'Vid direkt fara för liv eller hälsa: ring 112. För sjukvårdsrådgivning när det inte är akut: ring 1177.',actions:[['🚨 Ring 112','tel:112'],['📞 Ring 1177','tel:1177']]}
-];
-const S=[
-["😤","Mitt barn får ett utbrott","När barnet blir väldigt argt eller ledset och det känns som att ingenting du säger hjälper.",["Barnet skriker och blir argt när jag säger nej.","Barnet kastar saker eller slår när det blir väldigt argt.","Barnet får ett stort utbrott när skärmen ska stängas av.","Barnet blir argt när en lek eller aktivitet måste ta slut.","Barnet blir helt överväldigat och går inte att nå just då."]],
-["📱","Vi bråkar om mobilen/skärmen","När mobilen, surfplattan eller tv:n ofta leder till bråk.",["Barnet vägrar lämna ifrån sig mobilen när tiden är slut.","Det blir bråk varje gång skärmen ska stängas av.","Barnet smyger med mobilen eller använder den längre än vi kommit överens om.","Jag vet inte hur mycket skärmtid som är rimligt för mitt barn.","Jag och mitt barn har olika syn på vilka regler som ska gälla."]],
-["🛏️","Läggningen fungerar inte","När det är dags att sova men barnet inte vill och kvällen lätt blir en kamp.",["Barnet vägrar gå och lägga sig.","Barnet hittar nya saker att göra varje gång det är dags att sova.","Barnet blir argt när jag lämnar rummet.","Barnet vill ha mobilen eller skärmen vid läggningen.","Kvällarna slutar ofta med att både jag och barnet är helt slut."]],
-["🏫","Mitt barn vill inte gå till skolan","När barnet inte vill gå till skolan eller verkar må dåligt inför skoldagen.",["Barnet vägrar gå till skolan på morgonen.","Barnet har återkommande ont i magen eller mår dåligt inför skolan.","Barnet har börjat vara hemma från skolan oftare.","Barnet säger att det inte har någon att vara med.","Jag misstänker att något i skolan gör barnet oroligt eller otryggt."]],
-["💬","Mitt barn vill inte prata","När du märker att barnet inte vill berätta vad som hänt eller hur det mår.",["Barnet svarar bara 'vet inte' när jag frågar.","Barnet går undan när jag försöker prata om något svårt.","Barnet blir argt när jag ställer frågor.","Jag märker att något verkar vara fel men barnet vill inte berätta.","Barnet pratar lättare med andra än med mig."]],
-["😟","Mitt barn verkar ledset","När barnet verkar mer ledset, tyst eller annorlunda än vanligt.",["Barnet verkar ledset utan att kunna säga varför.","Barnet har blivit mer tyst eller drar sig undan.","Barnet gråter lättare än tidigare.","Barnet har slutat vilja göra sådant som brukar vara roligt.","Jag är osäker på om det är en vanlig period eller något jag behöver ta på allvar."]],
-["🥊","Barnen slåss eller bråkar","När syskon eller andra barn hamnar i fysiska bråk. Fokus är först på trygghet, sedan på att förstå vad som hände och hjälpa barnen vidare.",["Barnen slår eller knuffar varandra.","Samma bråk kommer tillbaka nästan varje dag.","Ett barn retar eller provocerar det andra.","Barnen börjar bråka när de är trötta.","Jag vet inte hur jag ska ingripa utan att allt blir värre."]],
-["💊","Jag är orolig för droger","När du misstänker att ett barn eller en ungdom använder alkohol eller droger, eller när du har hittat något som gör dig orolig.",["Jag misstänker att mitt barn använder cannabis.","Jag har hittat något hemma som jag tror kan vara en drog.","Mitt barn har förändrats och jag är orolig för alkohol eller droger.","Jag vet inte hur jag ska fråga utan att barnet stänger av.","Jag är rädd att mitt barn hamnat i fel umgänge."]],
-["🏠","Vanliga vardagsbråk","När vardagen fastnar i tjat, stress eller små konflikter. Små förändringar kan ibland göra stor skillnad.",["Det blir tjat om att klä på sig på morgonen.","Vi bråkar om läxor eller skolarbete.","Barnet vill inte hjälpa till hemma.","Det blir konflikter kring mat och måltider.","Alla är trötta och det blir lätt bråk."]],
-["🤥","När barnet ljuger","När du misstänker att barnet inte berättar hela sanningen. Försök förstå vad som ligger bakom innan samtalet blir ett förhör.",["Barnet säger något som jag vet inte stämmer.","Barnet skyller på någon annan.","Barnet ljuger om skärm eller kompisar.","Jag blir så arg att barnet slutar prata.","Jag vill bygga mer förtroende."]],
-["🏠","Vi bråkar mycket hemma","När det ofta blir bråk hemma och du känner att samma situationer upprepas.",["Jag och mitt barn hamnar ofta i samma konflikt.","Små saker blir snabbt stora bråk.","Jag känner att jag tjatar hela tiden.","Jag och den andra föräldern har olika regler eller sätt att göra saker.","Det känns som att hela familjen går på tå hemma."]],
-["🔥","Jag håller på att tappa tålamodet","När du är trött, stressad eller känner att tålamodet håller på att ta slut.",["Jag känner att jag snart kommer att skrika.","Jag blir arg mycket snabbare än jag brukar.","Jag känner mig helt slut och får ingen återhämtning.","Jag har dåligt samvete efter att jag blivit arg på mitt barn.","Jag känner att jag inte vet hur jag ska orka fortsätta just nu."]],
-["👥","Mitt barn har problem med kompisar","När barnet har svårt med kompisar, känner sig utanför eller ofta hamnar i konflikter.",["Mitt barn säger att ingen vill vara med.","Mitt barn hamnar ofta i konflikter med kompisar.","Mitt barn blir retat eller känner sig utanför.","Mitt barn vill inte längre gå till aktiviteter på grund av andra barn.","Jag vet inte hur mycket jag ska lägga mig i mitt barns kompisproblem."]],
-["❤️","Jag känner mig som en dålig förälder","När du känner att du inte räcker till eller ångrar hur du reagerat.",["Jag känner att jag aldrig gör tillräckligt som förälder.","Jag jämför mig med andra föräldrar och känner mig sämre.","Jag har gjort något jag ångrar och vet inte hur jag ska reparera det.","Jag och mitt barn har haft många konflikter och jag känner skuld.","Jag känner mig ensam i föräldraskapet och behöver prata med någon."]],
-["🍼","När familjen får ett nytt syskon","Ett nytt syskon kan väcka både glädje, oro och avundsjuka.",["Barnet blir argare sedan syskonet kom.","Barnet vill ha mer tid med mig.","Barnet säger att bebisen får all uppmärksamhet.","Barnet blir ledset eller drar sig undan.","Jag vet inte hur jag ska hjälpa mitt äldre barn."]],
-["🍽️","Problem kring mat","När måltider eller mat har blivit en återkommande källa till oro eller konflikt.",["Barnet vill nästan inte äta.","Det blir bråk vid nästan varje måltid.","Barnet blir oroligt kring mat.","Barnet äter mycket mer eller mindre än tidigare.","Jag är orolig för hur barnet mår kring mat och kropp."]],
-["🆘","När jag är rädd för att barnet skadar sig","När du är orolig för självskada, självmordstankar eller att barnet inte är säkert.",["Barnet har skadat sig själv.","Barnet säger att det inte vill leva.","Barnet pratar om att skada sig.","Jag vet inte hur jag ska fråga om självmordstankar.","Jag är rädd att barnet kan göra sig illa just nu."]],
-["📸","Press om bilder på nätet","När barnet pressas, hotas eller övertalas att skicka bilder eller filmer.",["Någon ber barnet skicka nakenbilder.","Barnet har redan skickat en bild.","Någon hotar att sprida en bild.","Barnet är rädd för en person på nätet.","Jag vet inte vad jag ska göra nu."]],
-["💰","När barnet tar pengar eller saker","När barnet tar pengar eller saker utan lov och du vill förstå vad som ligger bakom.",["Barnet har tagit pengar hemma.","Barnet tar andras saker.","Barnet ljuger om pengar.","Jag vet inte varför barnet gör det.","Det händer om och om igen."]],
-["😡","När jag blir för arg","När du märker att din egen ilska eller stress börjar påverka situationen hemma.",["Jag skriker på mitt barn.","Jag tappar tålamodet snabbt.","Jag känner att jag snart tappar kontrollen.","Jag ångrar hur jag pratade med barnet.","Jag behöver hjälp att bryta mönstret."]],
-["🍺","När jag är orolig för alkohol","När du misstänker att barnet eller ungdomen dricker och du inte vet hur du ska ta upp det.",["Jag tror att mitt barn dricker alkohol.","Mitt barn kommer hem berusat.","Jag har hittat alkohol på barnets rum.","Jag är rädd att alkohol påverkar skolan eller måendet.","Jag vet inte hur jag ska prata om det utan bråk."]],
-["🚭","När jag är orolig för nikotin","När du oroar dig för snus, vape eller rökning.",["Jag har hittat vape eller snus.","Barnet använder nikotin ofta.","Jag vet inte hur mycket barnet använder.","Det blir bråk när jag tar upp det.","Jag är orolig för att det har blivit en vana."]],
-["⚠️","När det finns hot eller våld","När någon hemma eller i barnets närhet hotar, skrämmer eller använder våld.",["Barnet blir hotat.","Det har varit slagsmål hemma.","Jag är rädd att någon ska skadas.","Barnet har blivit fysiskt utsatt.","Jag vet inte hur jag ska göra för att skapa trygghet."]],
-["🌐","När barnet har problem på nätet","När barnet utsätts för press, hot, kränkningar eller otrygga kontakter online.",["Barnet får elaka meddelanden.","Barnet har kontakt med någon som jag inte känner.","Någon pressar barnet att göra något.","Barnet vill inte berätta vad som händer på nätet.","Jag är orolig för en kontakt på sociala medier."]],
-["👥","När jag oroar mig för fel umgänge","När du är rädd att barnet dras in i kriminalitet eller ett umgänge som inte känns tryggt.",["Barnet har fått nya kompisar som oroar mig.","Barnet är ute sent och berättar inte var det är.","Jag misstänker att barnet dras in i brott.","Barnet verkar ha förändrats efter nya kontakter.","Jag vet inte hur mycket jag ska lägga mig i."]]
-];
-const steps=["Stanna upp och förstå vad som händer. Vad gör barnet? Vad gör du? Vad hände precis innan?","Sänk tempot och gör situationen lite lugnare. När känslorna är starka är det svårt att lösa problemet.","Välj ett konkret sätt att agera eller prata. Du behöver inte hitta den perfekta lösningen.","Tänk efter vad du själv vill prova nästa gång. Välj en liten förändring som känns möjlig.","Spara en enkel plan och bestäm vad du vill följa upp."];
-const qs=[["Vad behöver du lägga märke till?","Beskriv vad som händer utan att lägga skuld på dig själv eller barnet."],["Vad kan hjälpa just nu?","Tänk på vad som kan göra situationen lite lugnare."],["Vad kan du säga eller göra?","Välj några enkla ord eller en liten handling som du tror kan hjälpa."],["Vad vill du göra annorlunda?","Välj en liten förändring som känns möjlig att prova hemma."],["Spara och följ upp","Skriv kort vad som hände och vad du vill prova."]];
-const why=["Att först förstå situationen gör det lättare att välja hur du vill agera.","När känslorna är starka är det ofta svårt att lyssna och tänka.","En enkel och tydlig mening kan vara lättare att ta in än många förklaringar.","Små förändringar som går att upprepa är ofta lättare än stora förändringar.","När du sparar och följer upp kan du se vad som faktiskt hjälpte."];
-
-let db=JSON.parse(localStorage.getItem("lumora10")||"null")||{children:[],events:[],follow:[],reminders:[]};
-let si=0,ei=0,step=0;
-const $=id=>document.getElementById(id);
-const esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-function save(){localStorage.setItem("lumora10",JSON.stringify(db));renderAll()}
-function show(id){
-  const page=$(id);
-  if(!page) return;
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  page.classList.add("active");
-  document.querySelectorAll("nav [data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
-  try{history.replaceState(null,"",location.pathname+location.search+(id==="home"?"":"#"+id));}catch(e){}
-  window.scrollTo({top:0,left:0,behavior:"auto"});
-  try{renderAll()}catch(e){console.warn("LUMORA render error",e)}
-}
-function showFromHash(){const id=(location.hash||"#home").slice(1);if($(id))show(id);else show("home")}
-document.addEventListener("click",function(e){
-  const a=e.target.closest("nav [data-page]");
-  if(!a) return;
-  const id=a.dataset.page;
-  e.preventDefault();
-  show(id);
-});
-window.addEventListener("hashchange",showFromHash);
-
-function openSituation(i){
-  si=i;
-  $("exampleTitle").textContent=S[i][1];
-  $("exampleList").innerHTML=S[i][3].map((x,j)=>`<button type="button" class="tile exampleBtn" data-example="${j}" onclick="openExample(${j})"><strong>Exempel ${j+1}</strong><small>${esc(x)}</small></button>`).join("");
-  show("examples");
-}
-function openExample(i){ei=i;step=0;renderFlow();show("flow")}
-function getLevels(s){
-  const t=s[1].toLowerCase();
-  let green="Börja lugnt. Försök förstå vad som händer just nu och välj en liten sak att göra eller säga. Du behöver inte lösa allt på en gång.";
-  let yellow="Om det fortsätter: prova samma lugna strategi igen, prata med barnet när det är lugnt och ta hjälp av skola, vård eller annan stödverksamhet om oron kvarstår.";
-  let red="Om det blir allvarligt: om barnet eller någon annan är i direkt fara, sök akut hjälp. Vid akut fara för liv eller hälsa, ring 112.";
-  if(/skadar|självmord|hot eller våld/.test(t)){
-    green="Ta barnet på allvar och stanna nära. Fråga lugnt hur barnet mår och om det är i fara just nu. Lämna inte barnet ensamt om du är rädd att det kan skada sig.";
-    yellow="Om oron finns kvar: ta kontakt med vården eller annan professionell hjälp så snart som möjligt. Be om hjälp även om barnet inte vill prata.";
-    red="Om barnet försöker skada sig, har en pågående skada, säger att det tänker ta sitt liv eller någon är i omedelbar fara: ring 112 eller sök akut vård.";
-  } else if(/droger|alkohol|nikotin/.test(t)){
-    green="Börja med ett lugnt samtal när barnet är nyktert och situationen är lugn. Berätta vad du har märkt utan att anklaga och lyssna på barnets svar.";
-    yellow="Om oron fortsätter: sätt tydliga och trygga gränser och sök stöd via vårdcentral, elevhälsa, ungdomsmottagning, BUP eller socialtjänst beroende på situation.";
-    red="Om barnet är medvetslöst, har svårt att andas, är svårt påverkat eller det finns annan akut fara: ring 112 direkt.";
-  } else if(/bilder|nätet/.test(t)){
-    green="Spara bevis, prata lugnt med barnet och undvik att skuldbelägga. Hjälp barnet att blockera eller stänga av kontakten om det behövs.";
-    yellow="Om det fortsätter: ta hjälp av skolan, polisen eller annan stödverksamhet beroende på vad som hänt. Barnet ska inte behöva lösa det ensam.";
-    red="Om barnet hotas, utsätts för våld eller är i omedelbar fara: sök akut hjälp och ring 112 vid akut fara.";
-  } else if(/mat/.test(t)){
-    green="Försök minska pressen kring maten och håll måltiderna lugna och förutsägbara. Undvik att göra varje måltid till en diskussion.";
-    yellow="Om problemen fortsätter eller barnet äter mycket mindre eller mer än tidigare: ta kontakt med vården eller elevhälsan för råd.";
-    red="Om barnet är tydligt påverkat, inte får i sig vätska/mat eller du är rädd för barnets hälsa: sök vård akut.";
-  } else if(/pengar|saker|ljuger/.test(t)){
-    green="Prata om det som hänt utan förhör. Var tydlig med gränsen men försök också förstå varför barnet gjorde så.";
-    yellow="Om det händer igen: gör reglerna tydliga, följ upp lugnt och ta hjälp om du ser att det hänger ihop med större problem.";
-    red="Om situationen innehåller hot, våld, tvång eller annan direkt fara: sök hjälp direkt.";
-  }
-  return `<div class="level-card green"><b>🟢 Börja här</b><p>${esc(green)}</p></div><div class="level-card yellow"><b>🟡 Om det fortsätter</b><p>${esc(yellow)}</p></div><div class="level-card red"><b>🔴 Om det blir allvarligt</b><p>${esc(red)}</p></div>`;
-}
-function renderFlow(){const s=S[si];$("flowEmoji").textContent=s[0];$("flowTitle").textContent=s[1];$("flowExample").textContent=s[3][ei];$("stepNumber").textContent="Steg "+(step+1)+" av 5";$("stepText").textContent=steps[step];$("questionTitle").textContent=qs[step][0];$("questionText").textContent=qs[step][1];$("whyText").textContent=why[step];$("levelsPanel").innerHTML=getLevels(s);$("progressBar").style.width=((step+1)/5*100)+"%";$("nextBtn").textContent=step===4?"💾 Spara & skapa uppföljning":"Nästa steg →";$("videoPreview").innerHTML=`<div class="video-card"><div class="video-screen"><div class="characters"><span>🧑</span><span class="bubble">"${esc(s[3][ei])}"</span><span>🧒</span></div><div class="play">▶</div></div></div>`;let opts=db.children.length?db.children.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join(""):'<option value="">Lägg till barn först</option>';$("saveArea").innerHTML=step===4?`<div class="card"><div class="field"><label>Barn</label><select id="eventChild" class="select">${opts}</select></div><div class="field"><label>Vad hände?</label><textarea id="eventNote" class="textarea" placeholder="Skriv några ord..."></textarea></div><div class="field"><label>Min plan</label><textarea id="eventPlan" class="textarea" placeholder="Vad vill jag prova nästa gång?"></textarea></div></div>`:""}
-function nextStep(){if(step<4){step++;renderFlow();return}if(!db.children.length){alert("Lägg först till ett barn under Barn.");show("children");return}let e={id:Date.now(),child:$("eventChild").value,topic:S[si][1],example:S[si][3][ei],note:$("eventNote").value,plan:$("eventPlan").value,date:new Date().toISOString()};db.events.unshift(e);db.follow.unshift({id:Date.now()+"f",event:e.id,done:false});save();show("follow")}
-function previousStep(){if(step>0){step--;renderFlow()}else show("examples")}
-function addChild(){let name=$("childName").value.trim();if(!name){alert("Skriv barnets namn eller smeknamn.");return}db.children.push({id:Date.now(),name,age:$("childAge").value,note:$("childNote").value});$("childName").value="";$("childAge").value="";$("childNote").value="";save()}
-function addReminder(){let text=$("remText").value.trim(),date=$("remDate").value;if(!text||!date){alert("Fyll i text och datum.");return}db.reminders.push({id:Date.now(),text,date,done:false});$("remText").value="";$("remDate").value="";save()}
-function completeFollow(id){let f=db.follow.find(x=>String(x.id)===String(id));if(f)f.done=true;save()}
-function completeReminder(id){let r=db.reminders.find(x=>String(x.id)===String(id));if(r)r.done=true;save()}
-
-function renderContacts(){
- const box=$("contactGrid");
- if(!box) return;
- box.innerHTML=CONTACTS.map((c,i)=>`<article class="contact-card" id="contact-${i}"><button type="button" class="contact-toggle" onclick="toggleContact(${i})" aria-expanded="false"><div class="contact-head"><span class="contact-icon">${c.icon}</span><div><div class="contact-title">${esc(c.title)}</div><div class="contact-desc">${esc(c.desc)}</div></div></div><div class="contact-actions"><span class="contact-action secondary">Visa kontakt</span></div></button><div class="contact-detail"><div>${esc(c.detail)}</div>${c.actions.length?`<div class="contact-actions">${c.actions.map(a=>`<a class="contact-action" href="${a[1]}" ${a[1].startsWith('http')?'target="_blank" rel="noopener"':''}>${esc(a[0])}</a>`).join('')}</div>`:''}</div></article>`).join('');
-}
-function toggleContact(i){
- const card=$("contact-"+i); if(!card) return;
- const open=card.classList.toggle('open');
- const btn=card.querySelector('.contact-toggle');
- if(btn) btn.setAttribute('aria-expanded',open?'true':'false');
- const label=card.querySelector('.contact-actions .secondary'); if(label) label.textContent=open?'Dölj kontakt':'Visa kontakt';
-}
-
-function renderAll(){
-$("nChildren").textContent=db.children.length;$("nEvents").textContent=db.events.length;$("nFollow").textContent=db.follow.filter(x=>!x.done).length;$("nRem").textContent=db.reminders.filter(x=>!x.done).length;
-$("situations").innerHTML=S.map((s,i)=>`<button type="button" class="tile situationBtn" data-situation="${i}" onclick="openSituation(${i})"><span class="emoji">${s[0]}</span><strong>${s[1]}</strong><small>${s[2]}</small></button>`).join("");
-$("childList").innerHTML=db.children.length?db.children.map(c=>`<div class="item"><b>👤 ${esc(c.name)}</b>${c.age?`<span class="chip">${esc(c.age)} år</span>`:""}<p class="muted">${esc(c.note)}</p></div>`).join(""):'<div class="card">Inga barn ännu.</div>';
-$("historyList").innerHTML=db.events.length?db.events.map(e=>`<div class="item"><b>${esc(e.topic)}</b><p class="muted">${esc(e.example)} · ${new Date(e.date).toLocaleDateString("sv-SE")}</p><p>${esc(e.note)}</p><span class="chip">Plan: ${esc(e.plan||"Ej angiven")}</span></div>`).join(""):'<div class="card">Ingen historik ännu.</div>';
-let counts={};db.events.forEach(e=>counts[e.topic]=(counts[e.topic]||0)+1);$("patternList").innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="item"><b>${esc(k)}</b><p class="muted">Du har sparat ${v} situation${v===1?"":"er"} inom detta område.</p></div>`).join("")||'<div class="card">Spara några situationer så visas möjliga mönster.</div>';
-$("followList").innerHTML=db.follow.filter(f=>!f.done).map(f=>{let e=db.events.find(x=>x.id==f.event);return `<div class="item"><b>🎯 Följ upp: ${esc(e?.topic||"situation")}</b><p class="muted">${esc(e?.plan||"Du har ingen plan sparad.")}</p><button class="small" onclick="completeFollow('${f.id}')">Markera som klar</button></div>`}).join("")||'<div class="card">Inga öppna uppföljningar. 🎉</div>';
-$("reminderList").innerHTML=db.reminders.map(r=>`<div class="item"><b>🔔 ${esc(r.text)}</b><p class="muted">${esc(r.date)}</p>${r.done?'<span class="chip">Klar</span>':`<button class="small" onclick="completeReminder('${r.id}')">Markera klar</button>`}</div>`).join("")||'<div class="card">Inga påminnelser.</div>';
-renderVideos();renderMoods();renderWords();
-}
-
-function renderVideos(){$("videoList").innerHTML=S.map((s,i)=>`<div class="video-card"><b>${s[0]} ${s[1]}</b><div class="video-screen"><div class="characters"><span>🧑</span><span class="bubble">"${esc(s[3][0])}"</span><span>🧒</span></div><div class="play">▶</div></div><p class="muted">${esc(s[2])}</p><button class="btn secondary" onclick="openSituation(${i})">Gå till situationen</button></div>`).join("")}
-const moods=[["😌","Lugn"],["🙂","Okej"],["😟","Orolig"],["😠","Frustrerad"],["😫","Helt slut"]];
-function mood(type,val){let x=JSON.parse(localStorage.getItem("lumoraMood")||'{"p":"","c":""}');x[type]=val;localStorage.setItem("lumoraMood",JSON.stringify(x));renderMoods()}
-function renderMoods(){let x=JSON.parse(localStorage.getItem("lumoraMood")||'{"p":"","c":""}');$("parentMood").innerHTML=moods.map(m=>`<button class="moodbtn ${x.p===m[1]?"active":""}" onclick="mood('p','${m[1]}')">${m[0]}<br>${m[1]}</button>`).join("");$("childMood").innerHTML=moods.map(m=>`<button class="moodbtn ${x.c===m[1]?"active":""}" onclick="mood('c','${m[1]}')">${m[0]}<br>${m[1]}</button>`).join("");$("moodSaved").innerHTML=x.p||x.c?'<div class="support"><b>Sparat för stunden.</b><p class="muted">Du kan ändra känslan när den förändras.</p></div>':""}
-const words=[["😤","När barnet är argt","Jag ser att du är arg. Jag lyssnar när du är redo. Vi behöver fortfarande hålla den här gränsen.","Du behöver inte sluta vara arg. Jag hjälper dig igenom det."],["📱","När skärmen ska stängas","Jag vet att du vill fortsätta. Det är svårt att sluta när man har roligt. Nu är tiden slut.","Vill du stänga av själv eller vill du att jag hjälper dig?"],["🛏️","När barnet inte vill sova","Jag hör att du inte vill gå och lägga dig. Nu börjar vår kvällsrutin och jag hjälper dig.","Vi tar en sak i taget."],["💬","När barnet inte vill prata","Du behöver inte berätta allt nu. Jag finns här när du vill prata.","Jag tänker inte pressa dig. Jag vill bara att du ska veta att jag finns här."],["🏫","När barnet inte vill gå till skolan","Jag hör att det känns jobbigt. Vi behöver försöka förstå vad som gör det svårt.","Du behöver inte lösa allt själv. Vi kan prata med skolan tillsammans."]];
-function renderWords(){$("wordsList").innerHTML=words.map(w=>`<div class="word"><b>${w[0]} ${w[1]}</b><div class="quote">"${w[2]}"</div><div class="quote">"${w[3]}"</div></div>`).join("")}
-function support(t){let d={prata:["💬 Prata med någon","Börja med kommunens stöd eller vården beroende på vad du behöver hjälp med."],barn:["👶 Oro för barnets mående","Om du är orolig för barnets mående kan du söka råd hos vården, elevhälsan eller annan professionell verksamhet."],skola:["🏫 Skolan","Börja med skolan eller elevhälsan. Berätta vad du ser hemma och fråga hur ni kan samarbeta."],familj:["👨‍👩‍👧 Konflikter hemma","Kommunens socialtjänst kan ge råd om vilket familjestöd som finns där du bor."],akut:["🚨 Akut","Om det finns omedelbar fara för liv eller hälsa ska du söka akut hjälp."]}[t];$("supportResult").innerHTML=`<div class="support"><b>${d[0]}</b><p class="muted">${d[1]}</p><p class="muted"><b>Viktigt:</b> LUMORA ersätter inte vård, skola eller professionellt stöd.</p><p class="muted"><b>Akut:</b> Vid direkt fara för liv eller hälsa, ring 112. För sjukvårdsrådgivning, ring 1177.</p></div>`}
-
-const answerBank=[
- {keys:["utbrott","raseri","skriker","jättearg","superarg","kastar","slår","exploderar"],title:"När barnet får ett utbrott",body:"När känslorna är väldigt stora är det svårt för barnet att lyssna. Försök därför att lugna situationen först.\n\nProva först:\n• Prata lugnt och använd få ord.\n• Håll fast vid en viktig gräns, men undvik ett långt bråk.\n• Ge lite utrymme om barnet behöver det och det är tryggt.\n• Vänta med att reda ut allt tills barnet har lugnat sig.\n• Fundera efteråt på vad som hände precis innan.\n\nDu kan säga: \"Jag ser att du är jättearg. Jag är här. Vi pratar när det har blivit lugnare.\""},
- {keys:["mobil","skärm","telefon","ipad","surfplatta","youtube","tiktok","spel"],title:"När det blir bråk om skärmen",body:"Skärmbråk blir ofta lättare när barnet vet vad som gäller innan tiden är slut.\n\nProva först:\n• Berätta en stund innan att tiden snart är slut.\n• Ha en enkel regel som är samma de flesta dagar.\n• Bekräfta att barnet vill fortsätta utan att börja förhandla mitt i bråket.\n• Hjälp barnet vidare till nästa aktivitet.\n• Ta upp reglerna igen när alla är lugna.\n\nDu kan säga: \"Jag vet att du vill fortsätta. Det är svårt att sluta när man har roligt. Nu är tiden slut.\""},
- {keys:["sova","lägga","läggning","natt","sover inte","vill inte sova"],title:"När läggningen blir en kamp",body:"Försök göra kvällen lugn och förutsägbar. Barnet behöver inte tycka om läggningen för att rutinen ska fungera.\n\nProva först:\n• Börja varva ner innan det är dags att sova.\n• Ha några få steg som kommer i samma ordning.\n• Ge korta besked i stället för många diskussioner.\n• Försök hålla mobilen och skärmen borta från själva läggningen om det fungerar för er.\n• Följ upp vad som gör kvällen svår.\n\nDu kan säga: \"Jag hör att du inte vill sova. Nu börjar vår kvällsrutin och jag hjälper dig.\""},
- {keys:["skola","skolvägra","vill inte gå till skolan","skolfrånvaro","skolkar","ont i magen"],title:"När barnet inte vill gå till skolan",body:"Försök först förstå vad som gör skolan svår. Det kan finnas något barnet är rädd för, trött på eller har svårt med.\n\nProva först:\n• Prata när morgonstressen har lagt sig.\n• Fråga vad som är svårast, utan att pressa fram ett svar.\n• Lägg märke till när problemen började och när de blir värre.\n• Ta kontakt med skolan eller elevhälsan om problemen fortsätter.\n• Sök mer stöd om frånvaron ökar eller barnet mår sämre.\n\nDu kan säga: \"Jag ser att skolan känns jobbig. Du behöver inte lösa det själv. Vi försöker förstå det tillsammans.\""},
- {keys:["vill inte prata","vägrar prata","tyst","berätta","stänger av","säger vet inte"],title:"När barnet inte vill prata",body:"Du behöver inte få fram allt på en gång. Målet är att barnet ska känna att du går att komma tillbaka till.\n\nProva först:\n• Ställ en enkel fråga i stället för många.\n• Acceptera om barnet behöver tid.\n• Prata när ni gör något annat, till exempel går eller åker bil.\n• Visa att du finns kvar även om barnet inte berättar.\n• Försök igen senare.\n\nDu kan säga: \"Du behöver inte berätta allt nu. Jag finns här när du vill prata.\""},
- {keys:["ledsen","gråter","nedstämd","mår dåligt","ångest","panik","orolig","oro för mitt barn","psykiskt dåligt"],title:"När barnet verkar ledset eller oroligt",body:"Om barnet har förändrats kan det vara bra att stanna upp och se vad som händer över tid.\n\nProva först:\n• Fråga hur barnet har det och lyssna mer än du pratar.\n• Försök hålla kvar vanliga rutiner så långt det går.\n• Lägg märke till sömn, mat, skola, kompisar och sådant barnet brukar tycka om.\n• Sök stöd om måendet håller i sig eller påverkar vardagen mycket.\n• Om du blir rädd för att barnet kan skada sig, sök hjälp direkt.\n\nDu kan säga: \"Jag har märkt att du verkar ha det jobbigt. Jag vill förstå och hjälpa dig.\""},
- {keys:["droger","knark","cannabis","hasch","marijuana","amfetamin","kokain","ecstasy","tabletter","narkotika","missbruk","min son tar droger","min dotter tar droger"],title:"När du är orolig för droger",body:"Om du tror att ditt barn använder droger behöver du inte lösa allt själv. Försök ta oron på allvar utan att börja med anklagelser.\n\nProva först:\n• Välj en lugn stund när barnet är nyktert och ni kan prata ostört.\n• Berätta vad du har sett eller hört, utan att gissa mer än du vet.\n• Fråga öppet: \"Hur är det för dig just nu?\" eller \"Har något hänt som jag behöver veta?\"\n• Lyssna även om svaret är svårt att höra.\n• Sätt tydliga gränser hemma och sök stöd om oron finns kvar.\n\nDu kan säga: \"Jag är orolig för dig. Jag vill förstå vad som händer och hjälpa dig, inte skälla på dig.\"\n\nOm barnet blir mycket påverkat, inte går att väcka, får svårt att andas eller situationen känns akut ska du söka akut hjälp."},
- {keys:["alkohol","dricker","full","berusad","min son dricker","min dotter dricker"],title:"När du är orolig för alkohol",body:"Försök prata när barnet är nyktert och situationen är lugn. Målet är att förstå vad som händer och hålla kontakten.\n\nProva först:\n• Beskriv vad du har märkt utan att kalla barnet saker.\n• Fråga hur barnet själv ser på sitt drickande.\n• Lyssna efter kompisar, press, oro eller andra saker som kan ligga bakom.\n• Var tydlig med vilka gränser som gäller hemma.\n• Sök stöd om drickandet fortsätter eller du blir mer orolig.\n\nDu kan säga: \"Jag är orolig för hur alkoholen påverkar dig. Kan vi prata om det utan att bråka?\""},
- {keys:["vape","vepa","snus","nikotin","cigaretter","röker"],title:"När du är orolig för nikotin",body:"Försök ta reda på hur mycket barnet använder och varför, utan att göra samtalet till ett förhör.\n\nProva först:\n• Fråga lugnt vad barnet använder och hur ofta.\n• Prata om kompisar, stress, vana och press.\n• Var tydlig med vad som gäller hemma.\n• Undvik långa föreläsningar.\n• Sök stöd om användningen fortsätter eller om du är orolig för barnets mående.\n\nDu kan säga: \"Jag vill förstå hur det här har blivit en del av din vardag. Jag är orolig och vill hjälpa dig.\""},
- {keys:["slåss","slår varandra","syskonbråk","knuffas","fysiskt bråk","barnen bråkar"],title:"När barnen slåss eller bråkar",body:"När barn slåss är det viktigaste först att få stopp på det som händer och skapa trygghet.\n\nProva först:\n• Stoppa slag och knuffar lugnt och tydligt.\n• Skapa avstånd om det behövs.\n• Prata inte om vem som har rätt mitt i bråket.\n• Prata med barnen när de har lugnat sig.\n• Om bråken är ofta eller blir farliga, sök stöd.\n\nDu kan säga: \"Jag låter er inte slåss. Nu tar vi en paus och pratar när alla har lugnat sig.\""},
- {keys:["mobbning","mobbad","retad","utanför","ingen vill vara med","kränkt"],title:"När barnet blir mobbat eller utanför",body:"Lyssna först och visa att du tror på barnets upplevelse. Barnet ska inte behöva lösa upprepade problem helt själv.\n\nProva först:\n• Fråga vad som hänt och hur barnet känner.\n• Skriv gärna ner vad som händer och när.\n• Hjälp barnet att tänka på vem i skolan det kan prata med.\n• Ta kontakt med skolan om problemen fortsätter.\n• Följ upp så att barnet inte lämnas ensamt med problemet.\n\nDu kan säga: \"Det här ska du inte behöva bära själv. Vi tar hjälp tillsammans.\""},
- {keys:["kompis","kompisar","ensam","vänner","vänskap"],title:"När barnet har problem med kompisar",body:"Försök förstå barnets bild innan du försöker lösa problemet åt barnet.\n\nProva först:\n• Fråga vad som har hänt.\n• Lyssna utan att direkt säga vad barnet borde ha gjort.\n• Fråga vad barnet själv skulle vilja ska bli annorlunda.\n• Hjälp barnet att hitta en vuxen att prata med om det behövs.\n• Ta mer hjälp om barnet blir isolerat eller mår dåligt.\n\nDu kan säga: \"Jag vill förstå vad som händer. Du behöver inte lösa det ensam.\""},
- {keys:["nakenbild","nakenbilder","bilder på nätet","skicka bild","press om bilder","sexbild","intima bilder"],title:"När barnet pressas att skicka bilder",body:"Försök först att inte skuldbelägga barnet. Det viktigaste är att barnet vågar berätta vad som hänt.\n\nProva först:\n• Lyssna och fråga lugnt vad personen har sagt eller gjort.\n• Spara viktig information om det finns hot eller press.\n• Hjälp barnet att inte fortsätta skicka material eller gå med på mer press.\n• Sök stöd om barnet blir hotat eller utsatt.\n• Prata om att barnet alltid kan komma till dig även när något känns pinsamt.\n\nDu kan säga: \"Du behöver inte vara rädd för att berätta för mig. Vi tar det här tillsammans.\""},
- {keys:["mat","äter inte","äter för mycket","måltid","maten","problem med mat","matvägran"],title:"När det blir problem kring mat",body:"Försök göra måltiden lugn och undvik att göra varje måltid till en kamp.\n\nProva först:\n• Ha så lugna och vanliga måltider som möjligt.\n• Undvik att pressa barnet att äta upp.\n• Lägg märke till om det finns oro, stress eller annat som påverkar maten.\n• Prata med barnet utan att kommentera kroppen eller vikt på ett negativt sätt.\n• Sök stöd om barnet äter mycket lite, mår dåligt av mat eller om du är orolig.\n\nDu kan säga: \"Jag märker att maten har blivit svår. Jag vill förstå hur det känns för dig och hjälpa dig.\""},
- {keys:["självskada","skadar sig","skär sig","självmord","självmordstankar","vill dö","vill inte leva"],title:"När du är rädd för att barnet kan skada sig",body:"Ta det på allvar och försök vara nära. Du behöver inte veta exakt vad du ska säga.\n\nProva först:\n• Fråga lugnt och rakt vad barnet tänker och hur det mår.\n• Lyssna utan att skälla eller skuldbelägga.\n• Försök att inte lämna barnet ensamt om du bedömer att det finns akut fara.\n• Ta kontakt med vården eller annan professionell hjälp så snart som möjligt.\n• Vid omedelbar fara för liv eller hälsa ska du söka akut hjälp direkt.\n\nDu kan säga: \"Jag är glad att du berättar. Jag vill hjälpa dig och vi ska inte vara ensamma med det här.\""},
- {keys:["pengar","stjäl","stjäl pengar","tar pengar","snor","tar saker"],title:"När barnet tar pengar eller saker",body:"Försök vara tydlig med gränsen utan att direkt göra barnet till en \"tjuv\".\n\nProva först:\n• Ta reda på vad som har hänt.\n• Fråga vad barnet behövde eller tänkte just då.\n• Var tydlig med att man inte tar andras saker utan lov.\n• Prata om hur barnet kan göra rätt för sig.\n• Följ upp om det händer igen eller om du misstänker att något annat ligger bakom.\n\nDu kan säga: \"Det är inte okej att ta någon annans saker. Jag vill förstå vad som hände och hjälpa dig att göra rätt.\""},
- {keys:["ljuger","lögn","ljuger för mig","berättar inte sanningen"],title:"När barnet ljuger",body:"Försök att inte göra samtalet till ett förhör. Ibland ljuger barn för att slippa skäll, skydda någon eller för att de är rädda.\n\nProva först:\n• Beskriv vad du vet.\n• Fråga vad som hände utan att hota.\n• Lyssna på svaret även om det inte är det du hoppats på.\n• Var tydlig med gränsen och vad som behöver bli rätt.\n• Visa att det är lättare att berätta sanningen när vuxna kan lyssna.\n\nDu kan säga: \"Jag vill hellre att du berättar sanningen, även när något blivit fel. Vi kan prata om vad vi gör nu.\""},
- {keys:["hot","hotar","hotfull","rädd hemma","våld","våldsam"],title:"När det finns hot eller våld",body:"När någon är hotfull är tryggheten viktigast. Försök inte vinna en diskussion mitt i en hotfull situation.\n\nProva först:\n• Skapa avstånd och trygghet.\n• Ta hot på allvar.\n• Försök få barnet och andra i familjen till en trygg plats om det behövs.\n• Berätta för en trygg vuxen eller sök professionellt stöd.\n• Vid akut fara ska du söka akut hjälp direkt.\n\nDu kan säga: \"Vi behöver komma till en trygg plats nu. Vi pratar om resten när situationen är lugn.\""},
- {keys:["skuld","dålig förälder","räcker inte till","misslyckas som förälder"],title:"När du känner dig som en dålig förälder",body:"Att vara trött, göra fel eller tappa tålamodet betyder inte att du är en dålig förälder. Det viktiga är också vad du gör efteråt.\n\nProva först:\n• Ta en paus om situationen tillåter det.\n• Fundera på vad du vill göra annorlunda nästa gång.\n• Be om ursäkt om du gjorde fel.\n• Försök inte lösa allt på samma dag.\n• Be om stöd om du känner dig ensam eller helt slut.\n\nDu kan säga: \"Det blev inte bra. Jag vill försöka igen och göra annorlunda.\""},
- {keys:["nytt syskon","bebis","syskon","avundsjuk på bebis"],title:"När familjen får ett nytt syskon",body:"Ett nytt syskon kan väcka många känslor. Barnet kan vara glad ena stunden och arg eller ledset nästa.\n\nProva först:\n• Ge det äldre barnet egen tid med dig.\n• Visa att barnet fortfarande har en viktig plats.\n• Acceptera blandade känslor utan att skälla.\n• Behåll några vanliga rutiner.\n• Ge små stunder där barnet får din fulla uppmärksamhet.\n\nDu kan säga: \"Du får känna precis som du känner. Du är fortfarande lika viktig för mig.\""},
- {keys:["bonusfamilj","bonusförälder","ny partner","styvförälder"],title:"När bonusfamiljen blir svår",body:"Relationer i en bonusfamilj kan behöva tid. Försök inte lösa allt genom att alla ska komma överens direkt.\n\nProva först:\n• Var tydlig med vilka regler som gäller.\n• Ge relationerna tid.\n• Låt barnet få ha sina känslor.\n• Försök att inte tvinga fram närhet.\n• Ta hjälp om konflikterna blir stora eller återkommer.\n\nDu kan säga: \"Vi behöver inte få allt att fungera på en gång. Vi tar små steg.\""},
- {keys:["föräldrar olika regler","mamma får","pappa får","olika regler mellan föräldrar","separerade föräldrar"],title:"När föräldrar har olika regler",body:"Barn kan lätt hamna mitt emellan när vuxna gör olika. Försök därför hålla fokus på tydlighet och lugn.\n\nProva först:\n• Välj några få viktiga regler som vuxna kan försöka vara överens om.\n• Prata med den andra vuxna utan barnet mitt i samtalet.\n• Undvik att prata illa om den andra föräldern inför barnet.\n• Förklara reglerna enkelt för barnet.\n• Sök stöd om konflikterna mellan vuxna blir stora.\n\nDu kan säga: \"Vi vuxna kan tycka olika. Du behöver inte lösa det åt oss.\""},
- {keys:["läxa","läxor","morgon","kläder","städa","hjälpa till","tjatar","tjat","vardag","måltid","middag"],title:"När vanliga vardagssaker blir bråk",body:"När samma små saker blir bråk varje dag kan det hjälpa att välja en sak i taget.\n\nProva först:\n• Bestäm vad som är viktigast just nu.\n• Ge korta och tydliga besked.\n• Ge barnet lite tid att ställa om.\n• Uppmärksamma när barnet faktiskt gör det du bett om.\n• Försök ändra en sak innan du ändrar flera.\n\nDu kan säga: \"Vi tar en sak i taget. Först gör vi det här, sedan tar vi nästa.\""},
- {keys:["tålamod","skriker på mitt barn","orkar inte","helt slut","utmattad","blir för arg"],title:"När du själv håller på att tappa tålamodet",body:"Du behöver inte vara lugn hela tiden. Om du märker att du håller på att tappa kontrollen kan en paus vara viktig.\n\nProva först:\n• Sänk rösten och sluta diskussionen en stund.\n• Ta några lugna andetag.\n• Be någon annan vuxen om avlösning om det går.\n• Gå tillbaka när du är lugnare.\n• Reparera efteråt om du blev för arg.\n\nDu kan säga: \"Jag är för arg just nu. Jag behöver lugna mig och sedan pratar vi.\""},
- {keys:["kriminalitet","kriminell","gänget","gäng","brott","stjäl","polis"],title:"När du oroar dig för kriminalitet eller fel umgänge",body:"Försök hålla kontakten med barnet även om du är rädd och arg. Det kan vara viktigt att förstå vad barnet dras in i.\n\nProva först:\n• Fråga vad som händer utan ett långt förhör.\n• Prata om personer, platser och situationer som gör dig orolig.\n• Var tydlig med vilka gränser som gäller.\n• Sök hjälp från skola, socialtjänst eller annan professionell verksamhet om oron fortsätter.\n• Om det finns hot eller akut fara, sök akut hjälp.\n\nDu kan säga: \"Jag är orolig för vad du hamnar i. Jag vill förstå och hjälpa dig, även om vi behöver sätta tydliga gränser.\""},
- {keys:["naken","sex","sexuell","kontakt på nätet","främling på nätet","snapchat","instagram"],title:"När du är orolig för kontakter på nätet",body:"Prata lugnt och försök hålla dörren öppen så att barnet vågar berätta.\n\nProva först:\n• Fråga vem barnet pratar med och hur kontakten började.\n• Prata om gränser och att barnet aldrig behöver göra något för att få en kompis.\n• Hjälp barnet att blockera eller avsluta en kontakt som känns otrygg.\n• Spara information om någon hotar eller pressar barnet.\n• Sök hjälp om barnet utsätts för hot, press eller sexuella kontakter.\n\nDu kan säga: \"Du kan alltid komma till mig om någon på nätet gör dig rädd eller pressar dig.\""}
-];
-
-function findAnswer(q){let t=q.toLowerCase();let best=null,score=0;for(const a of answerBank){let s=a.keys.reduce((n,k)=>n+(t.includes(k)?1:0),0);if(s>score){score=s;best=a}}return best}
-function addMsg(text,type){let box=$("chatMessages");let div=document.createElement("div");div.className="msg "+type;div.textContent=text;box.appendChild(div);box.scrollTop=box.scrollHeight}
-function redLevel(title,q){
-  const t=(title+" "+q).toLowerCase();
-  if(/skadar|självmord|vill dö|inte leva|självskada/.test(t))
-    return "Om barnet är på väg att skada sig själv, har en allvarlig plan eller det finns direkt fara för liv eller hälsa: sök akut hjälp eller ring 112. Om du är osäker på vart ni ska vända er kan du ringa 1177 för sjukvårdsrådgivning.";
-  if(/droger|cannabis|knark|narkotika|alkohol|berusad|vape|nikotin|snus/.test(t))
-    return "Om barnet är mycket påverkat, inte går att väcka, har svårt att andas eller du misstänker en allvarlig förgiftning/överdos: sök akut hjälp eller ring 112. Vid oro som inte är akut kan du ringa 1177 för råd.";
-  if(/hot|våld|slåss|slår|knuff|kriminalitet|gäng/.test(t))
-    return "Om någon riskerar att skadas nu eller situationen är hotfull och akut: lämna om möjligt platsen och ring 112. Vid återkommande oro kan du också ta hjälp av skola, socialtjänst eller annan professionell verksamhet.";
-  return "Om barnet eller någon annan är i direkt fara, eller om situationen känns livshotande: ring 112. Vid oro kring barnets hälsa kan du ringa 1177 för sjukvårdsrådgivning.";
-}
-function answerQuestion(q){
-  let a=findAnswer(q);
-  if(a){
-    const lines=a.body.split("\n").map(x=>x.trim()).filter(Boolean);
-    const intro=lines.find(x=>!x.startsWith("•") && !x.startsWith("Du kan säga")) || "";
-    const bullets=lines.filter(x=>x.startsWith("•")).map(x=>x.replace(/^•\s*/,""));
-    const say=lines.find(x=>x.startsWith("Du kan säga")) || "";
-    const b1=bullets.slice(0,2);
-    const b2=bullets.slice(2,5);
-    return a.title+"\n\n"+
-      "🟢 BÖRJA HÄR\n"+
-      intro+"\n"+
-      (b1.length?"• "+b1.join("\n• ")+"\n":"")+
-      (say?say:"")+
-      "\n\n"+
-      "🟡 OM DET FORTSÄTTER\n"+
-      (b2.length?"• "+b2.join("\n• "):"Fortsätt följa vad som händer och prova en liten förändring i taget.")+
-      "\n\n"+
-      "🔴 OM DET BLIR ALLVARLIGT\n"+
-      redLevel(a.title,q)+
-      "\n\nVill du berätta lite mer om vad som händer?";
-  }
-  return "Jag hör att det här är viktigt för dig. Vi tar en sak i taget.\n\n"+
-    "🟢 BÖRJA HÄR\n"+
-    "Berätta vad som händer just nu, vad du har märkt hos barnet och vad som hände precis innan.\n"+
-    "• Försök beskriva situationen utan att lägga skuld.\n"+
-    "• Börja med det som känns viktigast just nu.\n\n"+
-    "🟡 OM DET FORTSÄTTER\n"+
-    "• Prova en liten förändring i taget.\n"+
-    "• Följ upp vad som fungerar och vad som inte fungerar.\n"+
-    "• Ta hjälp av skola, vård eller socialtjänst om du inte kommer vidare.\n\n"+
-    "🔴 OM DET BLIR ALLVARLIGT\n"+
-    redLevel("",q)+
-    "\n\nVill du berätta lite mer om vad som händer?";
-}
-function askLumora(){
-  const input=$("chatInput");
-  if(!input) return;
-  const q=String(input.value||"").trim();
-  if(!q){
-    input.focus();
-    return;
-  }
-  addMsg(q,"user");
-  input.value="";
-  input.style.height="auto";
-  setTimeout(()=>addMsg(answerQuestion(q),"bot"),180);
-}
-function quickAsk(q){show("ask");$("chatInput").value=q;askLumora()}
-
-function initLumoraChat(){
-  const input=$("chatInput");
-  if(!input || input.dataset.chatReady==="1") return;
-  input.dataset.chatReady="1";
-
-  input.addEventListener("keydown",e=>{
-    if(e.key==="Enter" && !e.shiftKey){
-      e.preventDefault();
-      askLumora();
-    }
-  });
-
-  input.addEventListener("input",()=>{
-    input.style.height="auto";
-    input.style.height=Math.min(input.scrollHeight,220)+"px";
-  });
-}
-if(document.readyState==="loading"){
-  document.addEventListener("DOMContentLoaded",initLumoraChat);
-}else{
-  initLumoraChat();
-}
-window.addEventListener("load",initLumoraChat);
-
-
-document.addEventListener("click",function(e){const n=e.target.closest("nav [data-page]");if(n){e.preventDefault();show(n.dataset.page);return;}const b=e.target.closest(".situationBtn[data-situation]");if(b){e.preventDefault();openSituation(Number(b.dataset.situation));return;}const x=e.target.closest(".exampleBtn[data-example]");if(x){e.preventDefault();openExample(Number(x.dataset.example));return;}});
-
-renderContacts();
-renderAll();
-if(location.hash && $(location.hash.slice(1))) show(location.hash.slice(1));
-addMsg("Hej! 👋 Skriv vad du funderar på så försöker jag hjälpa dig. Du kan skriva precis som du pratar.","bot");
-
-/* ===== LUMORA – TOPP-SCROLL ===== */
-(function(){
-  function initLumoraScroll(){
-    if(document.getElementById("lumoraTopButton")) return;
-    const b=document.createElement("button");
-    b.id="lumoraTopButton";
-    b.type="button";
-    b.setAttribute("aria-label","Gå högst upp");
-    b.title="Gå högst upp";
-    b.textContent="↑";
-    b.addEventListener("click",function(){
-      window.scrollTo({top:0,left:0,behavior:"smooth"});
-      document.documentElement.scrollTop=0;
-      document.body.scrollTop=0;
-    });
-    document.body.appendChild(b);
-
-    const toggle=()=>{
-      b.classList.toggle("show",window.scrollY>250);
-    };
-    window.addEventListener("scroll",toggle,{passive:true});
-    toggle();
-  }
-
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",initLumoraScroll);
-  }else{
-    initLumoraScroll();
-  }
-  window.addEventListener("load",initLumoraScroll);
-})();
-
-
-/* ===== LUMORA – TOPPMENY: INGEN SIDLEDES SCROLL ===== */
-
-
-</script>
-</body>
-</html>
+rJÚ‚*d8&EÞ]Ø0Ô$ÙuÂ‰0+ÏÂì‚
+ÎÄÉIZƒÅ^Ž¿{[-ƒ¸ß
+m]Ù£˜=¢‚ƒmGêHÒåªÔÊËCüÑÒlã-z×œß7Ÿ|u µàé}oÏWŠ
+P
+ãÐŸ%l‡›A
+*Ú5Ô‡J”ª¯º-Tüe|Û÷Sa~BízSRlZñªÌèe¡ÊgÉBe«²ÝOz¬H[S
+ìîÞÙéx°ùj•g÷ŠJdT™¬ÐÒ
+`d>_í; tË 'iRòs,höF`FnÃ+Å%è\ -BËÏU<:Áº§»-wšB3Ð³õ{ Â,hŽÅÈ¶íèÆ£ìeÚêªƒCÙ›q[¡ÊŒc<@C@‹8¶êSÐ~¤Nd£Hõ€r`w©q¼š—z+#¯øîéygãLèy«‹{å"IÃîÖ¾~—ÓèR‚†®ÆÛÝÛÛ¸|Åt›¶Vjñ¡uT‚2ŽëžgñMY´TÓ¦:çž>Uü|I#üýÆa0£Ã)­ÛÇœÁK:²—5ãj:»vmÃd¨Š^««Q¯­:§Œiéê»Ab8œgŠö­h×sD—í%PÉ-²|¤Óš=%äO
+naûŽÔ½Ý?)§f„žá÷Ë”‡2Od¼Aíx~•ë'«¶öÀŒo:é„³xU7
+õ*Æªéfò[fðªq¸ÿ•_:pF'Äæ*'ˆ
+ñ°$ªÆOîÍçøÆÂ‚¯tSbS<SïøD@Üí€ I0ox»MhYëSuüVô›¯þßFž
+3æuIŒEvW£ÙÄÆR
+Ë¨]ÄÝ}%GRI¶„FÂ*¯ÿ0:Àÿ35A1zöô³Ï¶>üüé£Gòò‡×¯µ
+Òª¡‡Gt:ÛCujÃŠEìþÉÃ‘®‰û,[Þ§â(ˆ[ÂgíF£Ú@¾âÖƒ^2:¨t©ß¡•í@¡Â®ß+‘Ác\ Oâíy<Pð‰h±0)ì$_„¯Í[Ç„×úîO~n^\~¨
+ñÒ¡m|íS*åÚ«q	ÿ€Î¯“,ï·ŠE–•ÓÖ¹¡ÍLú”c.Ü©´eÍ0l ;õ›¹¶ÈÓ|cQÌ&€‹¥ñ¸h2uâŠ{üºM…@[]o…p¸wkG3þ§‘xò­.w×=ÅâŸÉZõË|¥ô”e¨
+×|ÜÀ¾7;`tçñ4KˆjŽƒ–€®ÌLÇç6±ˆ¦3úøÁ“?èGŸ|òàItôð£G>zp…çöÚµ®ü’eyá~â¿Ór1?üPK    i7]¥ÚVb  bJ 
+           ¤    index.htmlPK      8   9b    
