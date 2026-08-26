@@ -1,280 +1,427 @@
-<!doctype html>
-<html lang="sv">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#17443e">
-<title>LUMORA – stöd i vardagen</title>
-<style>
-:root{--ink:#173b38;--brand:#398b77;--soft:#e8f3ee;--bg:#f7f8f6;--line:#dce6e1;--muted:#667873;--white:#fff}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
-.app{width:100%;max-width:980px;margin:auto;padding:12px 14px 55px}
-header{display:flex;align-items:center;gap:11px;margin-bottom:12px}
-.logo{width:48px;height:48px;border-radius:16px;background:#dceee7;display:grid;place-items:center;font-size:29px}
-.brand{font-size:24px;font-weight:800}.tag{font-size:11px;color:var(--muted)}
-nav{display:flex;gap:7px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none}
-nav::-webkit-scrollbar{display:none}
-nav a{border:0;background:#e8efeb;color:var(--ink);border-radius:13px;padding:10px 13px;font-weight:700;white-space:nowrap;cursor:pointer;min-height:44px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
-nav a.active{background:var(--brand);color:#fff}
-.page{display:none}.page.active{display:block}
-.hero{background:linear-gradient(135deg,#eaf5f0,#dceee7);padding:25px;border-radius:27px}
-.hero h1{font-size:31px;margin:8px 0}.hero p{line-height:1.55}
-.section{font-size:22px;font-weight:800;margin:21px 2px 7px}.muted{color:var(--muted);line-height:1.5}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-.tile{border:0;background:#fff;border-radius:20px;padding:16px;min-height:145px;text-align:left;box-shadow:0 3px 12px #173b380c;cursor:pointer;color:var(--ink);width:100%}
-.tile .emoji{font-size:38px;display:block;margin-bottom:5px}.tile strong{display:block;font-size:17px;margin:7px 0 5px}.tile small{color:var(--muted);line-height:1.4}
-.card,.item,.word{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin:11px 0}
-.btn{width:100%;min-height:51px;border-radius:14px;font-weight:800;font-size:15px;cursor:pointer;margin-top:9px}
-.primary{border:0;background:var(--brand);color:#fff}.secondary{border:2px solid var(--brand);background:#fff;color:var(--brand)}
-.back{border:0;background:transparent;color:var(--ink);font-weight:800;padding:8px 0;cursor:pointer}
-.flow{text-align:center}.flow .emoji{font-size:60px}.flow h1{font-size:28px}
-.progress{height:8px;background:#e2ebe7;border-radius:99px;overflow:hidden;margin:15px 0}.progress i{display:block;height:100%;background:var(--brand)}
-.step{background:var(--soft);padding:19px;border-radius:21px;text-align:left}.step b{font-size:13px}.step p{font-size:19px;line-height:1.45;margin-bottom:0}
-.example{background:#fff8e8;border-radius:19px;padding:16px;text-align:left;margin-top:12px}
-.input,.textarea,.select{width:100%;border:1px solid #ccd9d4;border-radius:12px;padding:12px;background:#fff;color:var(--ink);font:inherit}
-.textarea{min-height:100px;resize:vertical}.field{margin-top:11px}.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:5px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#eff6f2;border-radius:15px;padding:10px}.stat span{font-size:11px;color:var(--muted)}.stat b{display:block;font-size:23px}
-.levels-panel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;text-align:left}
-.level-card{border-radius:18px;padding:15px;border:1px solid var(--line);background:#fff;min-width:0}
-.level-card.green{background:#eef8f1;border-color:#b8ddc2}.level-card.yellow{background:#fff9e8;border-color:#ead59a}.level-card.red{background:#fff8f6;border-color:#ead0c8}
-.level-card b{display:block;font-size:16px;margin-bottom:7px}.level-card p{margin:0;line-height:1.45;font-size:14px}
-.contact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
-.contact-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;box-shadow:0 3px 12px #173b380c;min-width:0}
-.contact-toggle{width:100%;border:0;background:transparent;text-align:left;padding:0;cursor:pointer;color:var(--ink);font:inherit}
-.contact-head{display:flex;gap:10px;align-items:flex-start}.contact-icon{font-size:27px}.contact-title{font-weight:800;font-size:17px}.contact-desc{font-size:13px;color:var(--muted);line-height:1.45;margin-top:5px}
-.contact-detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.contact-card.open .contact-detail{display:block}
-.contact-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.contact-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 12px;border-radius:12px;background:var(--brand);color:#fff;text-decoration:none;font-weight:800;font-size:13px;border:0;cursor:pointer}.contact-action.secondary{background:#e8efeb;color:var(--ink)}
-.chatbox{background:#fff;border:1px solid var(--line);border-radius:22px;padding:15px}
-.chat-messages{min-height:90px;max-height:430px;overflow:auto;padding:2px}
-.msg{max-width:90%;padding:12px 14px;border-radius:17px;margin:9px 0;line-height:1.5;white-space:pre-wrap}.msg.user{margin-left:auto;background:var(--brand);color:#fff;border-bottom-right-radius:5px}.msg.bot{margin-right:auto;background:var(--soft);border-bottom-left-radius:5px}
-.chat-input-row{display:flex;gap:8px;margin-top:10px}.chat-input-row textarea{flex:1;min-height:60px}
-.quick{display:flex;gap:7px;overflow-x:auto;padding:4px 0 2px}.quick button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 11px;white-space:nowrap;cursor:pointer}
-.mood-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
-.moodbtn{border:1px solid var(--line);background:#fff;border-radius:17px;padding:14px;font-weight:700;min-height:78px;cursor:pointer}.moodbtn.active{background:var(--soft);border:2px solid var(--brand)}
-.quote{background:var(--soft);border-radius:15px;padding:13px;margin-top:9px;font-weight:650}
-.support{background:#fff8e8;border-radius:18px;padding:15px;margin-top:12px}
-.copyright{margin:42px auto 0;padding:22px 16px 8px;text-align:center;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.6}
-.copyright strong{display:block;color:var(--ink);font-size:13px;margin-bottom:6px}
-.top{position:fixed;right:16px;bottom:16px;z-index:9999;width:46px;height:46px;border:0;border-radius:50%;background:var(--brand);color:#fff;font-size:21px;font-weight:800;box-shadow:0 5px 18px #0003;display:none}.top.show{display:block}
-@media(max-width:700px){
- .app{padding:10px 10px 35px}.brand{font-size:22px}.hero{padding:20px;border-radius:22px}.hero h1{font-size:27px}
- .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.tile{min-height:138px;padding:11px}.tile .emoji{font-size:32px}.tile strong{font-size:14px}.tile small{font-size:11px}
- .levels-panel{grid-template-columns:1fr}.level-card p{font-size:15px}
- .contact-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.contact-card{padding:12px}.contact-title{font-size:15px}.contact-desc{font-size:11px}.contact-icon{font-size:25px}
- .stats{grid-template-columns:repeat(2,1fr)}.chat-input-row{flex-direction:column}.chat-input-row .btn{margin-top:0}
- nav{padding-bottom:9px}.copyright{font-size:11px;margin-top:30px}
-}
-@media(max-width:380px){.grid{gap:7px}.tile{min-height:132px;padding:10px}.tile .emoji{font-size:29px}.tile strong{font-size:13px}.tile small{font-size:10.5px}.contact-title{font-size:14px}}
-</style>
-</head>
-<body>
-<div class="app">
-<header><div class="logo">✦</div><div><div class="brand">LUMORA</div><div class="tag">Stöd i vardagen för föräldrar</div></div></header>
-<nav id="nav">
-<a href="#home" data-page="home" class="active">Hem</a><a href="#ask" data-page="ask">💬 Chatta med LUMORA</a><a href="#children" data-page="children">Barn</a><a href="#history" data-page="history">Historik</a><a href="#patterns" data-page="patterns">Mönster</a><a href="#follow" data-page="follow">Uppföljning</a><a href="#reminders" data-page="reminders">Påminnelser</a><a href="#support" data-page="support">❤️ Stöd</a><a href="#videos" data-page="videos">🎬 Video</a><a href="#mood" data-page="mood">💛 Mående</a><a href="#words" data-page="words">💬 Säg så här</a>
-</nav>
+PK    j@]gÝß*
+ˆ  Ì 
+  index.htmlUT	 ÇŽjÇŽjux
+     é  ¬<Ûn9–ïþ
+¶‚AÇ½’¬‹eË’í™¤“î¤'v‚Ø	v)%1*UÕT•{ûÐ=3‹ _ö2/É
+Ìs°û¬?Éì|ÂžC²ªHÖErzÀ¶Šä!ÏýÂS:ýÊñÇñmÀÈ,^¸ç{§ø‹¸Ô›žÕ¢U
+0êÀ¯‹)Ïh±ø¬¶Œ'~-yìÑ;«­8{øa\#cß‹™ ÓÞs'ž9lÅÇ¬!>Ô¹ÇcNÝF4¦.;k×“U	ÏÆþŠ…ØxÆ¬1ö]?Ô ?hvÎyì²óo.^¾~DÚäó?ÿ…Dñæ“C8YÑÐ¡Sæ‘·í^óøô@NÝ;â[ü=}?^7Ü› `wÔíQH=gð {ÒÃçÈŸÄƒ ¬?é2†ÃÓÁƒÉñ¤?9‚.÷Øà3fG¬
+Ë˜ÁÒ££ãþq>¿ŸñÆ'“ÉÝÞ7ë‘Óˆøï¹7ŒüÐaažÜí!Å×Ñ8ô]·1b3ºâ~8ˆp´Ùé1qý÷›ÁŒ;óîöF¾s»^ÐpÊ½Ak8¢ãù4ô—pb@ö!o(ˆ¥>nûÃ	­1¡
+îÞ…@þú3æ®XÌÇ´Q/jD,ä“¢Ýš4Ö‚sƒv«õ«á‚ÞHFNZ­àf¨B—±?¨ã ríÃà†ˆ½^€‚±píð(péí`â²›!uùÔk uÑ`eápJƒA»ÂâÄ±¿´;£éúS_ä°“fŒOg±ü[Q3¤_Fƒö>Êè‚ìaìx˜ì?
+¹3„¿@$ý‘€?lÐ9xÌA‹´â b±Ö&â$üø^¥ßjÝ5c:ÕættnÙO0Œý` °óèÊ$ÒâÖ&1	Œ¤m$ÌPÊÍˆ†Š+žï1o0€sæN’LI·H'‘ÑhìÕñOÚ„Ÿ(Ðóµ¤§)]  lÂFyÙ²ˆß…C¥‚ÐBAèZt:nµ†B1Q L€Ó¼i0/Ã  >ÜX }#¥cv76öCsß8¤,å*b£L²Þ-£˜OnÊz¤×9<LÈÓ 1ƒ}]Ü[ÚA¼‡Ã†°nûËñ¬AÇâ
+êñ`éŠ#émâøŠY„UO×y¥EÙJôVÐ. Ëe²L<J€$##×Ïïö¾!— È„"·ÇóÐŸŠ³Eä®KÞûá<"l‘O% <ˆ	ˆ€Âœ&ùæ@î<ˆAFYloƒÖg0£ÑC}Ò>ÑOg&#–Ì5g,ôuü‘o ¼S îÃv·ç°iý£“Þ¤UWº»ŸŠT§—Ó÷Î±0™ÌÚšöu3c2è£ÊÜÉIÁZH‹’®v³×ƒåÕ¼“Wð\ @'¸wShõº@Ï­}`4>kÃáH+<‰…Ÿ[.¼h²€Ñøa§Þž„û©i ÀGV¨ BllÒ´tmDƒ¢©U»×JôJèÌÀe“x(œÔŒ:`sZ¤‹ú‹h*ïØÛjš3 j BGÂn}Åèái•òhsvTDE
+Òd
+ÿ×ÙŽ.Á[Ë£ S’k£8ô½©)ãš“?6W[º 5ÛÎóC8æ¢z-R½	èäõ_ð.1¥”­Èw¹Cä(B´í¬ÉÙ£ìœ(& é°ëŒ kË@J
+«Þ›´ÙØ~r¢GgÓO4!ójš
+ë
+ÁÅž(d‚Ökç}tóÔw@-·B¶á‰Ø09<»-T†R³Šzî{Ž¶®cQ[-Êi–Îj9 ‘†Y… Ð=Fq8¦!žZ)
+oØ€µ¦§Ò}Ý‰çyñ?j¡ŒŠ1ÃvúŠjþ4dQ´VÌé[Áë°K‘Æ"26L®'Mk˜pKŸ]@©(aÚß˜yÅÀØ;3þí“¼ñoçmØ FFz ÖE¢ˆÇþZ
+Û³¬ê»¡`Ÿ
+ÇA}Ÿõm¹>±ÕÒ¶¯š«È–{Á2®7q"È
+­ƒˆºàŒteÊ† ã±sâÚ»wôÝ;&góRœÊ"˜ pŒ\˜TuŠµî(D¤¼E’`Úà‚ˆqæ:kŸ¶<|äˆ¹å†µÈµ–ÇÉšÝFA¡qtz˜¹Ð¾Œd“ÉÑ¤c“²gÅ±r!ö¶ øjò¨” ®À’< ífµá¯öñÂIé©W.ØÖXyÜÏÖ»ä¥Ñ©TÂJs	¸ünéÇ[·kz“
+ƒ£j`´0>ØAû:ìž	[iæ€lãÞÁPà‡-!R*,ëTn¾ß>ô—ûyüV hÈmi:ZÖ9’Ü$yûÓ)µ¼)õd¶1Kf;­j3S•B¥‡Ã¢A>'FM42<i€²…`õ“¥|lÆñÇ¶‘·rûŒ XZW„%"ÚOf;,[.¦È†•¹–ž!+‹)wŒÉ–¬„âÙ%.âs‘<Y2ÐôHþÊ¶TI^:,Y™|$Ç”} òveX“¶t:I v(zÏ\]/ è^îD)@‘'¬Ž …&V* ›î”“ya=ÒÜ¹Œ‚:û›s8}˜UÚŽÐÿî¯M³Ul©À.Ý™¶GF
+%]"Ö×G-ê¢I»ÛÛk®¸Ãü_nÒÚv”b§.rŸh2æ­?â‚7!sEÃÈaûùz€pˆ;”œ	c¬_09aýq¸­>Y"™VX,2/YíVó<2²«CÝuDÂ9ZŽF&»:¹¸µÛÚ<Ii\IÇ˜HX§#4šÑ›Ž€“`Ã†¡ÜBjYZ“ªblG+Ææ±WôëyÙ¶â,F "á®*MZ(êž3+ñ il>÷^Æàq×%AØnß±|¸‚ÛX@ºD§,Òƒí“–âLBÓn«´,CE4]g¬ì÷e(—(ÄiˆRº‘sZ…*£>„L˜{¹Us±0‰ú1GÚ…Çé¥ ÊPCHU*&	&MM K¹+o„•
+"žÆ(¨,ò«F9t.œ(ö[Æ"’fD"hh…
+™RÿnÉÇóû×ï‘{r­
+Ì~Q`Ôl„¸£Öo­³
+gÜ
+R¯K.wP­E¤D²REGˆÖ‘ª
+åŠ[Ã’¢H©Ò¾é'-.Ü×Y2Çmf“èK}í_æEþèJƒlß	^ŠÚvJ V¾V‘Î²*3¢€MšÛüºÌ|w¨Ë¥‘Â£Á=ŠK¦‡´f”¯'—NÔ¡-Á¡ÃCYMÈãåtJ
+5Åk	H©–—%‹|CÎðQ÷¾xëûí³G×ä»çÿHÈÅËÇÏ_¨ßì= Ñœ¤¶|\P¡ÕŸaø÷pV ´½§?¾“` ˜‹Ärï«] Ë¦ÞîÐ:-ó¹n}ÌeçÌ‡VZaêq
+(‹Ç³2:<Ç£ßçØíâc
+6‡²´Ô:z–ßæ ”¸c
+ÔÔ
+$æHYm­h–^¾¶ÆÍØË´
+“9ª§Æù¥ Gö†vZiŽZÅ:‹•W40]|CV! hÚÍÑä~¦zÖ.7=Héòë}ðY<¾Xã/cÑs‰Z¥P&þx)ô³²pesY«­à¬¯¨NSãŠX¶{¨C§HæóÉd¾-¥ºÜú$˜È(æöÌ¢G¹+%e¶$¼È]˜ûÝ% LƒSn KÐnåèU­Ww%çMY»mãBÛdœ©—³¸Â¥ú´«o_¿|ñâyö~¼ÝüøýÓKòæÕ«Ìµa÷Pˆ¦ =
+sû|j /^ißÏmÕ`Òd7.™¢‘œ®R²Pƒ âÌ½º¿ê²­ ®ÊU ö¡À1KŽl+°Žƒ8dÓ[„÷ø(^“À[ˆ•YÇtš$ú¡ŽŒ ¾?õH|ë€ß%s0 Cµ 7ìÆ`­æÆ(¡ÞjóËI>b/ è;–ò0º¥ñCzí e¡“zÂo˜#\‚*˜@@%,LäÕÇD©Oà_fˆäh’Š%kUžó‹˜í›ÎP³µueH÷3—(Ê†£Å¡ä‰Vƒ³3^:âáI8Ñ‡­:þo¶ûûšOIjÑZ˜!Ê{(iÅšÑLKU´Ê P<¥pGbÑ8} ¨z˜|Öû›*­ÀõËW¯.ž^þ¹úí#òýæ'òèú:5
+›ŸàïçO]fFûÉªB¨¥ü˜¦î•†¢ÈÜOö
+ïP¯q“ßÌ².p(e
+ŠŒÙWgLC:25[åÔÅ—6ggÎæé]HWãúÀòà¹„{gC£˜–Æª²º’óÙ¸”·‚	Šj˜’öönHú7|UÞÛi¸é
+e:/®VtJˆN³g›`¢w›îŠ’ˆ;`£¸ 6+šo>„
+0K(µ‹	|sRa®`àÖ¶m²ùâ:¹aêÇ+û
+7/›ª‘u'Ð¢ö±SÎ¡Ôõ
+òrÅ|N\0ÑÓðT$Ø|$‚z’<ØW'øœ1qdYhŽ‹V¬•ÁUZ'{3ÝËå‚ZrT˜Hc4 ›O¨•|£9%hb!™N)™m>Mc²ïUŠ:^êÁFòÝmÈ·lä+(i'…¤nÏ†”öv<Ž½uY6Z(3zÍÖD@ïÓ{ßÌËSm¤ªî§O+Í1+LÓj¿¼QïN'Þ`†
+X×ŸÈl×ô«$³+®ü§È¹Ì·mùÀõë§äòùÛÍOO_g¾±éÆnÃÃn«ö»½p~huKMŽ'£I¿’v±Ÿ¤eîâ"{:ÝmèD
+p ZÃÍöf†®ÖYªÕzEÛ~+×Q•PMÞými¸¸_ÛìWÈ¶iNÅõŸqÏÃ&ýI;á‰
+!G}ÇwÌ¥·ÌÅž9KaN²fµÌQï„škC–»Ýl±‰½°?êºÆÂŠn­?3±D²gY[dïtä:4H‡…UëcuClÈBE%Yc¦^»3döcÞ*ZGHæóKÌKŸ½|ýüêååõÓ/TpJ^A¬jÕb3GozóüÛ'zØ±í=;½“ïT”ìPšM
+ºí7ºp¡ÓªÞ¡°¶®“a.@½Û÷3²¤[ÜjªÍt%-ò«GÃ2‚Ú`í†äzÒ^U×¯ø-húFeËƒí>EF¶F?K–;aH
+rvá¸; ],(¨Ò‹\*BG‡Æ~èÕ	F™2 Äð.Nâ!¾lDüñLdÎÑŠ4‚1E\õ~ƒjëöÒŽŠLý	ý÷Ú-
+¦lû…
+Ð6„³ôI‰F"µTOAn²¼F´Wæh[³4Uu¬Ë§(Ûò‡Ýªf¢RÇÙé‡­BZÎ\„f&ÌD1ŸnËÖŒÐ8y•©¢–˜» $1š#°–g%$Ùr¨ "¯ôŒ6Ÿâ µÝ1‚ßtiÁmàan¢¸ÚÜÑ¼`"ë¹õô²³lnf2Rf·ÚZB\f—EbRnn
++ÎÅa|YJYø¶¦A«*]//ÿ‚MT]¾BUÚ[r)XIÓ¼‹ï5…“—~üêåyòèúåkòä»ÍÏ¯ŸüðæÕ£'äÙó+xöü· ›Ÿ/¯®Ÿ¾>xóêŒ¿øá‚-\å^$?¢åbaõÆ•¾
+Æ ÌîÖ1ûzG¦£Í’ÃÜ³X‹O
+:H2¸ ÕÜ&Å‹ÃY…Ñ¬¥ûyXUK¹h^1&ïÖ¬žk$Ã—éx^ö¶ïaw¶X] zÎ{—.‡e¹XYùÚB+°ÛÁ3x"iË¿TÐL+ÄÖ4,}­¥Ç£»¿Ö’í­ÿ’W[
+¶ÄWz|LPŠûk+)¬õ)™0ˆj3º*’9!‹–n¼ƒ$æZkÛ9nX]5•A“Çl&Š…2l‹DŒ6—ê”DuX.Z`¸§¢³*÷WÒŠ¯Y·\¿C“l—:É®YË¿Y¾“ í¶
 
-<section id="home" class="page active">
-<div class="hero"><b>LUMORA</b><h1>Vad händer just nu?</h1><p>Välj den situation som känns mest lik det du möter hemma. Du kan också skriva en helt egen fråga till LUMORA.</p></div>
-<div class="section">Välj en situation</div><p class="muted">Välj det som ligger närmast det du möter hemma. Här finns både vanliga vardagssituationer och sådant som kan kännas mer oroande.</p>
-<div id="situations" class="grid"></div>
-<div class="section">📞 Ta kontakt vid behov</div><p class="muted">Ibland behöver man stöd från någon annan. Det är helt okej att be om hjälp. Tryck på en ruta för mer information.</p>
-<div id="contactGrid" class="contact-grid"></div>
-<button class="btn primary" onclick="show('ask')">💬 Chatta med LUMORA</button>
-<div class="section">Din översikt</div><div class="card"><div class="stats"><div class="stat"><span>Barn</span><b id="nChildren">0</b></div><div class="stat"><span>Sparade</span><b id="nEvents">0</b></div><div class="stat"><span>Att följa upp</span><b id="nFollow">0</b></div><div class="stat"><span>Påminnelser</span><b id="nRem">0</b></div></div></div>
-</section>
+Biªˆji*'L±ïäÀÄ{X$ï»µ×M[P
+¼[àC¬š˜ŠÒŸ0‡L~ß‚Çµ )4	ÈGJ¯¤…MÑ!óHDñÈs)	ÓwÈ]Só[Éü<“
+ÒÝ“*6ç9d¤ù;R1Ï"íE¦røFÞÝjöªøÔ³ÀìÐ!þ¥
+TÜTnà_Ñ^~X<Ï~S£W<Í~Ó¢;áÈï%<‰È˜®s­uRæ<°ýBH¥ÏU
+k9#Ù=N3cÃ6˜$(1
+Ý¢Y¶Š·vQ„cR™ ·J§éòzÒ´DÊÓõm+§ ê«d°ø¿¾"c—FÑYAòU3,<×Gðk?jçŸÿí?Oà©2Æ…“­©oÉæ$Ã1ÖÎ¯ìoƒ™l>…âÇæƒ
+v)TëÔOu
+89æ£Ü9«Áï¡!§
+ñZãYMÅÆX~ÀsS2
+Ùä¬ö`æ/X-Ù;Éc‰¼^¬¡½£
+ìh8«‰‰çÏØâô€ê  ƒÈ­7â„ó¿ÿõÏ#ßBžS8ƒCì
+Pã ä˜W
+/uþ˜†žB…]Õ’IçÏÄ|nQñST
+%u~±ùäEð·FF2Õ@Ôœó7A Üußy à˜-°Ó!ÜrœlÚù«ÍGøœR”;“ªšUƒJ&þ÷ÿûß"B-@¢ê¶åHj0ÿ#oñƒ_ã¬!f ôü+¹ W
+Z °¸årŠÁ«Í‡)‰À“Ï6m`ªŽª õ1´¡$a¬ÔÎOG©2ÎOgíó·ÔAøÈ
+‚¯àoùkPÒöùipþøqð.’ÇKõM']`d	±æ‚Át—ÏÅM´³$‹Í',2cz6É“¥¨BXƒ(Dó¯(P3æÆ„	;n>N©l·‘‡jžÊPgWèÖÔ‰ô%³ƒd®ÈºjéÙcqb2yx}NáÔ…'~†·éŽ¨6Íƒ…TY¶(ÝS@/ Ì°$	 *ÈB‘.0ú`9™@H¢‚¬J!dR€Þ´–à\ˆ´X©|õUBˆ¿ÿõ/ÿA®)™ãóyL0±™¿*£Çó$‹bŽ¸c&
+¬Þ
+Ëlð€4§À^
+@ÌøDõfùsöŽ€ÅPa_BÐ$×áíx."MàG¸c)?bÏ½	áÅ{z&ß#ÖÉ	õ°J#…¬Z¦ž(öˆúJŠñ½±ËÇs ÑÌÿðk°Ú_ï—Ûm	A~ÕhÍÏÙ»
+˜¼b1 übóãå÷W×äòékû–½Ñ(IbÜ¼×ÎŸp/»Ä/dáÓµëuKIÅHÁ3 
+F>Ê‹ˆ?OGÒy~›º˜–ÐéíÑ \+øŒ§â’z7@„ù§ØŒ`úN¹ˆ] ™–ß óš-,Ö/E}Ûêþ-¡MÉL{Š%¥Xu®Ðvàob±´D
+ŒH4_º"Šµ€tÛI:áw r *ûP?¢Í§9šŽ{3 eÈ ÚfÌŒ°+(’Ì›,ØÎ‘Z•Wš:%%_»°PeM|¦´(Õ1ð(š?üú‚£Jƒ@©v!ˆ.€¥ñ(„,ªIÐ/ Q{G§d
+' ¿F{#‡3ª€ÿ‚y@`N…A;¤š‰b Bž-C7à¯DÓNÐ³Ó¯Ø¢Qf
+*+HÍ}ÍX1W8úÅ›!UR³àS‰C²…t/ø\ìó
+gî¸¤õbŸÈÝ|Œ"!Šxr
+l2±@SÀ’;íò¬G£¾	[aÑ¢/RU,ˆžú æ¶i”w‹ÝŸˆI;m‹¾däòP"„@ÜÍ‡?Ä^äX`*Ë‰—¥sÜ½˜uoåéK8äINn> N°ÿ;ƒ0e{_ÐÝä>!3¤?ŽcQèéPlÍS»äÙz%ºþÄ¼{"à×Aø;Fs ‘× zå sðprWCç‹9÷Ü
+ü"7oJ³à©JZ^‰©ÚšgQöÎWM7li[O­È›˜wAâËJÕÛ¤)Tqu”‚L†kD¼=óõ³ZÎÀcÀÝl6qÓdÉùn	x ¢yù! ó0äóþœRAÇDz"RyL´Œ75µñqp“dãÂMÈe˜;›ÿb¡¼· ¯ÜŽE r¾óîN*”ñ^7O€°Ê‚R¨€®ØÕêî3Iµ ‰øüãÿ`¶õr!Ü‹…¯¶ç÷QD<ä£¹ÊÌž3ÍXCFÔ +QoŽ¨§\j‚†ÃéÔó#|[8Å’.F6Q2¨†ºÈŠlfSð¦vØ‰‰J÷ç?ü
+¹æØ =§…Ü5"yµá5Öð©®È^Ø
+û¿æÞ½G®ó¼ü_Ÿâ¸F«ÍR‘”íÌlÓE‚’(‹1%*"­`@uÂS]§«O×Õçœ*²ÃjÀ$l6—±ã8ž]8	ÄM‚dvvv°ØÝ?†ßD_`ýöù=—÷r.Õ-Û¬‹ÕUçò^žçyŸëïY¬³9+cH/ÒÂÙ˜‚¤VëÆì7aEžµq–¾ía^Vîe]Kqz ®¾¶‚WZ
+è¿L@d:[D²\_Y¦\•a6çËé°•²”„r±zž©N5Ï¡Í—U6EÚ
+Í¤ê²,yÎÑ9ØÐs
+rŸÿ´¥;½å~pÈ¶r‘ÝÝ²6¸,~=.`—Ã'EŒf÷†`$ùF¿å|ƒ}AG?®ÏÛ5ìlÝ3E|¼YŒ3¾ž×Ñ¾~Br­9,[7lyÎ7dê™¸97·$¾nßÃ• ð{Až¯ùpg]G/‘6í¥ìoz×Ìƒ¶w>?=o~”¨Ç'z8Ê#!±ßñ	rË%Ì’¤["­ ÏqeZfsâ3èPuÁ”2Š/`AºÍ$äÔ»¼‚ã"^“šâ8Q		ÔÃlJÿYgMà†Lg‘Ë:ÕV¡L·Ù={î—=G`´ ïVË€ÕñÍc"k³%ìhmu(=Á³Ö ùÕ¦´çAh|@ŸMÍkf‚£KR5œ¯*­Úm½™ˆÝÜ*jÏÒ5;¦Èä"9‹ƒ¡RÝìW‘†
+,y¶¤3/´<¤HÌ¶I½‡¯¿˜NÅFóÆ5qt?º’	òÎÇéb©çv¹ÈfKúó»7ä§ï²ÚãßL—z' ÿÖJ¸ñó_ÿ±¨~í¼7­?1A¶Ñ‚“(—<º&ÿù¬Ê§KèÙ
+‡ù)úwÝ›kjæÞj¨m¡>vRöZÙdÂnP{@lõÎöž‹u?ý^bûËŸ'ÞSßJpìf„ßAàR¤?Oa`|Õ &2XçÁWt,ÖxH<ˆAãŽÊ€ uÔ'4ÁFaÿÿ$ñA„îº³YÅ•Ñ¤D’Z ëÄføú=
+t»ÏÍ„ÃŒÂgB‘Ì³+Yk nT½0ž½Né*³¯…>öÎýÏÿSG?Zçÿ~çRõ3Wt,¦“ìPÊlF[þ%Ç…0»SŒèVÛæWÓUÅÚ{u7š¨Œþ*ólÆföNõ§?MbjáÃ.•xŸC³Çð¹·W^líçz#Ù7‹»-BŠ†À MFE–ß‰9$/öžÒæxã¼ŸV›Eû+é§±8I+¯Ð_Q*}ªËèS¼XW’Oõ8ÙžmÕ Ù»™?KB w;ˆzŸÂ.¥Šž#"¸¢'_&Ñ¿Æãqî|8SÜkëCýÚš‡{	Ä¿¼ƒ”ƒš_L¢æêøÕßÁNHyÉ_ü#GTNÓådž²B(Ê_ýáÜmäL§ð÷_ýèÏèŸþÎEoçÇ³GîòdŽ€‡Zˆ¿ú[ÓÙ¦’wþüï“ÇîìZZD¿×½<^
+•§|ÊÉr—£µ˜í~©üO.V·­ü}dMÍéœI9ºWê
+“ ·Õ
+
+!Üiâ‰/3\‰^âU$o:Þ;“Ÿü q(ËrâXð1Ùv®¤K$d	ÑV%l{è1r·ÁdÄlà÷\rÌ†[5­Ü±¼…ÇÁéÐí;Ø™dzmˆÌ0ôœ»NºË	LÛÂ©‡¾=GOìŽÀ8Þ°xý*~8ëˆWy¶-ÿc2&—íSŸß¿Qÿy‰K:]Ò®=ºÏ:r&b\¤Ë5]§p¸Ù!æ2¦6\§çdµ»ˆªb}ÁÎæì¦;ÿõ’wn¾óÛÉ'YA;“/’Ó?Ì‹éCü;§þ|DGúñ¦¾R9?[­sâ˜r Æ>@c[oèŒ>Æ/Î·(Ë@Ž
+}`²×ó$£úÕr2´)È¸»‘öƒ{¦Üyƒ¤þ{>~rï½'GOßH^"íðIÓW×œwxí3¸6QúQÐ;n$·nýËym€|¶Ãk°(!Ò²£—S¥¤êô¼L ôíŠ8A¾»sˆ[Ø{x
+ ëÙfÆþÓ±¸i¾…
+Á*hÃ÷$!=a@¾Å‘ qÚù´\l–½IóŠŸ>½Æ±üOñ\ÿµ*›òÇ£~ýÓÇ?ËŒ~;­ªuyxãÆóçÏ‡úíkGGƒ`þî¯Ý½ûƒO¢aï=†¿ÁØ©è20ÝuvLÛ•“Â—ªU×o]žÏòrVµ,½ƒ-:=g.#a
+Ž€*[¬p9ûôÈÂ Y'ïÒHÎä ç…Ž_5­‰¬J«i"…5þzköÓ?'3ûÁ;Ñ±n¼coãh,áOþÉ-á .“MO°hA­ZïFy¶ØùB Êxž-xÑ˜‡OÌ‘‘†Û»Ÿ¿²ß—µLÙjÞÐmeðy³P0"«™eº8U§°œ
+èP§Wt<\ÍÒ¹Û!šÌ4?ÔwSù_1ëÐôE¸ðñ"ýÅ?ºEâ˜*q ‚ÙÂb¶Jt$³¶Ãi&´&«ÀcðÑ ü9õ$ð¹à&]¼Ø<íˆÅ!
+áDü=ÛH{Ö ùÑ€êÌ1§ftiú¬¿F~èìYæ²")©¨czm÷|ñ?ûXqª3$Ý;
+yDÛÀŠmOÌg¼wt­øøáÚC€[…Þ>
+9,z8ºK9‚Ðk%S ŽÆ|>ËŒs8I43‚*kOé¤sº÷/WŠ¼ä²¥“†T	&¯Ç·˜ mz<Èvó‚þ‹óAòFu½Â-Ç»²b|¶™¸¥k¾vÈN¾x–|'ðÏf{DîoÓÿo9	òÛøÃÉÝ1= )wõÛ†ÐøñÿêÖç“„¨ µ {
+ŠsÀL÷§+ÓÔÄÇ3›÷L£Óß–rH÷g­u
+i-ƒÕb©Dj{ö¶ÜÍ7ÑÝÂ²<´Ír"ÝºõíäÖ·‡Ðš!ŸÕý
+‘97ÁB£ÑÌ0v¹Ðß
+Å:')óhÊƒÔÓ0Av
+¦c­ñ>·Ôß¦Ïn¥unñbû/kýó¿wk}¯¶¸ó|[ÒÚ"ÿ.P9áÉj%QÄÖ¦!sEú†ÍÖ-q0»`‘ñD3ÝcTpáâ W’V ‚‹=(‘££U·¨íTW=øŽ.Þ8º­Š4¦§½_þâg_ô½Z¦"dšçC?~¬BKKÓ€%0awm15g“2“d
+,UþFÆ^•
+câÙ~ÅÉÔ£aoð´÷®ÊR%f¿åWñxÙM‰Æ6dgt“ÝCä„@ g…˜/|ŽYðm“ÖA ·»	Ãê¦-7;4%ìbÍ´âdÃnƒÛk£DÊ`6s›]å[4’JDBÁÇr¾©ê·s%“R³^¦NÃNyD¯ÄÖ›¼~5ì
+xûþò§‡‰T>{ê†Þ¶P¿§cpSœ 6·Œ´Ú’œ<AL*ƒ•øî46Ò^à)[Ðy”K^(+òhYIãâõÓÉÖ|ˆ#Î2ñH_e‰ËÅ¹æ`º÷Dæ„j7†ý„3s+ç_®Ë
+µhµÀ#áÉÉ«Š£\= 2Àý±¿É9ùbr‰=ölOÚñºmy¾dE§l
+uv®Ó›rþŸß»ÿðÿïù
+zàCïyLNè¤Ê°È¡íœyA[”ìÕV¤¾²¥hÆØ4Æ]ØrV/I¥+Ï’}±nÛN$Åá6v€²‚,>kÀÄKç©r^ÏÉHÑ6¶Ž°›MÀÌBE´Ð›Å"
+y‚çqšÖ6Û
+™_-nü>O8EéH»q¢úg%s®ö™n›.™K^"µ=ù‹ŒÄagê`M.ú
+¨]§£WoÅUwtx‚°rQgp™$nvlMø0©Ô,¦0ÂM¢K]Œ„O5:öé,^pµ3a‹¶w§õ Yf#+UõW]Æ€¥-²?E*c¥'ŽµRwP²ïÏ¢í0öYä%óº”F/r{ÇÔ”7)ìtµsfUçÓi°a?ù§Ž
+cÒqRù¿(ì}]‡ª¿ÕœòµÄF§¦¥ðz×Lª\ó.C,KôÍéâþ*ŸóëÒât=Jþã¢v&Z
+¿mU¸%¦«S"äÍ€ë/ ~Ùl%‚·ò°
+‘&´õÂWlAÖZ¢«Û‘Ÿý"Þy«(5¶1¶p
+Ä ©ÎËÊ§¢­Š9–K„:[TŸ„Ï‡7pd²Ë
+³Å
+×‰|Ž“™_¼¶9Ÿg¼Eá¾Ì^~	0:-è¨ŽXÃ³@¼¢g©JÊ°d\lÜ&eÛŽq„=Ó„LILT­Ù#a<_Mœ>Êûz†@*©çÅÓoÊ«?±Qºb
+%Šâ`Sž
+.#3[8Öyrr^æ8ÌD;H>XÍ6%‘éXR³˜GO±›e6Q±•JU@]»-tmîæ±Œ‘¤¼,íÓpÔ¦àÍ–›“]EŒKø˜‘ŠDÃX1‹N$š¹¬^9²HÜâ†ûF¡EÆ™2üdDSWÇ|cñÝÓu"mÕLÅ”PtñúKå›†–ÁŒÊhÓ"_§žR98fúi	;¹ö'!Y'É¾[M˜f6/uq,aýN ‰;})ÏV§«¹#{<q9šjÀ§¿“Ø±©ºò-Ô&ÑÛòÆ_“e¬3k¾AŽ¼ +V+q=1³ÀÆ¥#á‚GˆÃ
+U•-ÙÚ²jm3Þ»Uêîq;ež
+VQ9ý+äÛ¶Tnfjµ›Å”o4¿†æ1YÙÖúrY²p„ùª3$~ '„ãß:…w
+“ÇøÂ­IÎ)ØXÄ\ê»T"ÁÞ|™NxŽŽw$j·ÍHàIDOMùˆ­IÙwÊãpeu½NÖYyUÉI
+­„ÀÝ'®e+ ™’[vîjiÆs¶'?CU_1alÉ¿xU;æg›ý¼*
+v2jµJIÔ,(ë8Â›ÎÒ{m–â5¬8€"z¹ŠÅS9£žÖ”ª€óÎBJÅ 9&PÃfç"Á8—?¨Õó—Èt‡lÒtµXçeêø †šLÒ4"ÚÝšÕÇ;¬=Ãp€ÄÅT*qè×)ÝS‹Ú\¼ñ¡‰ÃJ{`'zß+Âað(è®(]˜µY¯
+ Í9yT7Ðøôâä†i§TÆg xFì™<É©q¥Of ósÃa°Œ:KE°áZˆÎgÇê÷¡µ¨ö¡òS¬7¯¤ÌEù¢æOá×9Ç1k•|î¢XØÉÖþ§¯LØFÉC¡×à@ú6]¬&^3£¥öLe²&5#œ¾¿·åáfû?m]5Zß¢²SZÊQ
+Zˆ A|fc;Líbm‡•¨úžêM:™° B”8Ò7¸6<‚Ì("²@‘g’qÈÃ†ªš"FÃ°î	¨OÍ©ÂÃdUàDYU)V†Æìý6ýøUãX³°ôkãÐšøbu“m„èªë²æ8W
+<à´¹ààÀ^ùF¬3zhÇ}ÔÁ]ô ßÂ;½«ªV8âø|˜§ÇYÇÎÑ¦$8-HG‚¶W`÷9l—Ô2ÊýF—:‹4éžI¢T
+rh{©T0~À`!ÍX\³@Ê£¹ÞdMàY"Êöç†–+…k¨›«Ò9÷R*ÆáG
+i3ä»‹ê¨é^¨{kuA RÜIáäè±xŒ{¦gp›–ˆšóQÛ4+ê‚&™ßíO;MOØâ†“; )Óï½Ì6óI› È–ÄÏQØ•Þ½VugÂ˜çÈ?û¿lÃœœu®âå9D[JjGßˆÆ*	¬âyšaMÎ2fJ9ã–èÎý4<òMêAÐ‰Ý$ä­E›ƒŒÉeâ-ð6—Ì8sHˆ OæŽJö
+H$¸î\PSºËîT—M¥ãMäõÎ”ïÜ‚þßÂ/Ÿ¨\sªóO›vg«4²ÕM†;×LÊ©™a°²¦Ì¸cýi´`ÊÎ6Ït>©ÙŠ:¨ú2™SÊM"¸ u”N¶,ütòå¤ÅsÐfâaa}bS]
+æÄ¿®ÿög¶€f÷ˆ1"fO ½¹ÊÒÚQ¾¹ôÅ¥ýc´"Z™³‘ëŠ1û
+Øo­:ŸNxRÅ4¤) ûý†¼S(woºŸTõá'š“ú2ë
+šn}ífÛØ‚IKS¿p
+€¾gõ_þ¦b˜`ðçÔ+hkg´Ýr0×%B±ð!+ µWsóòùBOå-âXø½ä–¤".å®šªùÁ—1ëàª!Ÿ…Á¨æµ.òI^âÈ8¢$ V
+×· fm,c¸p?ùßjk	«÷J‰a>_mÍ>ØZ%@§ýU§Í*’X‰Š”ýìyy8™Í+â
++JîmY…Âed•ºL2	³bÌ•¤üÀ0d÷¿óŸþMÈÐ,n„—‹sCÿ®ËÌçXy]&ñ˜ÇŠv½¥Ù´t³}Â¢¯­z.Û
+E¨ô‹‘Ô¥ ‹Š¯w!
+A²ž÷º«ŸˆoYÖÍvVkskqŽc›+AŠ,ˆüÙÿY†-N Ëí}YAq›±ß)?¶°t˜‡¦ŠÖ¼J­œÃ-'»¯b—=H +¸jÑž€Õ7eê– p”™
+{d‹ÅfÑ.Ô‚‹ÕS¥4Q¯ÉÆ¡$
+Kõ…éjN•ŸÿÇ}K¾Ìg«*_Kà#q!Ê‰³Ü”H…[[m
+ž35ÑžÖg\†û¦ô^F}#›#û´þqíÆuÀY 
+üö¶žÙvŒÅË6]:cü«Ÿÿµh@Îá!x>Ë‡ójìõáˆD~ÏÝ–cdÈãc9ŽÄ¶BüAÈ8?²¡eâ6/Ä‘žÃnN§ð'N¹&Qé¸8^³¸¬=:y‰€dˆ÷“˜œnK®·´‚'´?ýw-æ¯YÉçïFlnÉ‹”Ó˜Ïb$ø‚ñ—yp´HtÑ%@â›% ?Ã+`Ž°	«I¯j#k¨[Þ²p><I™iœÈ¢'¸a{?˜V­~ÔÖ¨e
+Ï£ƒ\3—'þ]ÎöãåYQóK8æÖ]Ø3B¿vM§l(V|’æœ˜Xä¤
+§R¯!
+äéƒ|~›ú¼,àÞ´
+lv¥ÎÁÀ7ºÖ™
+|¦ÙÒ¬?säÚqm¶®øtc‚ì‰ˆ×Ó4ŽFˆ+IF©õuØ
+Ÿµ5ÉNÒÍœ
+­ËÑÓÞc_²a)Âí~è€û<1¿0­+K7‚8´.8œo¦¨eVçõ2ãÕRà¥Ô¯È{\Á»œ¢à«G“.Â–VãáÚÓÄ@‚à©Ox”²ŽAukKq«8þc_Fa<ÍWû¹…±
+K)e H­f¾G«²Y*š›
+ï.ÏúåÁKšë†Îo©0úƒO>}ôÁƒ‡÷?-ïŸÞ::Úí–›ùüöEË3xñÙÜõ¨åé·õéë·ÞºWéù0/ùßþš{Â— o½¥Ÿ†¤^M«ÓÑhô»úÕaH/­Cø]d aÔAqeDœ?9*iƒ${1Ò
+v»òé·ŽžÞ¤/Û‡ìî/ÓóÑúîþ¹;,2.¼ìßø}Ã/@|þðóò›7òA¯w°ÛõÏ’Ó áSâœ$¢¾ªâ çßa%J@èO{Œ›”±,²â¨Þà™æ…çú&Ñô0yóeöâÂGpŒõX»ßB‡\H°
+ä	O?WÂh˜~@Xl
+SÉn÷ìƒ
+ž.Ñ{{¥7Gù¾7_ò†«ÕC@¾—–Yÿà"æSMèãs¬ÈjcÑÔQ)F¢5yó%mÍErOËŒ€Â½”Èk34CN{Š¤–g¡WÞn‰!GÆ“üM²÷Y7FÀ¡¯¿<32
+íÄ…ì½h(åPæ™Lj¯ý6^+øMuž÷%ôAT²jTÒ«¬Q#^{$Þ™-õ¡™a“½~ïôœ
+cy€þ¾k]Â9žóâÝöWE¬JôÏìðÕ,ŒJÒöBZ:—™Ñ1k‚\Xn›åh(±]xz—84gim\þ·˜™Ãg²ÏêÇ;®”•{‹@Ÿ‡eÕ^¢MÞ‡uƒáÕ†šŸªcu/ä¢ÍvoNí¨:Ñ³(>áh±ªØ7'3&>£‹>È6[J=[Çp_¹¢;{³ÑFžÓIÎ¯“=TÎ»¶1·øœ®GQ‹p46|~&PÇÞYsÓ5¯”xšU79séÉ†-ÐÍØÕ=|fDžŸôíÒ¹òNòÖ[‰Èóc€gŠËÙ…>þ­Ž‘s˜ŠÉÕŽú¤Q=.é[täÌ*I(”0WŠDV\
+Ÿ)|ñÔûœ©G"1B …¦È¿
+ÅN@´öII—e^àv
+ÎÉi©UêÇ8x‰i~r¨ŠÓ.ö»Ô±ø¡&Òõ½‚èT2¬Õ Ètå€Þy2§i‹ÂÒnt¬þ]½ cóéyþ]_K²‹\µ€5½C T“E
+Š*ï«û!OäP˜M]~~zNZò='Ö¼t
+ÖQUÄÉZï¬>~>«±C3u¤}Ê
+YÇLÍtçL>ºd
+ÎŠ`(Ë¥LŽ-
+~Î}â¯¥ý"sUn­Ë­|)i—-RË¥2ÔÒ:dN]0â±’òß?Œ;Ÿ)ü].yìXe=ú
+$¾LÆ£ßyüèã!=ŠŽ´ùê8?Æk§Ù˜ù™$ýž4x¿u“õB(ÐøðÒ`Ÿ
+´o.}„|r&(L»Í/+óÑÍA†ÿ@"Œni¼9Ê'£;“ÕñÕxñýy†ïž?˜ôóÉ]˜•Ç££;+,FÿÅÝ»¤«zeöé[ß½Ó»vtc:XŒîô_öÞêöÞ"-ù6­Ùwñy^áã|œâãµÞ5úøÃÍŠ¿¿†ïÿÅ·þ»Û½‹§‹£ƒƒÐÒH·tÞ¿Œ–§l,Ï€W²äÁå'çýÉø &áÞ|NÚað@€ñÑÄˆòoÊdYØß˜hÇwn}HÏ)Îgóì˜†‚'÷†\þ~0<Y÷ÓãÓþztg=äòrÔ Ó
+-V4žBÍð+pKpM:™ø
+.yzA<u8øGÁ‹Ç£;ãà¡Õj:ûÆCÜE+Ç¦SŒ¦Ë/#uã¥b Ù~¢“xÖ ¹‘E2ÀÒó‰¿N«ÓeºÈ®»oÊ,-ŽO¯ÓÒÑ`Ÿèâ°÷/z×ùñt
+l©
+îy¾œ¬ž¥ëà“Uÿ%w‡pÎ›:‹Òm¾*{è²Ø»pƒ
+·Ñ=;·"à9.}k„!W&YA¢»7@ÏãÚ¾P¬¦åißlMxßÍæ”~!6“ö ÃUûý[ ·‰"˜:Œtn£QI&Mor{F»É0áØ`aô{ŒÒØHú¡i™ŽÈŽI
+œÞÇóUIZtËY¦!Mº	¤ÑÎâ§lè8Ãûb÷Š¾ìFÿÖV7£9Z¬Â1†pf…kF÷øÅ\­³¥Ã5éç<!19Þóf?Æî<‹ì=iŒ9zü4?"u>¾á†Àó)>|òÑC¹ê[GÃEºî÷_ÎFwž‹ Éú­g|Óoí¡_Œzo¾<»€Z0|…œìã§ÿp_Õ6úúú­
+ûÀmmî™\÷_à þÂ¡¸<;ž­r¢Åž_lšzÙEáëií2,œŠe!áHÓ¦ÉCz3”`D,›>4ÀºÁíûPƒõÍÈŠÇ€'®tég™Ú¬9ÐI7[n*Ó'·)ir^Ï×ä’và]ê¢J
+"jHÓb‚}¦Ñ-¡špjÞüõ—ˆxI+&Þ¨æ#"û&ÞQ@Ö£HØ¥A’|¤µý6^[Âú¸iÑª¾ö	ÚObÿîvOŒŸo¾sàº®ÂÚ|FßýÎÜ?\oHHØ3Ðw!_n²ÝÎ?5-*=}”™¢ \Fü"àÚõá¥€‰ÔëÜìòë·ß>î²÷òty¾W¼þrY9•C¬®ÉA€®žàD
+:×åKZnfGe¸5Áx¸Éù»çp©)$Ñà úå³ï™–hîÍåÞ#ûÅ3w¡DorX32Ð6÷Ü£ÉËˆž¨šßy±÷zªæ5ö¨ <ÑèN¾ñ(XÍTs%
+WZh×<Ìª
+ tm3ƒ`w6µÉ]«Æ9á„Ö×¯&áêJøÚò>{´ð	–ö&5øÎéãØÍž©u.µ‹‰áŠ¦³À~ •ÃdAXÁé;syÂE"š¦"
+¹ø“y¡>/Ó{Ûç·KÅÀÎŒé5›–Ì|®j´µì-TðŒºýµ¼æzËÀ6ÁP™§Ó*rW²)8ÁîUaëÛM›=/«J šhŽ<À
+w×ù±IIŸ"KØ`¬•Âƒ€Õ`Ù¿Ë8 ¹ùq8‚U¦R´{²¡¹*ùÓ¬*#$Õ¡½èØlüÿ/¼
+S†²˜$Ä$å†ÏÉI¶îÈŠ‹lR'ÅÏ$°k	qVw¥>*MgOÔ"ÓèaZ/ELîm‘€^æ³M©0æô‹`eCl~nJÆX£Uœ‰Ã±b˜ãøIÒ­Á€Lµ¿’® >)Ò…
+ ž I'€ù‚—ö„f8Ñ4O«@ˆÇ¥>„¾è‰žÃ=If2GBAóæ‚)—žUP­õÙ…â	28ËUcæìv‘Þ:Z5 œJqêŸú
+Ù`®<ùpq¢ÂƒUAÁ@,á|+õ’U,—9ÝÆ´Hês¯„‘;P~·)#60GXÿ™{ùð	£(Ð¿ø[ƒ6’Ž]@ÉVÕ*8ˆè…že`ÕÏ®Û²t¼A¤¬½âo’@ö)ƒGo
+…ò×}U‘Mô=?ýÏöÉ[µ=¨¢w9–«¿HZ­;µç$…ˆ#
+Õb8æ~S¿M§;h>Z¸ŒFaŒ(}àl ¢Eã™ÇmÅ4¶<p/“<Î I œêØ’¨øž€Ame¥%´jÎû0´ª>œD’üw¾Š r8gEºUÖš`±š¸Z0–Ù³{;'s:†I•;ÄYŠTâ'xO§õûFñX;³CÎ×±IÔ‰g¶„“
+²ÌöÕŽÖ(ºO=Ä¶<¢[v¡J”Ó8j…_Sçøpu8o<˜ÕéÃäÐA
+ï©@i³'<4«‡¯•E cß™{ $›	¬ZZÜ¨2È\š§	/¶m2pÀEÀ-ý.DVaô,öÚÆšU#ºî¼²®$~J:dm`–Ö4Û"3‰Ù	¯&Ó¾ƒLãÍUÛ‡)¤9NNâ©NTâ‡0:pÝ¯)¤MLÁH¿Ù&9C":|Ï­¯óž¯+ŸÃ½S—Ðß&Û ót»*úå Ÿ¼èH¸$ª‰Î-Aœ>wB•½à•¦hÀ?d)2[Í%Œ$ÒIc–
+šFÏo8¼ÍxçÂü*Ñß- o,<ºÍµ‰ŸeV‹Açrž¨µpyÃ
 
-<section id="ask" class="page">
-<div class="section">💬 Chatta med LUMORA</div><p class="muted">Skriv som du pratar. Det behöver inte vara perfekt. LUMORA försöker förstå vad du menar och tar en sak i taget.</p>
-<div class="chatbox"><div class="quick">
-<button onclick="quickAsk('Mitt barn får ett utbrott. Vad kan jag göra?')">Utbrott</button><button onclick="quickAsk('Vi bråkar om mobilen.')">Skärm</button><button onclick="quickAsk('Mitt barn vill inte gå till skolan.')">Skola</button><button onclick="quickAsk('Jag vill få bättre relation till min tonåring.')">Tonåring</button><button onclick="quickAsk('Vi är separerade och samarbetet fungerar dåligt.')">Separerade</button><button onclick="quickAsk('Jag håller på att gå sönder av vardagen.')">Återhämtning</button><button onclick="quickAsk('Jag är orolig för droger.')">Droger</button><button onclick="quickAsk('Mina barn slåss.')">Barnen slåss</button><button onclick="quickAsk('Vi bråkar mycket hemma.')">Vardagsbråk</button>
-</div><div id="chatMessages" class="chat-messages"></div><div class="chat-input-row"><textarea id="chatInput" class="textarea" placeholder="Skriv din fråga här..."></textarea><button class="btn primary" onclick="askLumora()">Chatta med LUMORA →</button></div></div>
-<div class="support"><b>ℹ️ Om svaret</b><p class="muted">LUMORA ger stöd och idéer. Den ställer inte diagnoser och ersätter inte vård, skola eller professionellt stöd.</p></div>
-</section>
+b7¸pª¹³hÃ³8HæƒNN’“`H‘W}’I!âÇ\ÁÈ&Z= æfC$±„‡¬¤gè­óLgÕ”.Á„¼ÝèøÞEjØKƒw=õv„à´›<¤­Û3LxyÎ2OòÓ•K”|™
+«ñ8E_)5ãÔ'Øh@CÃö³²ß>Ë&£§ÃáÉëhH”½9Îúýtp|0º“^?“ùóÞj’Ý«ú776g:{JdzôÏù-ÿ·:<Ž®÷’Þõ~'€Õ±xœB¯”zNËÑã§e~t[£/Fœ“¹oÔagL#Ñ'¼äwƒßã,œƒÛoöƒÖ2±±$Ác¿·¹Á‡î~íÒ_‘½ÀïAç—øçÞc8ÈhqpÅõ[ ´R$»¿Ó³›R½öÎP8°§
+Ç=aâ;t8J{¤3ŠzÃì»\&hm]jCif^ð`Â>/¡¿5t)âº°ƒÎÁÛm
+¹aø¨o
+rã;ß¼uó&­ËoñšX+”æ’ŒF£oßEÝÃÿ“Hdó-U¦6A‡€Þ¡ñ¥µKá§F­ÂG’Ÿ¯z[q‘ß—ÇzªÅÑŠô¸âÎÊÒeó—¿ø»[[˜°ÙÌx3£—OON
+£òƒ‹^x5nÿIÔU&jP4OÏ{w¾ú÷_Æ¾å|—¯ÖU9šŒ‡ØSö¼~Wø1Üàt1xr›Î7ìÙ>æ“‹žždÇCDhp‚Ée¡_úðZíÞ^½ÏŠÚîækLíÖ'\·±ÏZ ©;û MÔµ
+(9®%Ý·‚àÎ#=!_1-,üíüÅ¥-	|ŸæŽ¶)ü®ö¶)mÝî4m ÙvµFw—ä£|‰ .÷ã@h]2—q õ!uônÛ˜„´{½@†ûÎD/5Ÿå»ß>xÉÌ|=;ÈéqˆS“&^¦¤vV}kó‰V0¢,†SøftØ³(†kEäžÂÏF/óÉ!zE—x÷€/;DdÈ“ÄÁéuP­Öùñ!;Ð²4¸¢_[ÐkÊÝÎ»lwc+Ü/¼ðö
+R.³ç	ÆÑ'¶zðø‘º.nÓH}¸Y–§ùIÕÏð¥ÄÛÝ—ñD®÷Nz›?Ìˆ? RêIÍ,³
+ZŽi[xGÚª„ž¸ñ“m×›²]o¿m×EŒôñ¦ài¾©ÏK,9äÃèÍ~ÐI×aH3^ô9Üù
+"¶ÓÂ®æ¢Ùliè75$¢Ôö¶zh#¸7õ[d›ç;é/|(5FLìvËsÂ¯Ã§à{Yúxu|s^ 0Èú¦ÄËÃÔ¢?sý™—
+·îvßÀ%nõ>8Ÿ³ñ
+,'˜¡gJ¼b._£uÉp'¿5&¢æuÞµµÎúx:©2éCÝ'-¸ÝÄ¨÷ý9Ž|^ˆ“‘§r2f'ý ÿƒhú€ä¿þÉÁ~Z€“ƒ—'CŒrT´$'C}ªüCÛ{'÷ªQ'Ç5F[¤Í‘BmŸCÛ<Ý#ñs+FÑº_mzÅAÌÎ†YW“ß“6íeÆ¡|«ÌrASwèé ú)ˆêÓ_Á!k¨þ?äO‹*?žgõ®ð|ö†½ãß~óe~á[S¶†ÍíRÉ	"äò…N¥'hÀìÅÎg´T%Öô*}ú¼×{êO &Æ±Nj
+}º0¥©ÑåÂF&­M»á?¡Þt]xc9þrWwõÓÐ;<¸cØ©: \Û—;Ÿå¥+h‰U¿Ö†žn|@F–U
+†‰/m XŒ)‚Ïö8¼¤’2™´_ÞKN‹ìzcJ‡èE/‘å-/¯Nû+}íàî5ILõþ ˜Y³`ùG½å
+é
+d/];¼víB§ª(uúæµk6g¸ÎVF‰7¼,²4cºË=
+¼z»w=?¸Í„_’Ë1Æ~i¦D]Ãox­1g¥WFÙVýkÃ˜9®)ÇÒå ¸ Yh÷*´ÙôÐˆ7®
+ðZ@’´LÌ(Á¥æÞwêv&CGp×dº|ï<"2µäï³oR©ò ¸=‘^‹}YA^ÕË7`Á½çT´èÁMí=N*›×ª®\ùj8õ+ÝÑ2'CÒ÷/X¼„7“änÞ
+î®›1%œ³‹D –*P/Í+rñ™Eî+pR^Ï-ò©Q"9c‘"s‰sàÄpPðí­£–Ä£òé;G—¤™ÒÓH§ºªi™¼¢…ê¿HêÆåXdÎ4#ÉÔlPkW#‹ò"yýªÐ9²EÒhûãžMªZäz,×†•ù y¿ln ¥z£r®Iº+6AÈ®Ih'D+'5ZÁ=N7Ùscý>Zñ°dmÍ#Vˆex¾,Ñwèír³àoÜê™FN,ždÉ©ë7´û´SË/Ä9?îÍ—õ!ðÆ‰¿ÂÞ Çuº/ZžÝíqVõý@CÙèª²ÈJ;8¢/{ðBz[-“-¿Î»ü^Óˆ5RÓ7ëuíø
+làëvª¶/äÂÑÛûe˜C"îá‹¢x+Š™\xàÊÛYJ(Þ–ê¢¾ÇJQo/H+hm ýË_üå'²	¬@gC¶8¸Dê˜Ì|©#ê•Û·ßï˜˜yS’Ç[Ù6ät\ä¸Ý3ï›/Oî2
+´>à«ÿé/õ~Óüw»žõô‚Gµ¿þÏÿSr¯m_Ÿ™úÐ.:²¡•l²ô /Y–Ð×õ%u­¨ßÏÂ–ð‡Ø‚Äžæ‘¬–­3ŸcNžCëTmÁ—4û Œ‡?’t9Í·8]#}ôÙÅ¥b1 *ë’ZBØ
+MÛñY$'–‹Ç«
+±ÂèeèÕ°râ
+ùù©RæÑ¨_ûb·»ypý–ðF¹*hÞ“ >Ÿ‘3Dƒ±<+õ6’è†ØO c:gÇt¬½
+USn_¤/øÞQø:µô_4O‘ÂåE©ºÈÃ¦µ‘S2xÔÕ¥®e‚¡VVÉs.‹dp“ôj§aß¹u—ËáTÊÕ›öF¥¯Óu² þ,Ñ¦Çw†I[=ìÕï«#yaÙÇœ b/I,ì+L¬ù¾dÔ1¥qüQÒÌ!P×–'8¥) `|1iiu‹M³´ÂDä
+>w>>Sv•]ÙÕZŽgË¡&îô|èWKnÅgò_ÿP êW‘ŠÆäz\D$ÄZâÓÙ`{tÐ¥É€f*Ä›D²½Ð#>Ò9q‹Ë#²Þ…_¯è‡‚~É‘?­$T5šK*í¿Mš
+ ‰\çHpçàÌá›/]Úô­w$oº ©LúÛÆo´9¸ø-¸ó;fpnAºáÿò?ù›äòÌ¦¼ÀÄp Ã5OBŒ'­PÃ½†¡€ü`Änë[±_,J$IóuÚCPW9Y‚![ûh7´F•û•FÅ‰*Y çyEõ0'òõ%ª zzfÜŠF¡¶M¨×AXïKækÐáü°N(ñQå^¡ç’2yî'!Ó¡?žÖÖcÙ-ØNi-Z{,Sà<‰[å²¹XG+ï)]]\ûP‹ã´OïŸ%ö…w¥ü:åð¾<û¯þM}ûë½àÇp·qyüOÿ(	¾k4¦®ø|È¨º©ÎˆÎW/üFéÏ«lûÈ¯¹ß…u'ß‘FÅ$ %*ÐÿÄ¡Í1ôþÞ}VÙÑ¯û…v %ŒÀNq6|LóêÄÞ‹ÌÍp_Þì‡
+ã;Ï]V\Ùþµ,¸¯mûì\ÍÄ
+ži#ž¤_çyW00«U•ÎëþQÿ_™"“ÿn×eå¿þr½^ÆùÐDHvþ÷*¿‰¼Å*Ÿõ"¶ƒòdµ¤ý"ÛôðÖ¿Z¿p:†=»²a¹Ç	¹=c[ßüNmÆ¾÷I?‹nwÊOª”Y°[«SuKX‡QEI¢w¯µOà2]äk‡Ï.f¨È5<"„ØG) ÓdÆO47SóTîÞ.ÒXôiô ¬¸¹ñxÙ·â\´¦öýàIû mnJ»ï¥%…4Kc§^WzÈØün‰ó´ÿY’Fnþ&rFÚ©¤ôI‹WkTßê£üžë²åmˆÚ	l¿I i8ãIüò?ûÓÞ ÷p3]2ŠÎZÍTÔ¿¹#Ò#F_³oÐáƒbòX¿Eó±
+Ážq5àu}xj Ût.¡¼W-£ç>è Û—½5)Ûô’cüCTûÅS<óhD½½¯ÔœQ/6qP#çFæœ~ÿ.ÛÀ®m|È¼Ì	‹ÀµmDC?‚$Þ|ùbˆìÑÿ]«Ç£á…¾¶&%çÍ—¸Že>ÂeÍ~Ž…rOÓm~è_}tÇWÝñ¯::ßé>-ÊnGï¾	6mfÍ¢ƒ­­™ÑtÙa»~.Ø^šÇ.Öílâ‚¤åÐ« ×8cG1; 
+•¯¾¨9â#ÚŸ)†^é1ôõ—a‚ïkÃ·2bDÂl²B#[Ÿ…ÖrVkê¡i¦d)¹»MdôA‘òa÷Ê¨Ù{.¥ÀÑ6Ò`«­áe€	¨ó8c×1b˜ÚP )"ãàI.RAÍ×ŽbÈqö­8­
+çg
+ß¢oEZg„Wcð.áÎé®NÄzV¶7?D×GÃ¬u ¨›à‚Z¯I¤ýb¬–¾e´sîæXFqU¼ÿp,2Nôn&‚»ž€í#´®€MuXš\þW#f¡­‚ÇúE Í=p)RÛ¢FPfæä0­T¾i=J@l™ý;lüÜ„òJí%‹¹^1‚[UÕhÞU¾4 "
+Žï:ØX¤ ñNáÜñt0¼o¤ ÃÜW¸e9ŒO²HåZÃßPkø[™Ïkj
+~Q…æ¹*4ÏÛ€¬ˆ.ò!Ä^S×¯ø–¿¢yäû:ŠýJÎ´Éè%ÏüPÈŽlà¸Ÿrà}e¶õd/µ&Æ¡þrQ 7NrÏÉ¦~Í½WŽ 
+~å¿LH¯ðÍÎ‘§¦°ÎqE\ ýZ»Î#H}©ÜÉéª´Q¡+\¶%â¤Íôm—¼ãAQP×ƒñ1
+
+)'Rƒ•ˆp¨ƒ7“wCL[†*‚FPŠëò£¥½TŠýñ^Á/“•ùû¯~ôgôÏ?È?—|ß7±ÎSß÷ûv»ü­LÖŽ»|tVí"[ÇÅˆÌ¸•
+ãó/Êx ?ÿû}Ç}˜\^«eâ™ç&‚eºû‚÷Ž.žV
+PBD·¡âdÛIÜ½Õêš
+­›¿Ñ­ŸÑÂ‘0O‡zÉÐòqO ˜ì¬o¦Ø¨Av½‹%ÏoôNÿ7Lo¨ÞA‚êyV¼›.¹õå,;/i}tÒX²"§
+“OŸÎxþ‚ËO
+ÒI|”Žäø-+éßìÅz¾B0£ ‘žô‘xo6]¯&ç‡­0c®¹ u¶€ªaß:t¨µºÊg©_
+#'r*?_~¾wž|qøùò«ý­J7AI0!¬âs(W}ÈB@Jà~*Ü;
+Ô£JÕ€ûÎ’
+Ißò¤áÁzõÉ#¾'>JZâ|±È¸Ï†Â—‡5TÖñO–q1¾Üÿº÷úÐè†AÏ’ƒ‹¦BœW{”èÝy2}‚Rè9=qé./Wj›|Þ¦Ÿ:rÍ _ñ©3T›œ¸žõ’ºAþ}N:òÀS&·Çfr„BI*’£'|ääëtÂ$i}ÞéóÕ¦ÚŒq*T´+t™,×Ù¼F®^P ð]§@t‘š|ÌËÏÒ
+'Â[d
+uÖkÒ¥Xjk-â;ÈÍÐò`tèÝ\7&š-7™žÃôÇ7®^‘M³¹ëé.A``Î3.íKáN³—þDõ²°-rÐ·Íw•£Œ;7rm !½ðÂdn(rj»§1ÒJå»ùÎezÃó–Æ€K•5M­Ý%“C'Éý·4!j¨Ê¾¨òöKš=b(ÈLº$s­ì=n=ß^ÐÑ=jXodç˜`Oú÷†…­`¬ÿé.Òwkâ‚ß[œÕð=ìmN²Á¡†™Â¥vR¦×ÒE)Ž¬M¡•«,/ð(UjÐî„KN3…Å” ¹áÉåÞNÍ*FÁŒ‘Œbô
+Å€€GŒšÝr©aËÂB#ãÎó³µ¹»u„+£M?t-´
+MøŠ–:[ng˜Ê:é´Ý<äõúÂ:eB aÑ¸šÓ½´èù5m(|àu ]éßÒ{µW/Øm?»÷˜f5Ê­CFË¦
+±,s*–*cZZw½À	â3
+´U§ ‹µ…Ü˜
+ësW_ArÎ–V(8Eïvd“"tÈ¼TTÛ—p²—['^¥h*Ä)’¨¹G3àWPWë«vÆv2ì­ÑeGpw&÷ì Ì^ó²`øjhóPæmûé\úÒ÷:
+Û°ióÃËN{Sd†·à[ó„È”@Þ±YÓ5b÷tm¾
+!ùÂý÷ôy8@ß¾‹5þ’FlÖ‘â2:×Ç
+u7¦éÆÐ„®N>"ad^¼¨1,–s‘8¬ZüñmÜñ¡‹œ³dô'¿ZŠí"S©àÞñq¶fÈ–‰:
+N!£“ÙU9’ƒÝ-TüÄ©oSU @_5SK‘Œ¡sô ´[‘¶­Ý¦ë=D?i#Åßˆg«FcÜ‚rZp	Nxú
+¸9P4™;´.ýÉÈ[Lrët™CÓ÷ƒ|Ð}0ìq\UžÏÔÇÑJ€š>5¨Ô6ŒFŒ	¦Ñ~¦Ç3{mÇê+ãö)z±åï„¤ÐJvx‡Dðj3Nô‚¨p´Æ¢çwœÒL
+[m	/êˆäõ¨‰d r2•¶XÐ)R
+ño#À=¯&éÒqžf3™ZÊF'­I˜ëñœskÄÌú=ë¶¸fõÒÊF%(iöÛÚ”’)×::B`!EìV €îˆ©{}×õàÁpûÓ9a@ÅJXV‹ö0)VÒ~F<ê=•ŒsxéOÓòøŸùÙ&]B˜¦‹“¬JÜäl¶š¥ü!;&â*Ï!}S:…*ezàŠì/Ü†CØ þˆöPKécaoÇ—“•ÀóùïkæZÓ»g÷;Ž0Dwih•ÊÎQnˆñ»|½Ž^Ñ®ÐVâ¦i˜FÒOxFz„„Ã;øÇA‘+/´!Y>Ãk'µÝÍ+PiaÄV÷²”9<hœ¡²2ÍË2bÍ­#[ejd_dÉ`®i¯2-·AøÞÓ7Ðu©; A*×ôË­.<ÿt‡2°ˆ 'ÿ¡/5m4<u¼‰üSkv¡QªÐAZFÌË›äOšNfjQ½èì&Uc¤ZwÚ˜W{"1ÛÏ—^6K‚¬t¼2R
+œj^úþ1/Ù5,ðv­‹jè¸Rm‹]‚ÝÞÓÍ}3HíÊHŸ ‰&šÒ¦dŠq¦¿$`KûòRžt¯ªYk¯Xt{8E3þzÔþýÑ£Eû-»-¾ß…2ŠWÇ13öA˜ÖÆ]Q»A+–rF`•,¢­Ãˆú%ÁÖ÷®×}¾£³t%—®¯y)ŸrÔÌZŸ¥…ï ÀÀ³€AB”@;¶un„2—5ÃÞx PÙÜ+³Fi [‡&³Ù÷Ñè!oé³)NI‡„ÀˆUþtÍ•lÍÊürƒ£ÉwÚ<æ|s=r
+¶&.§Qw{F«TÜ§ØÆ=Ý3
+Q[LR/d¥‹‰Žz´vœÑÿ/Q«ÄÕ’l}ÆÃm>C=]œ*JLbÓ¸§Â4¢[Q;ÉÔ\•!ü@ÜÕA« lþú‹RòÚhIGjN¦9­®›ëvóErÙÐøX›½Ð{ùRU4ï{Ö÷òÆqGùn•Œ²´ˆ+Ñ`J|Á-ê™LYcÚœœp:ƒµÿ´_xbÚ;¶='#Þb†·^†BXsÑ«ì8–ØBZ¬cå pËjEŠýZ-èº\¬uí´*é)7F•Þë<Á"ˆ( £Ñ@
+,Søøô/#2åãŽ«2¶´PÐÞVO²,ëb™‹¤5‚Ã–o_ú6/
+˜#ÐBˆÜNJÓp>÷«/ zŠ5·dŒNå.ÅàÃ¢>ºFc¬c|ä]ùð/D¶áf¡­@ô¼
+ 5nßÚa,Š¤fä9kæìž'¥§ÒŒ0·ÎYc{,“(b™ó-CÍPÛ›ªÆ¬ØÔ#’Þ´§™×¡÷Ë»ð ¯œˆ3[I{Æ¥á´ÖJ¤eP¢96¢5Á!nC$Á-enŽ«‰Úe.¥c¯ëíG›÷[[ÁÐÉA2t 'ƒ®ÊcŒh»sÃÕ¬p®¶þ
+æê½i•+·Ùç@“Ó‚796`¾a@âJÃšë'ÈŒvz
+[k¦‡>ªÕ	Ö8Ÿ[\«
+Ø£ª"©Å®HDZ¨TÅú–;›ÅÀÖÎaÁ;j%ÌèéÙª¨™DÁe¦âÍ6(Å!î<“¼ „ûÖ`Ôwškdo»y‘™ûØd\«Ü|"Öšnè*¶'r4Å)·‡©+¢5þÙë±à-IC]b;ÙÐ×ÏL;ò!îQ]Î k&z=«%<'»§Ì^èoôî|‘Ú/­ä'Žw9ù g]ôÇª±¶™OÆ™æã)}qü!8XkÛ-H¡hï>ÝIœ}ÿ³“ºr·ÎŠ’M6ÙyÐFvJÝ›f„@Þ«0»Æ÷R½&õ‰«Ú vuÑè‘Y‘§‹=åfÒÝoQ{f¬í…¤ÈÍÕÝ©ÃÝÏkúi°–ð¯äÒÅÏ;»Ù½ ^ñ:‹KAmÜuÎÒòjÎ_>0ë¾7Û8õÄN°tJäqIkï–øãþ§±y >aÌŒ}eûŽCù(¡ÿJ¬¢[sivÏŒÑiù®Öx°¾-k†‰·B¤ý^©¦ˆ™»höÃT¼¯œ&#ŽøfíubXjOCÛæøk@, <Z*V:]¸9“Šn6L{§ÐÙÎŒän×Cë‘æ%G;fiµÙÒ¥ýjxfËlJlµÕæÝûh]6]ÍAdë"©
+«cá{eÔ¬N™,K!tÊó
+íŽv@Ê!ÎEw‰§WŽ0ö?³D¦Vß²jì3_¶@Öiø ¢ $–Äé×_FQfRëI–Š~¹+ÜÈü‰œ7Ÿ5BÂßJ-ð€µn²>ãÌs§$Ë¥œ¥²ÚW2»ñ¦ÂîÖAZª³©¦v¨æ
+T]xÖÔC N*‹Nè ýE3úg´È‹Ì§:
+—°‹Ù”íŠªå×v'¯ªJÁýe8£¨…«‘”økån^Ðà²ƒy:1Ä  =Á ´¬&‹·B¶‚¬-y$Ú JòËjTOœ?•ôDä»ÎÝ‡ÄýÀ­£ÝUË•}Ç>¸v
+Äßb›Í×Ö¥52ð¹XEC+‘mWYýy¯:Ûl?ïu‘ï“ÀWÕ¥7YáßU†ÍÊL›†½~Õî,ù¤m+0ùTZ ‰›’g3_më hÍ¹¿bõKiO¸pvÓÊõl’îsSGÊÂˆ#[bTahšý¤œÅ ŽÒvƒŠ›,°;b–*{ØEC§uyH .pƒÓ·ó¤W>ÛH°‹Të)tùÂ)&AÖ‚ë»·—Z;Úkdç„Ë¥þÈä ÿ&ú 
+­Ùr9{ƒXª!Âz>™¸•’=q×jÃ1–õÝyd±Ó½ª­®c¨˜±Èe/»…¶>y‹gm*üúðg‘Ù¹î"lÇ‘!t…;X´Tå¥¢ùL²–fèNÑt»&ú,™|4döãK~ò^
+MÛªÕÅ¢è EWVá$›×JT´…ÃÖ96uš¤µE w%)ÜÚ'‡é8µ­t€6Îø_ø
+š
+lÝ"Ñ[fÐäÄúñ¸Tfi:äŒ° øª™8È\€ƒ×%ÿ=ëíi¾™e—³ÙÜ'p‰ªLÅ¼R?¸Oœ3CsÂ­É­Zbé„7? UÙnß¿™%îñè¡"Q³–ªH;màW:‰Ãb©À «I4>i›fCzeØ³kd(n˜|DYZW
+¡»r2¼]“æHÓ(k­.›¦º	¥=]
+i¾E¨ cr$sá@å#q†èEGGâ«yºXÉ–‘¬°Á¹ímo‰ü¢üKƒ@wÌ€§ûLwæZ£<ZqNO¼Ü¬FYVS½c}„$ïèoØ ªef'<ÈÏæu²¯çH° –üò4~¢/Æ›ÃºšéŽVôÝyH“¼Uw'´ýø$f
+gÍ€[€Õ&ÛpTã,ãÀ
+°’Úâ¾H·t*iÄÎ?ÇTæxÛ®DÚº-
+í9ªoyËVÙâ<ê®ç=ëÁjS´5K–ÂÒŽ4 Lö°‹p¾—é¡üBgNL™p&®éLí³‚œ°4XÊLÕóÄüßHd.›RÃr!ýs4¼–ë5t#/®/Q!fa©¢yÒ93è]yÚå2ßÈMšb©…+eDl=¾þ"®‰fÜJ¶óÕHi¼ZnJ! ÿÊ²å9±nQ‰
+½¬Î·’+x’• °¹oäôi67¤+>â‚ëy¾@®^7—Ja6'’XS8‘ò,ñQ	œ
+méJmYR­ÆŽýFnØË4H)}è½ù|€žÂê_,ÑeW[®bã[œ6ñAí\ã®ß&^+‹Éåb–—êqÀ.;]R/¯ÇV¥ –Û«D%Ü¬A)¶ñHLHTY6vb N¤VnÍ'Žþ^hmeƒ ±›x¸þP“WÁ»Oïú‚•”Í±ÓNÖ¨2}q ºòÉÅOi+­Ó”nu(N™bN-)”õ}épA¡ˆžyíÙË~–šŽ†]RŒ÷BˆŠj&·³|²ävmRmma[Ü˜±Æ¤Xs³Gyf†!$0ä
+4Ô4IÓ°¤ymìcŒèW×_î‰¹‹týúhb«ìÓžp˜qU6<ÝD	/´°éû@¤N‘BúJÃ4dz³÷Ð¬^UØª³T|€ÀÉ±_<Ÿà«˜TíDëKq'øŠ¼È|ÐvÑÌqµëÔÙMp™Ï6@Í®C¸®†žÐm¤"Ñ;*þpv‰kÀZ«Xò©V½ä¯0[][”j*¶x
+éþÀŸl‹8GÎõ€uˆlV•¿Ùñ¤ï§Éµ0«|] °›ŽZð%äÁUÔ£.¶ARf“t÷¬““iÑ¾„XKA&üŠýùUq:!gC,PÇ‰{%ƒƒÝEz`íHXÖ²µ×u¯+òõ,I8ˆBïO¥üo¨‰Ü¡s¾„ÖwÀõZ¬¸L{²ò¾õá»Nc”{Ù’%RZŸh)OŒk[-¨?õTZJ”†³÷B<ê+¶$4€-¸Ÿ«ÃÕ
+òê
+ŠkNBW‰Ë—}ªG¯V/54uÛ ½î^»È1«õn?dF
+õõ
+…©É¹ÍYE¾ 
+LUqvþÌXM¹Ø§²O !­iwà5	Éº–OSY+IS”¡†ï0™Š›…¼¡áv«çž†q)ï¥
+ƒ"ªçû
+¸€l,³+ð<ê³ØóJ:qþ5Òk&æ¦
+JÐƒ¬ÄÈm«ñi$§Bý·²|Õ¨`·,ÄõµòRÃsP9-Í”BŽ¢â*H>¼‘–ó¨=hî|'-½t¯šìêˆ€`Ê¯P€1ðÄ°
+4O
+Í×“Ý[Ó.$aBþ»ª·P”uA+úÅb¶“1–éúø”êœV7%yÒðè5“5®ãÌá:TÂI'&ô7à¡¹Æ`YOŽªeX\FÖ™
+Êªxà
+Ñyî³Ë:y;jdî
+s&EÈ#ñ+¨ƒÕ9ºOÄŒ§Î„‹ñ|uÌèŠJh[í|£ì§vKüvÅ¾¶(ñ£–ñ¡R½´aÂGÚ¦U62†6Â
+(¦‡hÖ¹y…†¼àj·’ôoËàðÎB–ØnŒž6¼„aÛâÓoÝ~ã7n|3á¶òÙ­ïpûÝ>}pïÓûƒäñƒ'?¸÷äÁ£ßûø“{ß{?yïÃ{Oô¦oÞPP¹û>ùôÑ ÞœŒ’—½\Pwäðe\Õ;4Ü“Ä4þ7•øÈÊçl<3Ô‰åäJv° ¥$V…ºÌÎÄ2Qä¦@Ó¥^»áJduaû1É×RðPKðeÁ«EËï‘×x¨4“K–Ô‘KÄmƒŽy˜ÙšVãi¯E5¡é	®Wœ…Ì=¬ççŒ±œ0@QX¸ ~!
+\êÕaÓ„
+”eªêê2ö3ÃŽÒfÎ)Ä§Ø¼¤iÄè6Õœ'àº3;È
+‡Ó·` ¼¿ÅCáÑ‚¤ç½Ã^Û1ÐuÒn§¸¿U¾Ü ñðÑÂvÒ;+‚ÉiÂZ£ EãRÕ(	ž‰Ês1%ñvÓ	9º8A‚^¤€(œúRŠ²³ñ9Þ§ncWá#§@ÏJ·2}AÔÇ˜	âL}Ñ’%­*19è‡œo&Däø²®Z)»i$Kž¯ˆ‡°Å33ÿ¤¸ú¨ÍãÃ$Õ6Qø˜DàaÅ‹IìhLJ.nFãTŸAìþÅñLÿ°Dãì'ÆµOg¨ÈM‚5é6 Ç 7 p`:¥ÀÇ¢±dó&˜n œâ-^
+z„ryZF¼löl
+$&×ÓšÛ¹+kfÖ¿i€tQ¶Z1lèõ˜ 	ÛK4CsÎ­Á„óIgd–Re“b¹ÂIbO
+¢…·ÃÒJqä%Œº!æI4'²H–fPùµ¾½É½V|(ž0‘q//¤õR\áÎ’ Ö›¥(*¦qR¨' XJYÑp]ÔÙPV-®Á9UÌnP
+‰þ Sw¥
+­fÒä¡žw7õ®+UT8nö*‚÷G–VÑü5‘¹öaˆ=cÐ*lò{†UéæÀXEª»@ë@mbPŒ§Åj[l÷}ßPX<D“àuÔ š$Üi8$³—3P)Ã½éÖ£¹`*^ÇjÉµh7L–
+íCÓìÄûªÞF½Sòp>‰˜aé@Ÿ RGg¦NO×ÑÎXm'Š%v°|­H6ª(
+§mœäo™š¾^òâèX™ÍKˆB üt3é>øçg¯»îš<ÈÔR+=K-ÞËÄ§Â›Aº©ÃPN*‚üæJ®|ÓÂc—ŠÚàÃ <B w¢s˜‰Çiy¾Aö¾VY>é IIÝi}€õ“Íò3š×s»¡<Ë	n¡G*‚ÏbƒÏ<F0âIß#ó„–ÍØ0 M€B“ <ˆ¡ƒø~‹a\Úï@ëì—e&×²Å¡rOÎî†‰WÄrî¦Y—=&X
+ÈBß…e»L1ÞY?H¬¤+Ô¥è¦ŽÚ!"†´‡Ž •!,‹ÄÝ®Öq,€ê2Ç§Ë™ë¡»IJþðÖËŽÇÖô¶Œ¦Ï$÷ÒÇ`|<¡–=_çÌ j(dNÀ:ßý¾§H8³ »þLêŸØmëË†´ªƒ1™ÓTsŒnõà›J¶ÎZ5SÄÑ¬”þ ÝY½FÌ™âL’n¶ÚN.„!Ï›¢x Æ(Q¬¢"Gûdpþ¤ƒ1JØÃ/çƒTœVy"8¼¤‡rƒŒvk4€Hb"Ñ3€Ÿ°2_ˆNhf§ë0‰ð~…äëç	§ãÓØiÏLVÈ‹- ø½âˆ54¼ÄE—bÙÁUK=w¹zõL\.¥ÙIí#ë†H{­IJ¥ˆ1;h!d:Ùí×C*jã¬ FQ;¨r w¬u°Y•áÏš»ÞKÆ‰<Sã@0 ²\h]ä,˜¦§ÕÚêÜÖ’¦(`R$¤ÞS$	D5
+Ê"¯çMNs
+‘[Dé`[q¥Bøò˜ýB|¥Peì'þ™øŠ %ÿÒ¤×E¾@ü?Š:qØPÂ³Ìˆ`MaF-Õ›¸©ÁG…§c´ƒV2yºY`©^
+n1Znz"^éðÑÍu±ç'9©ýìàU±”îº4gBÔ”Ø†lbÍ0d^øz°K'<T
+4/â­q¦^â:— 
+¥zx/ ”Þ"Õ¨z{hÈ$æùÉâé’s±uïòÙƒ½³ø©yì›9‹ òïÐªêìíèJ’c› 
+-xTªF‚êR m¡ †LÍæ›D}ºNN=ˆ,÷ÙóBÓ~Â’eçÃ†/§ëd|w*B ·†®Wà@vÍ¨ ”›HSñÐ¢Šÿ¬"5´ƒöîPÂ¨–Y
+0B7²‚å“÷Ãð­âº¬ÏÈÉjU…8h‚,ô€Ù®áeÅpÊÕ’ðI*ç[;ü3'ÝÊ¡©ý	ê¨ºÌS¯*µOy	|{Î2²T¯_ä¼QTªýY¦—øOyAƒL¡ö•¸Ø¾Ô:(p‹Èv·¸áÚ=©eæº•V‡Î
+3¤ô‹ °®?Ûœe¢óˆkúO‡CTG+ç–ºDéœËìôqu
+È¾úQ3Ÿ¹âWêPåµjr³M+ž•€¢y®QÐ3ü“¼[Âàn‰ƒvKžg87²-a8¸Ä¡½%‚õ–8|·¤:=vhBÇ[xEà‡j³þ*… „APwÎxÍØð²†È–˜v@)pS›Ú ³±"c mu)—¥`³QQâ¬ Ôc‡!nÂ	VÚ(9ì<ÓS#À<+·V§øÆªÍ°¬râ‹RÓÄï.Hœu—ðdƒŒ2mŒãÀ±~”´6.eå6ƒýz)?¦püÕ#Ôî¹zž /PÐ¶#iªm‰]çáë´ÎðÛ,b ß¦¨n³"]¬³ ^+R‘½ŽKÃšæ'UàUàÃh²*C	 F§©jˆŽÄ™tŸˆ\¬/ØM÷bež†DÓúIêKÂ”¾y|‰dõ%’¹çJÉå
+ÀÍ€°¯dÛëç©SHÄÅ%‹Ù–ž'çˆ·áÑ¬¦¥Ø…õý5sñÚÞk´š
+'ˆŽéÂ;[šv§1¾o¼Ë
+pYyQY†_ÏìJïkÕ[[óû\kæé®ŽS9ÌÆÜÃÃ¿¡$¾ö3Õ¼^1Oú„CEÞ2Tù¶½!)w–²,kê™!ÝŠ7<3ýœ­C>•!öD½íï«Ê$4*‹y¥¥„2à)…äMþ5¬ç[éGÁsQ²)Y»ää²ÔJ)W‹¶³O*ØÅÓª"ðÎ×=îÅÃäSâÑržºTœ2›Ñ2–ªvçRÆ©EÑ¶çYF4ÿƒF#—Æ!òz¦7ÜD
+Ñ¯iLøê—<µÌS á1i9ÒlÂ~M=Së,\I¦6îò“mø.wmj5%°ÍJ{§0f­>¦Ž¾vê“¼Z™ÖÇz¾æl6}…l°t@
+1û‡ˆü{]8yaîQçm	Š5_KÞå3‘2ÂZX]=£Rôé9B£ÚY(² ,J	ÖW9ÿ_ý×mõvW=~Î,É¾\÷X÷<û²z÷qƒÀo!2\ä“Æž97pˆ°Œ°
+©dVlŠsÅÉ»K
+á‰‹¯\³¯3ÙjlÉ¡‡uÜë›'‡QtPæ`|¿÷¾tá’²…ZLm°9_Ìi´ˆ*îG·çÄ°Ž`
+(e:{:Ä<y%æYZLS±Çhj¸™”é·qOTØ:0¸žÃ•?©G_”X:A„w¼_œcqÌlkú»Ê•hÃK­œ
+kz@‘Ãu\:«°GéL«KË=›Ø—.‰Ì§·û‚Gƒ·±wN.³ry:Óx5jéèA‰ª$¤m*«Ke
+æ—BÈ»JZÀkÆiÆÎ™‘/Õe4Æâ
+LÆÜZR„¬ro»'Y=J2‡'¿™N;M˜K¼«yOÞºl³?s$z$°«Ã¦-.½<‰ýŠõ¥+'³K\Ÿø)JKnuæsâ‚f3×…r[‹‰ê“ë†,¶L—.Ä^Ài#*»ùxÑ®~æL”Ž®ÞMïÇ³2ÒPëâ-:¬í`wÖ–÷¸w‚z’¯ü	i(–‚m9ñáV†ÍÔ’â¼Ìð˜RLCþ·M%s†lÓ˜WLƒköŠ«¬‘hÜ6‹‹z}„òô·[U©<@çt€uŽu7a3ëÙªªáe ®ž4‡$ŽÈÂ`$,]Xñý…ø1–À ¯ÄþbŸ×‹[÷ Êˆ\§/Ç`é=¡ñf²²¡½‚ãÒákE³
+±É±ëD±ßøðÑÒù0€é(Ð£Ú©­Y_!öjÖÀd4t§å´hï˜tÃ­‘z7v§³T§é¡a9§Aš:¬x-ë‘uú²È×i°rFQ‹} 
+;±þ›øš“”C 9³\}&ëBÐóeÀ—÷œC€òA×ðÏÑyëkÍShgé#³RtA*å‰$Æèq +Øi$EXp%à
+pÿç•Zî](òÜ5DE2Ý@w«9ÊT¿±À›‹ˆ¡ &0„aØµÎ~m0††CÄ¢×3U4â[QZ·wb²)#/Û€¹´íP3ŠVz¼'
+•¥^lÆGM`îœÂ' á¤ÐŠ¡UœSa?T„ç )‚!'hãóÄcQÀQ\É'¹ŠæM'4²ÊÈvZi~ýVE¾·:
+…‹x1Âar¿Š€"¼J( ÃQp>‹
+§Ëƒv5Ð‰(÷þ
+Ø|ý^à
+\Y9ô\²ê£Ú¢žã[
+Os"Ÿ:!ÞD †wKìenâ×À™è8^êùŒ¹K]ª¥˜çjÊ3zàtÊ™
+Ûª•­d£çpÓr¢f»¿»©ÖcXÌ1œ¦
+×Së9M¤ìLà`.ú¤€äõ§
+(ªXœêV÷ôI±™­J”,1£u•ÃÿNìò"OÆ›y¾€E[q
+i“TPAuÀ¬¤Òû«¡(Ö¡WÛ3‚“ÔË
+ÃI’¥°	ÄR“T	·V† š¶9ê¼Ü¿¸	ã,•<õ1mÀ2‚lmi¨åìj—RÄ™Þd]ð‰[D(~
+½¹éÑnäa£"ÏÚ;°)ØlØØE—Û]rÊS×o§³ÁC¬ ºÑ yÛmh¯ºHl”<}ÑÒÈ–(ònVH
+hV†¬BB_™õšòœa‡5¾%ïÊóÝwj6¢ÓbÊÿä¤È‡bbíË¶ üYœršZÅ°œá·l„™üñv¦KÝé Ê	AV—¿ ‘'’x ÙÄðe=°lRnòc”ðLmÒ†Kë8V,¦B–Ô%VÄ±;»;ëz§e.š×.™<"Ž;î)¹B”CŽe¶)Ž[ëÒsCg
+õ— ß Âì‡k1B¿dárpû¯ ½•V2tÆuÍò¬tÏU€n:—RÚ‚:oƒ­k¤èÕ²Š˜‹Êé2¶÷Š—æjããÖcÅ¹‚|£;Lt8ÁzâRXäô½»uéð}áÒÔXôÆ»?øär”]†À®b~¶™hÊ•bØîcw¶Jáˆ¶``H]æ@X{[=NÑè¶nÐ¡!‡ã1ØáÈ‰Ó:@áý$ñ«ÂE×êÂÊ£è³"ÿKg©K†wSñg) Ê^Tø7ºm]ä×PÀXÿQPÞè O3^ba„g!Äc$é(ÓÍÇ
+KÁØl&@È0Eï­lÓN¢¨Ÿ’v2Gæ¥µº´&gµšjåáÖP€5ç¸ò|œII˜Ý ÌˆÁ œO‰ŒÝæ¶&š
+Rr-MA®§W^^¥¾ßÌd—§;ã¹y#/öû›fòÿi*Øî¾=;ð³š*e«è:¾¯8áýÕlc ñ>r ›¾™ ­õAŒr58
+Úô'üjK8s®wxv‚øš|©-2RÉ
+rßs-™–Aþl*#ÇÛkð(ë A~TÔl
+s;€ìˆÙ¨›­Ð r|s¼šÙ“
+G¶¡TÕ£œ‚Z+¦4nÍ9Z¨#¾Ä1àsÞ7ÎU^KQŠà¡Û2ÀÚâÞxÊ2›¸Ã;8£/EÕ®ª*z]°Â"À”0&3½
+«8p×:ú™?ÖA ”èÙ^»;ûÜ?PÚ–Y<È­1Ž¬–?B
+@Õ(d'Q±7Ø-§…Æª0ÆËÜ¨öab„'Ž&iÐN"ØäíÖ¢éÑÅX}Žñ¬<—¹x’ MÄ@…E´)gÖ'Ê¬YÑ!ÂVp.Ö­0¯¹VØÒ²j™ŽÇÞ]^V©!Qè¡Pø*fY²';¨‚`±GÚ½îí‡‚V9}¨”úx¿%ciáÝšvP3‚(á¬8ÂnJ
+¢óƒòà×‰ü9½SríÑf;
+¡r²ãwñ†Ë¡<©¢vu.|áÚ}Ýk†ÅÅédDLžøhÛR¡:	Û#_1Ô§R+Œ_	°!2ÛÄzê×o¬Ç¬¶&M´3m"èÞÄSHC¨Å29fçÆ	JõNÎé¤ˆý‰¸é}
+Ò}-gÿ H>&?¨¨‚—¬´ŠF¡÷\¾^»ç,ikËÜ^*SÏ vÝYÓÎ±ÁX’J±¶ÓrhhÚMÐ¯¹Jly6Ï¿du·£y .×äþ[u„íðÔÅÄ§9…ªü
+U‹‹‹ã<h-ŸmvÏ×sÇ´÷vnË
+nÏs€÷&ývr˜µ·
+1ù&AûÜuIË9[ãŸwo[ÝÄ·ÓM¤™.ÿÃ§¢>ƒfZÆS¼ÜÚÛ®Þ·³Ë³u½uÁfßÊ]`¥ëÖ¨ù¥½t=oYô7fG-üZÕZÜF51NÓ—Ô\o¦VúKu±'²ü¸ýnÝ¤ŠÓáÃ¾P>1êkò"7M‘í	jà,Ü¯5²)ÒeèkçM‡õÝdÎxÜâ;Sƒ4€HðÌÀÉDÌ}zÞ±ô½¼•QÐßÁ¡lÑ ‘òò|Q!ÂÍõüF¦ò$þVLX?àº{_xæÃ/Á
+`è Çfn…NR™V³ñù¤<Óó·J5Q#5¬3ûEËyS˜áAq®×'+ÒÒåðÒñcÊZp<ÖêôìT„£Ðà™PF$Š…¾ˆ'^HA;Š¸.ÛCûÌÈ ÷œEŠLfM×ÐÃ…>€°¼Ï‚öMGÉ“Ð-ÀVu{ŠHën/À¾˜bÃßáÛ]ÅÍ®—A
+ô]FnR5ámˆOÊ:Í8Ç¶¼\|E«­SÁG\´81ƒb¸¼Vò9jý*cZ*PÄaÂAÀ[·Þi8-Â\²v¿£@b
+…”—s’wºOläìºP´/ ƒix`“¼<F,Â{Þh”
+[¹44÷Á"8‚¢ph-y{%(³ü-¬on<E
+ê“Ðú´7;tè¨%Q«mÞž_ÖRÆäœ¦E¦jwMZ„¡ÐÄM»jÏÎ
+ó•šùd5ôÌ‚l_RG
+ ‹hFË¬0ÜÄìÿ[®P†Ÿì,°©H+™W¡{õIÃÅŸ6Là¹&F£p™Øcµý: &E9»vÍ¥¤‡Ö×½ä$±J«r¬û%+árÖ­£S—|˜êéjN}u‰ƒØÚ€iùZ~Lû›vcBýàæ…©8Jsàb	¾NøŸØ©$N %íÓP—çi˜“š¤²ŠWõ‹òqÝ¦»33–a¯v<èû–4ëˆIšÚÇ0‹9‹Ší°'X]µ›r¿Ç¬ºûwbE‡ì&èÎ—Cw:2
+Íòà<…Ø´i,BÈŸ5¨'–ÐÇ4Z3k}M,gþñâJ‰ÿÜ Ï­¾R›Uvlåb!½z×h­
+t—G".ÔS3CoåÈÆÕ‚{ó‚ÚŽ{³sÅNžZr\P"ÏÌ×¢g»;Ò
+¡Vpqû7N6ËcŽ„Í7‹U‘~¼*ým:ßd /ßH)¾!>z\á.ù>¹{7éõèÇ$V«‡«çYñ^Zf}ýj‰ØÚ<ÿÃ¬ßûøƒ÷íÂ"#=Îú7ž~¾¹ù­›7ßÆ?¿}rtc:è5¯ùýÏ×/^Ð>¾ø¼¤k6ƒ^Ò¸êóò:îv?ÐýƒÛo\4&õdEP6§Õ˜òtµ¼êã™Ã“|N·ÿbtçÅÔ‰iuzç–<ýÆ7“û/ª‚
+…_! {ÙçYJa¶ä
+JÖîî€æ¥[HS‘Ì€T ¨a‹ùÞÃ ÷
+3
+{/s/{±ž¯R§H!jO¸%*¯Ð¥š¬ž:ÀYùÓ:%®7À£/Ã‡í)äk@§`®^ë‚tÃä±{ ,ƒöÇ±ÒõðpåIWBè
+ž|Ÿ„(}
+Ðg/røjÝoQ„±žCù‚#í½\Cf`Pcp‡žf(½l<0ÆLêM²õšžB‚?F5JDÉgŸNäQ{1^´%›lÆIzñ7=­¼],ÏØ xÑÐŠNˆ
+ná+P^Z1R6Pa˜ZKéµŽÖoi%=—Î/5UQ*Ü5GUÕViì*Œé+ó
+‹yå‘]4È:®Ïì¹dcW|H8)õ¿rµ%»¼AÐ&\æ uea—–˜º+zzbªºú¨€ÆJrüà®VÐcø«uX{Ð,)H¾ð`lÄ%ÙÙÒåÙœkí²ŸS×êOjÉPíIº @kY.é2N7åüJÉ­ÔAºÒadº!^=Ã.Î¬óÙsT9îÔ.#ïNØé…¹5ø :…åÝ„‘Ñàº&‰wåô$G ì»íj³¯H{r4ãŸ!Õ>³l
+8õ8’da%‹Hd‰cIvåþç9÷z¯æNWùq>¼åYð¼=þÂžxû¡h>ì óÖ—¾Ë#Ò‹êqnï÷p®ØR[ˆ½†V/´©Øê‹ÊYLÂ©Þ–ê½Ñ¢¿‘â’•ýPÏy4>ËŽ«!=¤Èé§ZŸ‡ƒá"]÷ûO¹É`}t0ºÓÉ*•|Ã¹J¨0­‡øê:©J×û±²":ÚíH±;»×2ªÃ5ýuqPÓÑh;'÷–%©‘ýò¨EªFÁÛ~H÷¸X›Eª]Å¿Ï9^V£å-·ññ1mC6ºI
+•À°ïË#È  ƒæ¤±f 2o®[·ñ…Ü…	p+O=Ðå"ÿøžkôyI’ŸôgªE~÷[ ‰Ù*·ýÏÕ0_Ï7Æìà@^Ÿ\%}™nøëÝoÞÒw^ðI!ýt3C_c›á¥ãd`QK^%ƒÎÊ*¦ŸoÕï!Q7^Ož%ÿØ˜ÜsLÎßNñ¹)Ê£o'o½•SzNépìtÿpÇíÖÁK¿qüÓmÞSé6î¹ð„í.¼3z'¹Ë&‡	v?&±t2ù¨œö+Z‚Au¾Î2¯^ŒÞì÷À¼áØ¦E6”ö
+úñ@ßåéo’oG“Õ1û½‡ÇE–VÙ}¶.‰è7¹›>ûüqºÈF½E9%FÁ«íGŒå½R?ª>ã{zÝ0E‹ŸÉ{§tFôéºû¾<†ä~²Zü_fPñÚ,žû‹¬ •ûøü2–¢YÞ ¹¹#ûg²ó¢s‡ ÊŽ…æN4Èt~ƒÆ\VÄjboéôêflÔ¶™³‡>×¬¯»ÏXkï Žg¶Ú°Ë³Tí¤¼¯v.ã}ç}w|ÿ¹ã~¤ätOäÿçyÃÖ‰Ëeïñ°Ä"d³÷÷íÇ=w+‰r9Vßio?2 v´q´b%–;…àÚ­OkG"Á"|—®èÕcúWÁûÊ–¿.ä×í7¢Q†É9
+cî_py+–ý»7äNóÂìbv9Œ(:ä`ˆ¢GÄxôó $uå¾Ÿ¤Ëhdqì¼Ý±s…ª;§!Ò¡B¼1MI^ïféªôè–EÌž/}}{àuu
+Mþ6>—¹¥(Z’XÌ±{æí×Ò¢À‚oa $¾Z’Äº›É##šm:Ù‰û ÅŠìNÒÊŒî‹,¯Š–ñ[>¦KÅ40O^ >Iß,¬*€céçsØ*®¨BMùYœ’¸Yïø¿)áE,û”6Œ¿  8}Ñ2â{ãr…râö¶
+uÐPoµÃ`sI{Ö€m#cÊ™§ãl^ŽäÈÞïM‚áìZ[-†)ã–ëÃžèy—{‘jµæ='©9Sk%Ç‰Z¾ì¡‡'‘ìs8Õ^®>¦(3O‘"Ã]×&è’<¶êˆ êKºÏIÕº¶_£ƒ¼k¯+§öŠ¶ì»è À¾@ºÑœ±ÆKåMpu¯¿‚¹XD3ÐgªGÀå¹ÅïÙgö}ˆ
+Z’5Já¤úJ—êŒñ€s…Rn›Ü¼	<:r d-MÐ·šÁÚ2ˆýu=(ºÁ)%œëM+'²*ë/·óÝNLú"†$j‘%uúhBDŠðˆÎ¦´Ü¤ó‡|ü|š­çWÑ/¿Q9'š¹HÊßïŸfgt6•tnUg)§´b¯_ñ?énºš(Ô&f=x³En~˜}#ùå/~ü?$Ÿá@P¶ðª|’Nï&¥Bjij­²R½¸ ÿ3~`1;žóQyÿûý*=žíðŸ¤´Þd»ŠŽ¡Y¹C3~iæg)	´W˜Ë/ñWÿ&yÌy®ý°ptã´Æ°ÇE|UÔ³ÓM'Êö’n?=eú}zƒžÇ8iwòÇd³Øå“œ”}ùšÞUÑOX%Ù¶ƒ}˜NI3KÏàn þìøtœ¯¶Š)¾u‰ÉKå”n/cÇ³çPaˆU±¤g¢žƒÙMŸ%’»‹<¤”Ë·W›é)^õÇÉb„®—
+ÿI
+} `Œ/Y @®ö33pNç“´Ãq·G\áÂ•ß«©Ìè#úÃ˜ÙMC&œ’‘¨þAòÀÝÞÑÑ@DJDuBÜŽ(^ÃN½˜ª‚=Óæê‚ŸëÁ‘Ùÿ<&Ã)«µYKLq¾’NGt·9c¢¸TTš¡’UØû‚t6œŸ‚(é'€j xÒw“¢{ÌF Ä¤Ú—€•©v4í²âIÜ£%d|2Ú?äH¤@|\0<,mÀ]Ù½¨Ï¸Ë!]O=ÐY
+Å¥+Mm¢¥ý*’ÙM\Šº’:<S%0Óâ¤¥ŽV•º
+lñœI®÷Éü|šîô	í¢û£<#ýÀýEVn
+¯²ý=C *Ò_xþ¬ïƒ®ìŒÎ–1Aqå¯hqa8[
+šR=âì, ¶4¹ ƒ;×m“é†d÷`ë"ƒ‡ã%è½Ç‚N*t¹ø
+ÛR¥UL ü3Î˜~^€Œí5|Âö‡øöyªƒ]¸Zv#(b\âú00]n,êÙ`+tÀÎL[ŒØR%÷Ð*´
 
-<section id="examples" class="page"><button class="back" onclick="show('home')">← Tillbaka</button><div class="section" id="exampleTitle"></div><p class="muted">Välj det exempel som ligger närmast det du möter.</p><div id="exampleList"></div></section>
-<section id="flow" class="page"><button class="back" onclick="show('examples')">← Tillbaka</button><div class="card"><b>Du behöver inte lösa allt på en gång.</b><p class="muted">LUMORA hjälper dig att ta ett litet steg i taget.</p></div><div class="flow"><div class="emoji" id="flowEmoji"></div><h1 id="flowTitle"></h1><p class="muted" id="flowExample"></p></div><div class="progress"><i id="progressBar"></i></div><div class="step"><b id="stepNumber"></b><p id="stepText"></p></div><div class="example"><b id="questionTitle"></b><p class="muted" id="questionText"></p></div><div class="card"><span class="chip">Varför kan detta hjälpa?</span><p class="muted" id="whyText"></p></div><div id="levelsPanel" class="levels-panel"></div><div class="level-note card"><b>💬 Vill du berätta lite mer om vad som händer?</b><p class="muted">Du kan skriva med dina egna ord. LUMORA tar en sak i taget.</p></div><div id="saveArea"></div><button class="btn primary" id="nextBtn" onclick="nextStep()">Nästa steg →</button><button class="btn secondary" onclick="previousStep()">← Föregående</button></section>
-
-<section id="children" class="page"><div class="section">👶 Barn</div><p class="muted">Skapa en enkel profil. Du kan ändra informationen senare.</p><div id="childList"></div><div class="card"><b>Lägg till barn</b><div class="field"><label>Namn eller smeknamn</label><input id="childName" class="input"></div><div class="field"><label>Ålder</label><input id="childAge" class="input" type="number"></div><div class="field"><label>Vad är viktigt att komma ihåg?</label><textarea id="childNote" class="textarea"></textarea></div><button class="btn primary" onclick="addChild()">Spara barn</button></div></section>
-<section id="history" class="page"><div class="section">📚 Historik</div><p class="muted">Här sparas situationer du själv har valt att följa upp.</p><div id="historyList"></div></section>
-<section id="patterns" class="page"><div class="section">📊 Mönster</div><p class="muted">Här kan du se vilka områden som återkommer i det du själv sparat. Det är ett reflektionsstöd – inte en diagnos.</p><div id="patternList"></div></section>
-<section id="follow" class="page"><div class="section">🎯 Uppföljning</div><p class="muted">Se vad du ville prova och vad du vill göra nästa gång.</p><div id="followList"></div></section>
-<section id="reminders" class="page"><div class="section">🔔 Påminnelser</div><div id="reminderList"></div><div class="card"><b>Ny påminnelse</b><div class="field"><label>Vad vill du bli påmind om?</label><input id="remText" class="input" placeholder="Följ upp läggningen"></div><div class="field"><label>Datum</label><input id="remDate" class="input" type="date"></div><button class="btn primary" onclick="addReminder()">Spara påminnelse</button></div></section>
-<section id="support" class="page"><div class="section">❤️ Behöver du prata med någon?</div><p class="muted">Du behöver inte lösa allt själv.</p><div class="card"><button class="btn primary" onclick="support('prata')">💬 Jag behöver prata med någon</button><button class="btn secondary" onclick="support('barn')">👶 Jag är orolig för mitt barn</button><button class="btn secondary" onclick="support('skola')">🏫 Det handlar om skolan</button><button class="btn secondary" onclick="support('familj')">👨‍👩‍👧 Det är mycket konflikter hemma</button><button class="btn secondary" onclick="support('akut')">🚨 Situationen känns akut</button></div><div id="supportResult"></div></section>
-<section id="videos" class="page"><div class="section">🎬 LUMORA Video</div><p class="muted">Korta prototyp-scener kopplade till situationerna.</p><div id="videoList"></div></section>
-<section id="mood" class="page"><div class="section">💛 Hur känns det just nu?</div><p class="muted">Det finns inget rätt eller fel svar. Att stanna upp kan hjälpa dig att välja nästa steg.</p><div class="card"><b>Hur känns det för dig?</b><div id="parentMood" class="mood-grid"></div></div><div class="card"><b>Hur verkar barnet må?</b><div id="childMood" class="mood-grid"></div></div><div id="moodSaved"></div></section>
-<section id="words" class="page"><div class="section">💬 Vad kan jag säga?</div><p class="muted">Här får du konkreta meningar som låter naturliga. Anpassa dem efter ditt barn och situationen.</p><div id="wordsList"></div></section>
-<footer class="copyright"><strong>© 2026 Perparim Haziri</strong><div>Materialet får inte kopieras, ändras, återpubliceras eller användas som eget material utan tillstånd.</div></footer>
-</div>
-<button id="topBtn" class="top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Gå högst upp">↑</button>
-
-<script>
-const CONTACTS=[
-{icon:'🏥',title:'Vårdcentral / 1177',desc:'För oro kring barnets hälsa, kropp eller mående.',detail:'1177 ger sjukvårdsrådgivning och hjälper dig att hitta rätt vård.',actions:[['📞 Ring 1177','tel:1177'],['🌐 1177.se','https://www.1177.se/']]},
-{icon:'🧠',title:'BUP',desc:'För barn och unga som behöver mer specialiserat stöd kring psykiskt mående.',detail:'BUP har olika kontaktvägar beroende på region. 1177 kan hjälpa dig hitta rätt mottagning.',actions:[['📞 Ring 1177','tel:1177'],['🔎 Hitta vård','https://www.1177.se/hitta-vard/']]},
-{icon:'💬',title:'Föräldrasupport',desc:'För stöd i föräldrarollen, vardagsproblem och relationen mellan barn och förälder.',detail:'Kontakta kommunens föräldrastöd eller den verksamhet som finns där du bor.',actions:[]},
-{icon:'🏫',title:'Skola / elevhälsa',desc:'Vid skolfrånvaro, mobbning, oro, konflikter eller andra skolproblem.',detail:'Börja med mentor, skolkurator eller elevhälsan. Berätta vad du ser hemma och fråga hur ni kan samarbeta.',actions:[]},
-{icon:'🤝',title:'Socialtjänst',desc:'Om familjen behöver mer stöd än det egna nätverket kan ge.',detail:'Socialtjänsten kan ge råd om vilket familjestöd som finns i kommunen.',actions:[]},
-{icon:'🧒',title:'Bris – för barn och unga',desc:'Om barnet själv behöver prata med en vuxen utanför familjen.',detail:'Bris erbjuder stöd för barn och unga.',actions:[['📞 Ring 116 111','tel:116111'],['🌐 bris.se','https://www.bris.se/']]},
-{icon:'👮',title:'Polisen – ej akut',desc:'Vid oro, hot eller händelser som inte är akuta.',detail:'För icke-akuta polisärenden kan du ringa 114 14.',actions:[['📞 Ring 114 14','tel:11414'],['🌐 polisen.se','https://polisen.se/']]},
-{icon:'🚨',title:'Akut',desc:'Vid pågående allvarlig fara eller när någon behöver akut hjälp.',detail:'Vid akut fara för liv eller hälsa: ring 112.',actions:[['🚨 Ring 112','tel:112']]}
-];
-
-const S=[
-['😤','Mitt barn får ett utbrott','När barnet blir väldigt argt eller ledset och det känns som att ingenting du säger hjälper.',['Barnet skriker när jag säger nej.','Barnet kastar saker eller slår.','Det blir utbrott när skärmen ska stängas.','Barnet blir helt överväldigat.']],
-['📱','Vi bråkar om mobilen/skärmen','När mobilen, surfplattan eller tv:n ofta leder till bråk.',['Barnet vägrar lämna mobilen.','Det blir bråk varje gång skärmen ska stängas.','Barnet använder skärmen längre än vi kommit överens om.','Jag och barnet har olika regler.']],
-['🛏️','Läggningen fungerar inte','När det är dags att sova men barnet inte vill.',['Barnet vägrar gå och lägga sig.','Barnet hittar nya saker att göra.','Barnet blir argt när jag lämnar rummet.','Kvällarna slutar med att alla är slut.']],
-['🏫','Mitt barn vill inte gå till skolan','När barnet inte vill gå till skolan eller verkar må dåligt inför skoldagen.',['Barnet vägrar gå på morgonen.','Barnet får ont i magen inför skolan.','Frånvaron ökar.','Barnet säger att det inte har någon att vara med.']],
-['💬','Mitt barn vill inte prata','När barnet inte vill berätta vad som hänt eller hur det mår.',['Barnet svarar bara vet inte.','Barnet går undan.','Barnet blir argt när jag frågar.','Jag märker att något verkar vara fel.']],
-['😟','Mitt barn verkar ledset','När barnet verkar mer ledset, tyst eller annorlunda än vanligt.',['Barnet drar sig undan.','Barnet gråter lättare.','Barnet vill inte göra sådant som brukar vara roligt.','Jag vet inte om det är en period eller något mer.']],
-['🥊','Barnen slåss eller bråkar','När syskon eller andra barn hamnar i fysiska bråk.',['Barnen slår eller knuffar varandra.','Samma bråk kommer tillbaka.','Ett barn retar det andra.','Jag vet inte hur jag ska ingripa.']],
-['💊','Jag är orolig för droger','När du misstänker att ett barn eller en ungdom använder alkohol eller droger.',['Jag misstänker cannabis eller annan drog.','Jag har hittat något som oroar mig.','Barnet har förändrats.','Jag vet inte hur jag ska fråga.']],
-['🍺','Jag är orolig för alkohol','När du misstänker att barnet eller ungdomen dricker.',['Jag tror att barnet dricker.','Barnet kommer hem berusat.','Jag har hittat alkohol.','Jag vet inte hur jag ska prata om det.']],
-['🚭','Jag är orolig för nikotin','När du oroar dig för snus, vape eller rökning.',['Jag har hittat vape eller snus.','Barnet använder ofta.','Det blir bråk när jag tar upp det.','Jag är orolig att det blivit en vana.']],
-['🏠','Vanliga vardagsbråk','När vardagen fastnar i tjat, stress eller små konflikter.',['Bråk om morgonen.','Bråk om läxor.','Barnet vill inte hjälpa till hemma.','Det blir konflikter kring mat.']],
-['🤥','När barnet ljuger','När du misstänker att barnet inte berättar hela sanningen.',['Barnet säger något som inte stämmer.','Barnet skyller på någon annan.','Barnet ljuger om skärm eller kompisar.','Jag vill bygga mer förtroende.']],
-['🔥','Jag håller på att tappa tålamodet','När du är trött, stressad eller känner att tålamodet håller på att ta slut.',['Jag känner att jag snart kommer skrika.','Jag blir arg snabbare än vanligt.','Jag får ingen återhämtning.','Jag får dåligt samvete efteråt.']],
-['👥','Mitt barn har problem med kompisar','När barnet har svårt med kompisar, känner sig utanför eller ofta hamnar i konflikter.',['Ingen vill vara med.','Barnet hamnar ofta i konflikter.','Barnet blir retat.','Barnet vill inte gå till aktiviteter.']],
-['❤️','Jag känner mig som en dålig förälder','När du känner att du inte räcker till eller ångrar hur du reagerat.',['Jag känner att jag aldrig gör tillräckligt.','Jag jämför mig med andra.','Jag ångrar hur jag reagerat.','Jag känner mig ensam i föräldraskapet.']],
-['🍼','När familjen får ett nytt syskon','Ett nytt syskon kan väcka både glädje, oro och avundsjuka.',['Barnet blir argare sedan syskonet kom.','Barnet vill ha mer tid med mig.','Barnet känner att bebisen får all uppmärksamhet.','Barnet drar sig undan.']],
-['🍽️','Problem kring mat','När måltider eller mat har blivit en återkommande källa till oro eller konflikt.',['Barnet vill nästan inte äta.','Det blir bråk vid måltider.','Barnet blir oroligt kring mat.','Jag är orolig för barnets mående kring mat.']],
-['🆘','När jag är rädd för att barnet skadar sig','När du är orolig för självskada eller självmordstankar.',['Barnet har skadat sig.','Barnet säger att det inte vill leva.','Barnet pratar om att skada sig.','Jag är rädd att barnet kan göra sig illa nu.']],
-['📸','Press om bilder på nätet','När barnet pressas, hotas eller övertalas att skicka bilder eller filmer.',['Någon ber barnet skicka nakenbilder.','Barnet har redan skickat en bild.','Någon hotar att sprida en bild.','Barnet är rädd för en person online.']],
-['💰','När barnet tar pengar eller saker','När barnet tar pengar eller saker utan lov och du vill förstå vad som ligger bakom.',['Barnet har tagit pengar.','Barnet tar andras saker.','Barnet ljuger om pengar.','Det händer om och om igen.']],
-['⚠️','När det finns hot eller våld','När någon hemma eller i barnets närhet hotar, skrämmer eller använder våld.',['Barnet blir hotat.','Det har varit slagsmål hemma.','Jag är rädd att någon ska skadas.','Barnet har blivit fysiskt utsatt.']],
-['🌐','När barnet har problem på nätet','När barnet utsätts för press, hot, kränkningar eller otrygga kontakter online.',['Barnet får elaka meddelanden.','Barnet har kontakt med någon jag inte känner.','Någon pressar barnet.','Barnet vill inte berätta.']],
-['👥','När jag oroar mig för fel umgänge','När du är rädd att barnet dras in i kriminalitet eller ett umgänge som inte känns tryggt.',['Nya kompisar oroar mig.','Barnet är ute sent.','Jag misstänker att barnet dras in i brott.','Barnet har förändrats.']],
-['🤝','Separerade föräldrar och dåligt samarbete','När föräldrar inte får samarbetet att fungera och barnet hamnar mitt emellan.',['Vi kan inte prata utan att det blir konflikt.','Barnet får höra olika saker hos föräldrarna.','Barnet känner att det måste välja sida.','Övergångarna mellan hemmen blir jobbiga.']],
-['❤️‍🩹','Få en bättre relation till mitt barn/tonåring','När du vill komma närmare ditt barn eller tonåring och få mer kontakt.',['Vi pratar nästan aldrig.','Tonåringen stänger in sig.','Allt jag säger blir fel.','Jag vill bygga tillbaka förtroendet.']],
-['🌿','Jag behöver återhämtning som förälder','När vardagen blivit för mycket och du själv behöver få tillbaka lite ork.',['Jag känner mig helt slut.','Jag får ingen tid för mig själv.','Jag blir lättare irriterad.','Jag känner skuld när jag behöver vila.']],
-['👨‍👩‍👧','Vi bråkar så mycket att hela familjen påverkas','När konflikterna blivit ett mönster som påverkar stämningen hemma.',['Alla går på tå.','Barnen påverkas av vuxnas bråk.','Vi återkommer till samma konflikt.','Jag vet inte hur vi ska bryta mönstret.']],
-['😡','När jag blir för arg','När du märker att din egen ilska eller stress börjar påverka situationen hemma.',['Jag skriker på mitt barn.','Jag tappar kontrollen snabbt.','Jag ångrar hur jag pratade.','Jag behöver hjälp att bryta mönstret.']]
-];
-
-const steps=[
-'Stanna upp och förstå vad som händer. Vad gör barnet? Vad gör du? Vad hände precis innan?',
-'Sänk tempot och gör situationen lite lugnare. När känslorna är starka är det svårt att lösa problemet.',
-'Välj ett konkret sätt att agera eller prata. Du behöver inte hitta den perfekta lösningen.',
-'Tänk efter vad du själv vill prova nästa gång. Välj en liten förändring som känns möjlig.',
-'Spara en enkel plan och bestäm vad du vill följa upp.'
-];
-const qs=[['Vad behöver du lägga märke till?','Beskriv vad som händer utan att lägga skuld på dig själv eller barnet.'],['Vad kan hjälpa just nu?','Tänk på vad som kan göra situationen lite lugnare.'],['Vad kan du säga eller göra?','Välj några enkla ord eller en liten handling.'],['Vad vill du göra annorlunda?','Välj en liten förändring som känns möjlig hemma.'],['Spara och följ upp','Skriv kort vad som hände och vad du vill prova.']];
-const why=['Att först förstå situationen gör det lättare att välja hur du vill agera.','När känslorna är starka är det ofta svårt att lyssna och tänka.','En enkel och tydlig mening kan vara lättare att ta in än många förklaringar.','Små förändringar som går att upprepa är ofta lättare än stora förändringar.','När du sparar och följer upp kan du se vad som faktiskt hjälpte.'];
-
-let db=JSON.parse(localStorage.getItem('lumora10')||'null')||{children:[],events:[],follow:[],reminders:[]};
-let si=0,ei=0,step=0;
-const $=id=>document.getElementById(id);
-const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function save(){localStorage.setItem('lumora10',JSON.stringify(db));renderAll()}
-function show(id){const p=$(id);if(!p)return;document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));p.classList.add('active');document.querySelectorAll('nav a').forEach(x=>x.classList.toggle('active',x.dataset.page===id));history.replaceState(null,'',location.pathname+location.search+(id==='home'?'':'#'+id));window.scrollTo(0,0);renderAll()}
-function openSituation(i){si=i;$('exampleTitle').textContent=S[i][1];$('exampleList').innerHTML=S[i][3].map((x,j)=>`<button type="button" class="tile" onclick="openExample(${j})"><strong>Exempel ${j+1}</strong><small>${esc(x)}</small></button>`).join('');show('examples')}
-function openExample(i){ei=i;step=0;renderFlow();show('flow')}
-function levels(s){
- const t=s[1].toLowerCase();
- let g='Börja här: försök förstå vad som händer just nu. Välj en liten sak att göra eller säga. Du behöver inte lösa allt på en gång.';
- let y='Om det fortsätter: prova igen när det är lugnt. Följ upp vad som händer och ta stöd om du märker att du inte kommer vidare.';
- let r='Om det blir allvarligt: ta situationen på allvar och fundera på vilken hjälp som passar. För de flesta vardagssituationer handlar det om att söka stöd, inte om att ringa 112.';
- if(/droger|alkohol|nikotin/.test(t)){g='Börja här: välj en lugn stund när barnet är nyktert. Berätta vad du har märkt utan att anklaga och lyssna på barnets svar.';y='Om det fortsätter: håll fast vid trygga gränser och ta stöd av vård, elevhälsa, BUP eller socialtjänst beroende på situation.';r='Om barnet är medvetslöst, inte går att väcka, har svårt att andas eller är allvarligt påverkat: ring 112.'}
- else if(/hot eller våld|skadar|självskada/.test(t)){g='Börja här: ta barnet på allvar och försök skapa lugn och trygghet. Stanna nära om det är säkert.';y='Om det fortsätter: ta kontakt med professionellt stöd så snart som möjligt och be om hjälp även om barnet har svårt att prata.';r='Om någon är i omedelbar fara eller riskerar att skadas allvarligt: ring 112.'}
- else if(/bilder|nätet/.test(t)){g='Börja här: lyssna lugnt och undvik att skuldbelägga barnet. Spara viktig information om något hänt.';y='Om det fortsätter: ta hjälp av skolan, Bris, polisen eller annan stödverksamhet beroende på vad som hänt.';r='Om barnet utsätts för pågående allvarligt hot eller våld och är i direkt fara: ring 112.'}
- else if(/droger|alkohol/.test(t)){}
- return `<div class="level-card green"><b>🟢 Börja här</b><p>${esc(g)}</p></div><div class="level-card yellow"><b>🟡 Om det fortsätter</b><p>${esc(y)}</p></div><div class="level-card red"><b>🔴 Om det blir allvarligt</b><p>${esc(r)}</p></div>`;
-}
-function renderFlow(){const s=S[si];$('flowEmoji').textContent=s[0];$('flowTitle').textContent=s[1];$('flowExample').textContent=s[3][ei];$('stepNumber').textContent='Steg '+(step+1)+' av 5';$('stepText').textContent=steps[step];$('questionTitle').textContent=qs[step][0];$('questionText').textContent=qs[step][1];$('whyText').textContent=why[step];$('levelsPanel').innerHTML=levels(s);$('progressBar').style.width=((step+1)/5*100)+'%';$('nextBtn').textContent=step===4?'💾 Spara & skapa uppföljning':'Nästa steg →';$('saveArea').innerHTML=step===4?`<div class="card"><div class="field"><label>Barn</label><select id="eventChild" class="select">${db.children.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')||'<option value="">Lägg till barn först</option>'}</select></div><div class="field"><label>Vad hände?</label><textarea id="eventNote" class="textarea" placeholder="Skriv några ord..."></textarea></div><div class="field"><label>Min plan</label><textarea id="eventPlan" class="textarea" placeholder="Vad vill jag prova nästa gång?"></textarea></div></div>`:''}
-function nextStep(){if(step<4){step++;renderFlow();return}if(!db.children.length){alert('Lägg först till ett barn under Barn.');show('children');return}const e={id:Date.now(),child:$('eventChild').value,topic:S[si][1],example:S[si][3][ei],note:$('eventNote').value,plan:$('eventPlan').value,date:new Date().toISOString()};db.events.unshift(e);db.follow.unshift({id:Date.now()+'f',event:e.id,done:false});save();show('follow')}
-function previousStep(){if(step>0){step--;renderFlow()}else show('examples')}
-function addChild(){const name=$('childName').value.trim();if(!name){alert('Skriv barnets namn eller smeknamn.');return}db.children.push({id:Date.now(),name,age:$('childAge').value,note:$('childNote').value});$('childName').value='';$('childAge').value='';$('childNote').value='';save()}
-function addReminder(){const text=$('remText').value.trim(),date=$('remDate').value;if(!text||!date){alert('Fyll i text och datum.');return}db.reminders.push({id:Date.now(),text,date,done:false});$('remText').value='';$('remDate').value='';save()}
-function completeFollow(id){const f=db.follow.find(x=>String(x.id)===String(id));if(f)f.done=true;save()}
-function completeReminder(id){const r=db.reminders.find(x=>String(x.id)===String(id));if(r)r.done=true;save()}
-function renderContacts(){$('contactGrid').innerHTML=CONTACTS.map((c,i)=>`<article class="contact-card" id="contact-${i}"><button class="contact-toggle" onclick="toggleContact(${i})"><div class="contact-head"><span class="contact-icon">${c.icon}</span><div><div class="contact-title">${esc(c.title)}</div><div class="contact-desc">${esc(c.desc)}</div></div></div><div class="contact-actions"><span class="contact-action secondary">Visa kontakt</span></div></button><div class="contact-detail"><div>${esc(c.detail)}</div>${c.actions.length?`<div class="contact-actions">${c.actions.map(a=>`<a class="contact-action" href="${a[1]}" ${a[1].startsWith('http')?'target="_blank" rel="noopener"':''}>${esc(a[0])}</a>`).join('')}</div>`:''}</div></article>`).join('')}
-function toggleContact(i){const c=$('contact-'+i);c.classList.toggle('open');const b=c.querySelector('.contact-action.secondary');if(b)b.textContent=c.classList.contains('open')?'Dölj kontakt':'Visa kontakt'}
-function renderAll(){
- $('nChildren').textContent=db.children.length;$('nEvents').textContent=db.events.length;$('nFollow').textContent=db.follow.filter(x=>!x.done).length;$('nRem').textContent=db.reminders.filter(x=>!x.done).length;
- $('situations').innerHTML=S.map((s,i)=>`<button type="button" class="tile" onclick="openSituation(${i})"><span class="emoji">${s[0]}</span><strong>${s[1]}</strong><small>${s[2]}</small></button>`).join('');
- $('childList').innerHTML=db.children.length?db.children.map(c=>`<div class="item"><b>👤 ${esc(c.name)}</b>${c.age?` <span>${esc(c.age)} år</span>`:''}<p class="muted">${esc(c.note)}</p></div>`).join(''):'<div class="card">Inga barn ännu.</div>';
- $('historyList').innerHTML=db.events.length?db.events.map(e=>`<div class="item"><b>${esc(e.topic)}</b><p class="muted">${esc(e.example)} · ${new Date(e.date).toLocaleDateString('sv-SE')}</p><p>${esc(e.note)}</p><span>Plan: ${esc(e.plan||'Ej angiven')}</span></div>`).join(''):'<div class="card">Ingen historik ännu.</div>';
- const counts={};db.events.forEach(e=>counts[e.topic]=(counts[e.topic]||0)+1);$('patternList').innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="item"><b>${esc(k)}</b><p class="muted">Du har sparat ${v} situation${v===1?'':'er'} inom detta område.</p></div>`).join('')||'<div class="card">Spara några situationer så visas möjliga mönster.</div>';
- $('followList').innerHTML=db.follow.filter(f=>!f.done).map(f=>{const e=db.events.find(x=>x.id==f.event);return `<div class="item"><b>🎯 Följ upp: ${esc(e?.topic||'situation')}</b><p class="muted">${esc(e?.plan||'Du har ingen plan sparad.')}</p><button class="small" onclick="completeFollow('${f.id}')">Markera som klar</button></div>`}).join('')||'<div class="card">Inga öppna uppföljningar. 🎉</div>';
- $('reminderList').innerHTML=db.reminders.map(r=>`<div class="item"><b>🔔 ${esc(r.text)}</b><p class="muted">${esc(r.date)}</p>${r.done?'<span>Klar</span>':`<button class="small" onclick="completeReminder('${r.id}')">Markera klar</button>`}</div>`).join('')||'<div class="card">Inga påminnelser.</div>';
- renderVideos();renderMoods();renderWords();
-}
-function renderVideos(){$('videoList').innerHTML=S.slice(0,12).map((s,i)=>`<div class="card"><b>${s[0]} ${s[1]}</b><p class="muted">${esc(s[2])}</p><button class="btn secondary" onclick="openSituation(${i})">Gå till situationen</button></div>`).join('')}
-const moods=[['😌','Lugn'],['🙂','Okej'],['😟','Orolig'],['😠','Frustrerad'],['😫','Helt slut']];
-function mood(type,val){const x=JSON.parse(localStorage.getItem('lumoraMood')||'{"p":"","c":""}');x[type]=val;localStorage.setItem('lumoraMood',JSON.stringify(x));renderMoods()}
-function renderMoods(){const x=JSON.parse(localStorage.getItem('lumoraMood')||'{"p":"","c":""}');$('parentMood').innerHTML=moods.map(m=>`<button class="moodbtn ${x.p===m[1]?'active':''}" onclick="mood('p','${m[1]}')">${m[0]}<br>${m[1]}</button>`).join('');$('childMood').innerHTML=moods.map(m=>`<button class="moodbtn ${x.c===m[1]?'active':''}" onclick="mood('c','${m[1]}')">${m[0]}<br>${m[1]}</button>`).join('');$('moodSaved').innerHTML=x.p||x.c?'<div class="support"><b>Sparat för stunden.</b><p class="muted">Du kan ändra känslan när den förändras.</p></div>':''}
-const words=[
-['😤','När barnet är argt','Jag ser att du är arg. Jag lyssnar när du är redo. Vi behöver fortfarande hålla den här gränsen.','Du behöver inte sluta vara arg. Jag hjälper dig igenom det.'],
-['📱','När skärmen ska stängas','Jag vet att du vill fortsätta. Det är svårt att sluta när man har roligt. Nu är tiden slut.','Vill du stänga av själv eller vill du att jag hjälper dig?'],
-['🛏️','När barnet inte vill sova','Jag hör att du inte vill gå och lägga dig. Nu börjar vår kvällsrutin och jag hjälper dig.','Vi tar en sak i taget.'],
-['💬','När barnet inte vill prata','Du behöver inte berätta allt nu. Jag finns här när du vill prata.','Jag tänker inte pressa dig. Jag vill bara att du ska veta att jag finns här.'],
-['🏫','När barnet inte vill gå till skolan','Jag hör att det känns jobbigt. Vi behöver försöka förstå vad som gör det svårt.','Du behöver inte lösa allt själv. Vi kan prata med skolan tillsammans.'],
-['❤️','När du vill få bättre relation till din tonåring','Jag märker att vi har hamnat längre ifrån varandra. Jag vill inte bråka om allt. Jag vill förstå dig bättre.','Vi behöver inte lösa allt idag. Jag vill bara hitta tillbaka till dig lite i taget.'],
-['🤝','När föräldrar har svårt att samarbeta','Vi vuxna kan tycka olika. Du behöver inte lösa det åt oss.','Jag vill att vi försöker prata om det här utan att du hamnar mitt emellan.'],
-['🌿','När föräldern behöver återhämtning','Jag behöver inte vara perfekt för att vara en bra förälder. Jag behöver också få vila.','Jag tar en stund för att fylla på energi så att jag kan vara mer närvarande sedan.']
-];
-function renderWords(){$('wordsList').innerHTML=words.map(w=>`<div class="word"><b>${w[0]} ${w[1]}</b><div class="quote">"${w[2]}"</div><div class="quote">"${w[3]}"</div></div>`).join('')}
-function support(t){const d={prata:['💬 Prata med någon','Börja med kommunens stöd eller vården beroende på vad du behöver hjälp med.'],barn:['👶 Oro för barnets mående','Om du är orolig för barnets mående kan du söka råd hos vården, elevhälsan eller annan professionell verksamhet.'],skola:['🏫 Skolan','Börja med skolan eller elevhälsan. Berätta vad du ser hemma och fråga hur ni kan samarbeta.'],familj:['👨‍👩‍👧 Konflikter hemma','Kommunens socialtjänst kan ge råd om vilket familjestöd som finns där du bor.'],akut:['🚨 Akut','Om det finns omedelbar fara för liv eller hälsa ska du söka akut hjälp.']}[t];$('supportResult').innerHTML=`<div class="support"><b>${d[0]}</b><p class="muted">${d[1]}</p></div>`}
-
-const answers=[
-{keys:['utbrott','raseri','skriker','jättearg','kastar','exploderar'],title:'När barnet får ett utbrott',intro:'När känslorna är väldigt stora är det svårt för barnet att lyssna. Försök därför lugna situationen först.',b:['Prata lugnt och använd få ord.','Håll fast vid en viktig gräns utan ett långt bråk.','Ge lite utrymme om det är tryggt.','Vänta med att reda ut allt tills barnet lugnat sig.'],say:'Du kan säga: "Jag ser att du är jättearg. Jag är här. Vi pratar när det blivit lugnare."',red:'Om någon är i direkt fara på grund av våld eller allvarlig skada: ring 112.'},
-{keys:['mobil','skärm','telefon','ipad','surfplatta','youtube','tiktok','spel'],title:'När det blir bråk om skärmen',intro:'Skärmbråk blir ofta lättare när barnet vet vad som gäller innan tiden är slut.',b:['Berätta en stund innan att tiden snart är slut.','Ha en enkel regel som är samma de flesta dagar.','Bekräfta att barnet vill fortsätta utan att börja förhandla mitt i bråket.','Hjälp barnet vidare till nästa aktivitet.'],say:'Du kan säga: "Jag vet att du vill fortsätta. Det är svårt att sluta när man har roligt. Nu är tiden slut."',red:'Om situationen inte är akut: fortsätt lugnt och sök stöd om bråken blir ett stort problem.'},
-{keys:['skola','skolvägra','skolfrånvaro','skolkar'],title:'När barnet inte vill gå till skolan',intro:'Försök först förstå vad som gör skolan svår.',b:['Prata när morgonstressen lagt sig.','Fråga vad som är svårast utan att pressa.','Lägg märke till när problemen började.','Ta kontakt med skolan eller elevhälsan om det fortsätter.'],say:'Du kan säga: "Jag ser att skolan känns jobbig. Du behöver inte lösa det själv."',red:'Om barnet inte är i akut fara handlar nästa steg oftast om stöd från skola, elevhälsa eller vård – inte om 112.'},
-{keys:['droger','knark','cannabis','hasch','narkotika','överdos'],title:'När du är orolig för droger',intro:'Välj en lugn stund när barnet är nyktert. Berätta vad du har märkt utan att anklaga.',b:['Fråga öppet hur barnet har det.','Lyssna även om svaret är svårt.','Var tydlig med gränser hemma.','Sök stöd om oron fortsätter.'],say:'Du kan säga: "Jag är orolig för dig. Jag vill förstå vad som händer och hjälpa dig, inte skälla på dig."',red:'Om barnet inte går att väcka, har svårt att andas, är allvarligt påverkat eller du misstänker en allvarlig förgiftning/överdos: ring 112.'},
-{keys:['alkohol','dricker','berusad','full'],title:'När du är orolig för alkohol',intro:'Försök prata när barnet är nyktert och situationen är lugn.',b:['Beskriv vad du märkt utan att kalla barnet saker.','Fråga hur barnet själv ser på drickandet.','Lyssna efter press, oro eller annat bakom.','Var tydlig med gränser hemma.'],say:'Du kan säga: "Jag är orolig för hur alkoholen påverkar dig. Kan vi prata om det utan att bråka?"',red:'Om barnet är svårt påverkat, inte går att väcka eller har svårt att andas: ring 112.'},
-{keys:['separerad','separerade','samarbete','samarbetar','andra föräldern'],title:'När separerade föräldrar har svårt att samarbeta',intro:'Försök hålla barnet utanför konflikten så mycket som möjligt. Barnet behöver inte bära de vuxnas problem.',b:['Prata med den andra föräldern utan barnet närvarande.','Håll kommunikationen kort och saklig när det är svårt.','Undvik att tala illa om den andra föräldern inför barnet.','Försök hitta några få saker ni kan vara överens om.'],say:'Du kan säga till barnet: "Du behöver inte välja sida. Det här är vuxnas ansvar."',red:'Om det inte finns akut fara handlar nästa steg om stöd och hjälp att få samarbetet att fungera, inte om 112.'},
-{keys:['tonåring','relation','närmare','förtroende','kontakt med mitt barn','vi pratar aldrig'],title:'När du vill få bättre relation till ditt barn eller tonåring',intro:'Målet är inte att vinna varje diskussion. Målet är att bygga tillbaka kontakt och förtroende.',b:['Börja med små stunder utan krav.','Lyssna mer än du föreläser.','Visa intresse för sådant barnet faktiskt gillar.','Välj relationen före onödiga småbråk när det går.'],say:'Du kan säga: "Jag märker att vi inte har det så lätt just nu. Jag vill förstå dig bättre."',red:'Om barnet inte är i akut fara: ge relationen tid och sök stöd om avståndet eller konflikterna blir stora.'},
-{keys:['återhämtning','helt slut','orkar inte','vardagen','utmattad','ingen tid för mig'],title:'När föräldern behöver återhämtning',intro:'Att behöva vila betyder inte att du är en dålig förälder. Återhämtning kan göra det lättare att vara den förälder du vill vara.',b:['Välj en liten paus som faktiskt går att genomföra.','Be om avlösning om du har någon att fråga.','Sänk kraven på sådant som inte måste vara perfekt.','Försök skydda sömn och återhämtning så gott det går.'],say:'Du kan säga till dig själv: "Jag behöver inte lösa allt idag. Jag behöver fylla på lite energi."',red:'Om du känner att du riskerar att skada dig själv eller någon annan: lämna situationen om det är säkert och sök akut hjälp.'}
-];
-function findAnswer(q){const t=q.toLowerCase();let best=null,score=0;answers.forEach(a=>{const s=a.keys.reduce((n,k)=>n+(t.includes(k)?1:0),0);if(s>score){score=s;best=a}});return best}
-function addMsg(text,type){const d=document.createElement('div');d.className='msg '+type;d.textContent=text;$('chatMessages').appendChild(d);$('chatMessages').scrollTop=$('chatMessages').scrollHeight}
-function fallback(q){return `Jag hör dig. Vi tar en sak i taget.
-
-🟢 BÖRJA HÄR
-Berätta gärna lite mer om vad som händer just nu.
-• Vad har du märkt?
-• Vad hände precis innan?
-• Vad vill du helst ska bli annorlunda?
-
-🟡 OM DET FORTSÄTTER
-Prova en liten förändring i taget och följ upp vad som händer. Om du inte kommer vidare kan skola, vård, socialtjänst eller annan stödverksamhet vara ett nästa steg.
-
-🔴 OM DET BLIR ALLVARLIGT
-Om det inte handlar om direkt fara behöver du inte ringa 112. Sök i stället den hjälp som passar situationen.
-
-💬 Vill du berätta lite mer om vad som händer?`}
-
-function answerQuestion(q){
- const a=findAnswer(q);
- if(!a)return fallback(q);
- const normalRed=a.red||'Om det inte är akut: fortsätt följa situationen och ta stöd om du behöver.';
- return `${a.title}
-
-🟢 BÖRJA HÄR
-${a.intro}
-• ${a.b[0]}
-• ${a.b[1]}
-
-${a.say}
-
-🟡 OM DET FORTSÄTTER
-• ${a.b[2]}
-• ${a.b[3]}
-Ta stöd om du märker att situationen fortsätter eller blir svårare.
-
-🔴 OM DET BLIR ALLVARLIGT
-${normalRed}
-
-💬 Vill du berätta lite mer om vad som händer?`;
-}
-function askLumora(){const input=$('chatInput');const q=input.value.trim();if(!q){input.focus();return}addMsg(q,'user');input.value='';setTimeout(()=>addMsg(answerQuestion(q),'bot'),180)}
-function quickAsk(q){show('ask');$('chatInput').value=q;askLumora()}
-$('nav').addEventListener('click',e=>{const a=e.target.closest('a[data-page]');if(a){e.preventDefault();show(a.dataset.page)}});
-$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();askLumora()}});
-renderContacts();renderAll();addMsg('Hej! 👋 Skriv vad du funderar på så försöker jag hjälpa dig. Du kan skriva precis som du pratar.','bot');
-window.addEventListener('scroll',()=>{$('topBtn').classList.toggle('show',window.scrollY>250)},{passive:true});
-</script>
-</body>
-</html>
+b/¡Ã¦PœOñLÝù4¯ÒùPÖHn°¥b}–‰˜Z¹ñ,æ<Ê• hì´ÐzïNÙF “vi%WH€‚>œn€5×©Dœ~Á+ã¾{¬â  r‘MVaÞŠŸ0	’KWÔö5_ýìä›?ã
+¥Ùïh›7m.Ò¹Èø]ð…¼i‡¬
+Tyðxì¿m¯s	£çËAHi¸.L_tŠ£’	uKn†<ÿž¼v¹R¯É–S7ˆ{ØW“NŠó%±—˜‘vÈ3|FøyÊäaè;šçÇ$½u¯Wgü§®o‰É	÷²V
+cžÍh[ë3çÜ©–ê¦-_à`(®Rr¡Äe
+ÒÖºØùŒÓ³rw’—»g»b³X‡'$	w†Ë±Ôé–$¯Ú<–óØ
+SÇ‚¼D"Ùºë±>Ìš±íŽªî10l?õ}“'(CÆšIZeY}õ£ÿ%™¬N*6j PÊö’r–Z·Ê «Wy‡E	·j<g ¢]ZNNv?|Njí9{B›^8 gïF’05&Æç yò I	´­N5^œÇùØÕ	±±FÚq¥eª3&x™å íìáæžaöIøÜD 
+KPLMäÂãÑ\Ô±¦mÒæüìý åyÂéd­ãW?ú«æ1D;*ÖÅŽŒHÿÇVŽ¥vôà3/Ê“sE>&’ï7$ffEÊÉ÷È\s4»5ú¨;&<FR¨ƒX|qŒ†gu¬%IºB÷
+Ò„–Ùm˜d)ì g
+¼eÍ2	yßs-{µPG•ÄßÜŸ0¦ÖHf
+wßðz Ï²)Dùb
+žLð&éœNÅ_ €¶DŠ>5Ž§°.™Œe
+ÒÝ½NÚ$e×qˆt×uþ‡˜îä¿§éb¼)Pêã$/etœ?üJÐ•#¥³¨ü%õº<œ‰Ê¯\a-¯‹TÁ/@qv¸®¨ßAI"<B
+éâ
+·­ÊÌŠÞ;…K™ç¤Tí6ÕjqFß-†þ¸Z¹†wL2Ñ¸HSð´Æð¦#Ké¸ÛLÑéšép.2­n–`õrCâkÁ¸kyV›Ÿ&vt;Š×=-²ò¾ò¬<Bø‰mƒ—0ÈH…¬[ZzåÓÒêtHêXÿép8¬Ž†tünŽ³~?Œî¤×‡d§ï­&Ù½ªó`póàà·ô^
+dÝæhì>¤@Ë»eÜaûÄ¹&8WÛ=¨XÕ‘ Ì3®æÃ¥
+‹S½hèV¹SƒÔµ
+RGã}üb´!üb¹Ì=tÑ¾ ¡ nW9;qq*×ª>$Jþ‘æ»bEÂžI6g6hŽCÔId+ÒåT©†ÍI7CÍ˜‹-vUrÕ@Ð5¢ ‹”y©…’;ÿ±ÃWãƒþ¿@*Ì”ÙõOêê¬ê)­*}‡–äÅ¤ìæ«ùNS7(	œyˆ5þŽ­cEkRƒ,zŸ˜FwÜÐnãßŒùŠ¨|ºîhì3U Wpi[©ß!Y0p„†G³3ãI&­«X#Ò~A²——"¦9-ìËÔ½3c"8>Jiò |ùyèx©l!Fï4‰ÏC”>–ªËJ@ñPëç5ß®9%?96Èß[K<™Ó~wC³¦?#˜xÈFmŽ2‰üä&!z?N:Š"8sîJ5Ð.­GéP“*ÂÎK­‡ü/§u¼Ýé}õ£¿Mz×_ÏVù²ßû|i
+rÓJbMÉ¨yJ%`üP¯×ë
+×éIô¬ëÿ'²üÅß’–ôï?ý{É‡¯ÿèÓà7Œ(-*Üá¾ã1FßÐUéyËSÿ&yôQòþý'É >}òøõ=yr?~¸¥S4ïýé¶{ß}øàÓäÞÃ‡ŸÝûôáƒï=‰_+©ÙõÛM GêŽâúÕ¢Â^Ø¬ßL>(r—Ô{h|èzùho."ÊT:Â,6D†€”äŒKò_Ž‘ 97Øº/WËÝd…z•ÙZ“ÕbW­èEˆ–ñ |›í$
+oÇÍÈhbªÎ²3ÇåFj7öÅ­$¶µãÌa¥‹"tq P9Æ¸s®;YƒHäùI)‡,8ºßÏªZ‰Ë
+.Û’@Š.§ ­±±½Ð´z­¨¸2Õz¸`^Ð9
+\zN¬ÙÓK1—âA\RHŸØb2_…üÂñÄòî¶]¡‚+ŒIµ^§Fð²^âêG5k¸ûu®§ àRRÓ¢L5B‰2\æºCkÖ© [ÁÏ=4÷¼©^ ÎøHzÞ#ýÅÐ@N³…-Ÿ÷tvtÁªžíýy¯±ãW‘
+Í<šßx¨Ÿ]A‡
+«äµ@ËdÁA
+o++oM*kÅm|ƒìÉq¨Ç²^ƒšC=|ÀÅ~Sî>‚t¹ñ›´î9êfU¸V1m¬l9ê‡ ”Ê•$Gûøªü¼7ÐÝåðý×çFF8\‹ª´t´ÀÊÍç½ÇƒÖüÆÄÑ½¥wkq°´œÉÙÞŽþ|¹ÞT–Lö øL2þ­™KöÃ‘–ÖðïC®BáÄIWÍ"·ÿP¥¢\v²:Þ”ýèP¾­‰qšéöÃAoC§š¾ß?{ÔëùoÊê|ž
+O9‰lÔKÉ&äIž=ÉÙjSõû°“ä‰
+•gÐ#ƒ w0¸õ¯nrB§[›nòãÙ½rµ¨<]=ï÷hµh$ñÂèx~x;XÊp…óe^É÷ïÑM_k™“ÝNgˆbšì¼êÓ,œF£Þ­^¸]Òeròï´÷·Ù²z˜£	
+)f¨ŠDEMoî¼´LÆ™¡xÇ}¤÷p°}#–§ùIõýìÜ¥Jf¤»exÜûÙIº™W¶•IHW>Iòâ`ïHøûÞ {IÇî¶þÌ–2±ž’a˜]8xç›$úÖ/D‚ñVÓL]dÕz\¥U†yÏW)|
+=žª»¦9æ÷}¤ÉéŽlÒÄû× ÓèKžwL	ÁsR‘WÏ[Œ´<ì7öæŽäÞÀH¯Ÿ¼J[Ž²!i+èx<_•ÐVzËt›<¹¼½¦#ïˆHVcyð²eO™ø—Ž¶pýÁm¥¼
+Í>myÃÐ•ïVKy•ûFß7n}ôòÇveÿãÍ‚ÄXìÞïrPÅ‹¶QvºXÏ37ý[Gð¢s÷å:{ÿ
+÷~}@ðv&ì9q¨!=®XªÉ7÷æsüAïš¯ŽyÜÃÓ´<O½5,i³þ­$cÍ;~½ý†Ê² càqˆ6Z€­~ã 1ër
+à\fy›kGø_èzòè“OÞ~üÞ§>ÔIýï;2dj‘‡™;û Nê8Ò¦
+ÔLäwÏLˆ4¥{ýî¦"K w
+>— Ý™Ì<Ö»äêñ0ŸŒ´ßÚ<²;ìKÚõ{dôuF§ Eos‹vBgº’¡½ý;ØâÕv¿IÓ½¯þíÝ—3µ¾*:,Ÿºÿ²Z­oæÙIEÿÀE¶ÍÉjë•‹Õª:í]8Ùì–É>èB©Ù7×ŽW“óæöÐø²0õ{,2ß×<L§´.^ÆcÒœ_Žåç~ÔßD3ü×wÞùÎM;LäŸNá)wôò¸ÁKhéù6;¬ŠMfCÖW8}öŠ‡Á¯|¹ËûìHHZØÁ4 +
+îÁ }>"ºxô£ûÿëÃäÁÇß»ÿqòøÁûï¿ÿqRç[¹_ïüìÖw†·½Íóv¹&ñp’sx	­ä— ¯*‰7Ž+xËÌÌHž‹Sž=ß½A’¯«;ô	‚O«ÅüÎÿ PK    j@]gÝß*
+ˆ  Ì 
+         ¤    index.htmlUT ÇŽjux
+     é  PK      P   Oˆ    
