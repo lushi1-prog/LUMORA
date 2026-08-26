@@ -356,11 +356,20 @@ nav button,nav a.nav-link{max-width:100%;white-space:normal!important;overflow-w
   .level-card{padding:7px!important}.level-card b{font-size:10px!important}.level-card p{font-size:9.5px!important}
 }
 
+
+/* ===== V15.9: språkval ===== */
+.langbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-left:auto}
+.langbar-label{font-size:11px;font-weight:800;color:var(--muted)}
+.langbtn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:12px;padding:8px 9px;font-size:12px;font-weight:800;cursor:pointer;min-height:38px}
+.langbtn.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+#google_translate_element{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden}
+.goog-te-banner-frame.skiptranslate,.goog-te-banner-frame{display:none!important}body{top:0!important}
+@media(max-width:700px){header{align-items:flex-start;flex-wrap:wrap}.langbar{width:100%;margin-left:0;margin-top:5px}.langbtn{flex:1 1 auto;font-size:11px;padding:7px 6px}.langbar-label{width:100%}}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="logo">✦</div><div><div class="brand">LUMORA</div><div class="tag">Stöd i vardagen för föräldrar</div></div></header>
+<header><div class="logo">✦</div><div><div class="brand">LUMORA</div><div class="tag">Stöd i vardagen för föräldrar</div></div><div class="langbar" aria-label="Välj språk"><span class="langbar-label">🌍 Språk / Language</span><button class="langbtn active" type="button" data-lang="sv" onclick="setLumoraLanguage('sv')">🇸🇪 Svenska</button><button class="langbtn" type="button" data-lang="en" onclick="setLumoraLanguage('en')">🇬🇧 English</button><button class="langbtn" type="button" data-lang="de" onclick="setLumoraLanguage('de')">🇩🇪 Deutsch</button><button class="langbtn" type="button" data-lang="sq" onclick="setLumoraLanguage('sq')">🇦🇱 Shqip</button><button class="langbtn" type="button" data-lang="ar" onclick="setLumoraLanguage('ar')">🇸🇦 العربية</button><div id="google_translate_element" aria-hidden="true"></div></div></header>
 
 <nav id="nav" aria-label="LUMORA meny">
 <a href="#home" class="nav-link active" data-page="home">Hem</a>
@@ -1015,5 +1024,12 @@ addMsg("Hej! 👋 Skriv vad du funderar på så försöker jag hjälpa dig. Du k
 
 /* LUMORA V15.1: situation-specific levels and restricted emergency wording. */
 </script>
+
+<script>
+function markLumoraLanguage(lang){document.documentElement.lang=lang;document.documentElement.dir=(lang==='ar'?'rtl':'ltr');document.querySelectorAll('.langbtn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang);});}
+function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'sv',includedLanguages:'en,de,sq,ar',autoDisplay:false},'google_translate_element');markLumoraLanguage(localStorage.getItem('lumora_language')||'sv');}
+function setLumoraLanguage(lang){localStorage.setItem('lumora_language',lang);markLumoraLanguage(lang);if(lang==='sv'){document.cookie='googtrans=;path=/;max-age=0';document.cookie='googtrans=;path=/;domain='+location.hostname+';max-age=0';location.reload();return;}var tries=0;function apply(){var c=document.querySelector('.goog-te-combo');if(c){c.value=lang;c.dispatchEvent(new Event('change'));}else if(tries++<12){setTimeout(apply,250);}}apply();}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
