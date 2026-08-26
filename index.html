@@ -727,6 +727,34 @@ function lumoraTokens(value){
 }
 
 /* Extra ord gör att LUMORA även förstår vardagligt språk, stavfel och korta frågor. */
+const LUMORA_DEEP = {
+"Mitt barn får ett utbrott":"Titta efter mönster: hunger, trötthet, krav, övergångar eller att något blev annorlunda än barnet väntat sig. Efteråt kan ni prata kort om vad barnet kan göra nästa gång – gå undan, be om hjälp eller säga att det blir för mycket. Försök träna på detta när barnet är lugnt, inte mitt i utbrottet.",
+"Vi bråkar om mobilen/skärmen":"Bestäm gärna i förväg när skärmen börjar, när den slutar och vad som händer efteråt. Om samma bråk återkommer kan ni prova en förändring i taget, till exempel tydligare förvarning, annan sluttid eller att mobilen laddas utanför sovrummet. Målet är en hållbar rutin, inte att vinna varje enskild konflikt.",
+"Läggningen fungerar inte":"Försök ta reda på vilken del som är svårast: att avsluta skärmen, gå till sovrummet, vara ensam, somna eller vakna på natten. Håll kvällsrutinen kort och förutsägbar och ändra inte flera saker samtidigt. Om barnet kommer upp igen, försök svara lugnt och ungefär likadant varje gång. Lägg märke till vad som faktiskt gör kvällen lite lättare och bygg vidare på det.",
+"Mitt barn vill inte gå till skolan":"Försök skilja på morgonens konflikt och orsaken bakom den. Fråga om lektioner, raster, kompisar, krav, sömn och om något särskilt har hänt. Vid återkommande frånvaro är det bra att tidigt göra en enkel gemensam plan med skolan och följa upp vad som fungerar.",
+"Mitt barn vill inte prata":"Kontakt kan ibland fungera bättre sida vid sida än ansikte mot ansikte – i bilen, på promenad eller medan ni gör något tillsammans. Visa att barnet får komma tillbaka senare. Om du märker tydliga förändringar i mående eller vardag behöver du ändå agera även om barnet inte vill berätta allt.",
+"Mitt barn verkar ledset":"Titta på förändringar över tid: sömn, mat, energi, skola, kompisar och sådant barnet tidigare tyckte om. Försök skapa små stunder av kontakt utan att varje samtal handlar om måendet. Om nedstämdheten håller i sig, blir starkare eller vardagen påverkas mycket är det klokt att söka professionellt stöd.",
+"Barnen slåss eller bråkar":"När bråket är stoppat, prata gärna med barnen var för sig först. Hjälp dem beskriva vad som hände före första slaget eller knuffen och vad de kunde gjort i stället. Försök inte alltid avgöra vem som började – fokusera på att ingen får slå. Om samma situation återkommer, gör en enkel plan i förväg för pauser, leksaker, skärm eller andra vanliga utlösare.",
+"Jag är orolig för droger":"Om du vet eller starkt misstänker att barnet använder droger, försök få en tydligare bild av vad som används, hur ofta, i vilka situationer och med vilka personer – utan att samtalet blir ett förhör. Prata när barnet är nyktert. Var tydlig med att du inte accepterar droger men håll samtidigt kontakten: 'Jag är orolig och tänker hjälpa dig även om du blir arg på mig.' Undvik att ge pengar som du tror går till droger och försök få fler trygga vuxna runt barnet. Om användningen fortsätter, barnet inte klarar att sluta, skolan eller måendet påverkas, eller det finns skulder, kriminalitet eller hot, sök professionellt stöd tidigt. Vid kraftig påverkan, medvetslöshet, andningssvårigheter, kramper eller misstänkt överdos ska akut vård sökas direkt.",
+"Vanliga vardagsbråk":"Välj ett återkommande bråk och arbeta med just det först. Fundera på om barnet vet vad som förväntas, om kravet kommer vid en svår tidpunkt och om en förvarning skulle hjälpa. Små rutiner som fungerar ofta är bättre än många regler som ingen orkar hålla.",
+"När barnet ljuger":"Försök förstå vad lögnen hjälper barnet att undvika – skäll, skam, konsekvenser eller något annat. Var tydlig med sanningen och gränsen, men skapa också en väg tillbaka där barnet kan berätta utan att situationen exploderar. Följ upp handlingen och hur den kan repareras.",
+"Mitt barn har problem med kompisar":"Hjälp barnet skilja mellan en enstaka konflikt och ett återkommande mönster. Fråga vad barnet själv önskar ska hända och vilka vuxna som kan hjälpa. Ta mer ansvar som vuxen om barnet blir utsatt, isolerat eller rädd för att gå till skolan eller aktiviteter.",
+"När barnet blir mobbat":"Dokumentera gärna vad som händer, när och vilka som är inblandade. Håll kontakt med skolan och följ upp konkreta åtgärder, inte bara att ett samtal har hållits. Barnet ska känna att vuxna tar över ansvaret för att stoppa utsattheten.",
+"Problem kring mat":"Försök minska kamp och kommentarer om mängd, vikt och kropp. Lägg märke till om barnet undviker måltider, får stark ångest kring mat eller förändras snabbt i energi och mående. Vid tydlig eller ihållande oro bör vården kopplas in tidigt.",
+"När jag är rädd för att barnet skadar sig":"Fråga rakt om barnet har tankar på att skada sig eller inte vilja leva. Lyssna lugnt och ta svaren på allvar. Vid aktuell risk ska barnet inte lämnas ensamt och professionell hjälp ska sökas direkt.",
+"Press om bilder på nätet":"Skamma inte barnet och hota inte med att ta bort all teknik som första reaktion – då kan barnet bli rädd för att berätta mer. Spara relevanta meddelanden eller hot, stoppa fortsatt kontakt när det går och ta hjälp av polis eller annan professionell aktör vid hot, utpressning eller sexuella övergrepp.",
+"När barnet tar pengar eller saker":"Ta reda på om det är en engångshändelse eller del av något större, till exempel kompispress, skulder, droger eller behov av pengar. Låt barnet reparera det som går och håll koll på om beteendet återkommer utan att förnedra barnet.",
+"När jag blir för arg":"Gör en egen stopp-plan innan nästa konflikt: vilka tecken märker du i kroppen, hur pausar du och vem kan avlösa? Om du skrämt barnet, ta ansvar efteråt utan att lägga ansvaret på barnet. Om du är rädd att du kan skada barnet behöver du söka hjälp och skapa avstånd direkt.",
+"När jag är orolig för alkohol":"Försök få en bild av mängd, hur ofta, sammanhang och konsekvenser. Håll kontakt och sätt tydliga gränser. Om alkohol påverkar skola, relationer, säkerhet eller mående behöver professionellt stöd kopplas in.",
+"När jag är orolig för nikotin":"Fråga vad barnet använder, hur ofta och vad som gör det svårt att avstå. Undvik bara skrämsel; hjälp barnet tänka kring beroende, situationer som triggar användning och vilket stöd som kan göra ett stopp möjligt.",
+"När det finns hot eller våld":"Gör säkerheten konkret: vart kan ni gå, vem kan ni ringa och vad behöver finnas nära till hands? Försök inte medla mitt i pågående våld. Återkommande hot eller våld behöver professionell hjälp och en tydlig trygghetsplan.",
+"När barnet har problem på nätet":"Be barnet visa vad som hänt om det känns möjligt och spara bevis vid hot eller kränkningar. Hjälp till att blockera och rapportera, men försök behålla barnets förtroende så att barnet fortsätter berätta. Vid hot, utpressning eller sexuella kontakter behöver vuxna agera snabbt.",
+"När jag oroar mig för fel umgänge":"Försök veta var barnet är, vilka personer det träffar och vad som förändrats, samtidigt som du håller relationen öppen. Skola, socialtjänst och andra trygga vuxna kan behöva kopplas in tidigt om det finns droger, kriminalitet, skulder, hot eller stark press från andra."
+};
+for(const [title,deep] of Object.entries(LUMORA_DEEP)){
+  if(LUMORA_PROFILES[title]) LUMORA_PROFILES[title].deep=deep;
+}
+
 const LUMORA_ALIASES = {
   "Mitt barn får ett utbrott":"explosion rasar flippar ur meltdown får spel får panik",
   "Vi bråkar om mobilen/skärmen":"telefonen skärmen skärmbråk mobilen data spel",
@@ -871,6 +899,7 @@ function answerQuestion(q){
       p.say+"\n\n"+
       "🟡 OM DET FORTSÄTTER\n"+
       p.continue+"\n\n"+
+      (p.deep ? "🔎 FÖRSTÅ OCH HANTERA MER\n"+p.deep+"\n\n" : "")+
       "🔴 OM DET BLIR ALLVARLIGT\n"+
       p.serious+"\n\n"+
       "Vill du berätta lite mer om vad som händer?";
