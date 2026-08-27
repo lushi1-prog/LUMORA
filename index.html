@@ -373,10 +373,39 @@ nav button,nav a.nav-link{max-width:100%;white-space:normal!important;overflow-w
 .goog-te-banner-frame.skiptranslate,.goog-te-banner-frame{display:none!important}body{top:0!important}
 @media(max-width:700px){header{align-items:flex-start;flex-wrap:wrap}.langbar{width:100%;margin-left:0;margin-top:5px}.langbtn{flex:1 1 auto;font-size:11px;padding:7px 6px}.langbar-label{width:100%}}
 </style>
+<!-- LUMORA V15.11: språkfix, spanska, renare situationskort och utvecklad historik/mönster/uppföljning -->
+<style>
+/* V15.11 – situationskort utan Exempel-nummer */
+.exampleBtn small{
+  display:block!important;
+  font-size:17px!important;
+  line-height:1.5!important;
+  color:var(--ink)!important;
+  font-weight:600!important;
+}
+@media(max-width:700px){
+  .exampleBtn{
+    min-height:105px!important;
+    padding:18px!important;
+  }
+  .exampleBtn small{
+    font-size:18px!important;
+    line-height:1.5!important;
+  }
+}
+/* V15.11 – uppföljning */
+.follow-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.follow-choice{border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px 8px;font-weight:800;cursor:pointer;color:var(--ink)}
+.follow-choice.active{background:var(--soft);border:2px solid var(--brand)}
+.week-summary{background:linear-gradient(135deg,#edf7f2,#fff8e8);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}
+.week-summary h3{margin:0 0 7px;font-size:18px}
+.follow-form textarea{min-height:78px}
+@media(max-width:600px){.follow-choice-grid{grid-template-columns:1fr}.follow-choice{min-height:48px}}
+</style>
 </head>
 <body>
 <div class="app">
-<header><div class="logo">✦</div><div><div class="brand">LUMORA</div><div class="tag">Stöd i vardagen för föräldrar</div></div><div class="langbar" aria-label="Välj språk"><span class="langbar-label">🌍 Språk / Language</span><button class="langbtn active" type="button" data-lang="sv" onclick="setLumoraLanguage('sv')">🇸🇪 Svenska</button><button class="langbtn" type="button" data-lang="en" onclick="setLumoraLanguage('en')">🇬🇧 English</button><button class="langbtn" type="button" data-lang="de" onclick="setLumoraLanguage('de')">🇩🇪 Deutsch</button><button class="langbtn" type="button" data-lang="sq" onclick="setLumoraLanguage('sq')">🇦🇱 Shqip</button><button class="langbtn" type="button" data-lang="ar" onclick="setLumoraLanguage('ar')">🇸🇦 العربية</button><div id="google_translate_element" aria-hidden="true"></div></div></header>
+<header><div class="logo">✦</div><div><div class="brand">LUMORA</div><div class="tag">Stöd i vardagen för föräldrar</div></div><div class="langbar" aria-label="Välj språk"><span class="langbar-label">🌍 Språk / Language</span><button class="langbtn active" type="button" data-lang="sv" onclick="setLumoraLanguage('sv')">🇸🇪 Svenska</button><button class="langbtn" type="button" data-lang="en" onclick="setLumoraLanguage('en')">🇬🇧 English</button><button class="langbtn" type="button" data-lang="de" onclick="setLumoraLanguage('de')">🇩🇪 Deutsch</button><button class="langbtn" type="button" data-lang="sq" onclick="setLumoraLanguage('sq')">🇦🇱 Shqip</button><button class="langbtn" type="button" data-lang="ar" onclick="setLumoraLanguage('ar')">🇸🇦 العربية</button><button class="langbtn" type="button" data-lang="es" onclick="setLumoraLanguage('es')">🇪🇸 Español</button><div id="google_translate_element" aria-hidden="true"></div></div></header>
 
 <nav id="nav" aria-label="LUMORA meny">
 <a href="#home" class="nav-link active" data-page="home">Hem</a>
@@ -581,7 +610,7 @@ window.addEventListener("hashchange",showFromHash);
 function openSituation(i){
   si=i;
   $("exampleTitle").textContent=S[i][1];
-  $("exampleList").innerHTML=S[i][3].map((x,j)=>`<button type="button" class="tile exampleBtn" data-example="${j}" onclick="openExample(${j})"><strong>Exempel ${j+1}</strong><small>${esc(x)}</small></button>`).join("");
+  $("exampleList").innerHTML=S[i][3].map((x,j)=>`<button type="button" class="tile exampleBtn" data-example="${j}" onclick="openExample(${j})"><small>${esc(x)}</small></button>`).join("");
   show("examples");
 }
 function openExample(i){ei=i;step=0;renderFlow();show("flow")}
@@ -654,12 +683,32 @@ function stepFlavor(s,idx){
   let seed=[...title].reduce((a,c)=>a+c.charCodeAt(0),0);
   return banks[idx][seed%banks[idx].length]+" "+(p?.steps?.[idx]||"");
 }
-function renderFlow(){const s=S[si];const ex=s[3][ei];const localSteps=situationSteps(s);const localQs=situationQuestions(s,ex);$("flowEmoji").textContent=s[0];$("flowTitle").textContent=s[1];$("flowExample").textContent=ex;$("stepNumber").textContent="Steg "+(step+1)+" av 5";$("stepText").textContent=stepFlavor(s,step);$("questionTitle").textContent=localQs[step][0];$("questionText").textContent=localQs[step][1];$("whyText").textContent=situationWhy(s,step);$("levelsPanel").innerHTML=getLevels(s);$("progressBar").style.width=((step+1)/5*100)+"%";$("nextBtn").textContent=step===4?"💾 Spara & skapa uppföljning":"Nästa steg →";$("videoPreview").innerHTML=`<div class="video-card"><div class="video-screen"><div class="characters"><span>🧑</span><span class="bubble">"${esc(s[3][ei])}"</span><span>🧒</span></div><div class="play">▶</div></div></div>`;let opts=db.children.length?db.children.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join(""):'<option value="">Lägg till barn först</option>';$("saveArea").innerHTML=step===4?`<div class="card"><div class="field"><label>Barn</label><select id="eventChild" class="select">${opts}</select></div><div class="field"><label>Vad hände?</label><textarea id="eventNote" class="textarea" placeholder="Skriv några ord..."></textarea></div><div class="field"><label>Min plan</label><textarea id="eventPlan" class="textarea" placeholder="Vad vill jag prova nästa gång?"></textarea></div></div>`:""}
+function renderFlow(){const s=S[si];const ex=s[3][ei];const localSteps=situationSteps(s);const localQs=situationQuestions(s,ex);$("flowEmoji").textContent=s[0];$("flowTitle").textContent=s[1];$("flowExample").textContent=ex;$("stepNumber").textContent="Steg "+(step+1)+" av 5";$("stepText").textContent=stepFlavor(s,step);$("questionTitle").textContent=localQs[step][0];$("questionText").textContent=localQs[step][1];$("whyText").textContent=situationWhy(s,step);$("levelsPanel").innerHTML=getLevels(s);$("progressBar").style.width=((step+1)/5*100)+"%";$("nextBtn").textContent=step===4?"💾 Spara & skapa uppföljning":"Nästa steg →";$("videoPreview").innerHTML=`<div class="video-card"><div class="video-screen"><div class="characters"><span>🧑</span><span class="bubble">"${esc(s[3][ei])}"</span><span>🧒</span></div><div class="play">▶</div></div></div>`;let opts=db.children.length?db.children.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join(""):'<option value="">Lägg till barn först</option>';$("saveArea").innerHTML=step===4?`<div class="card"><div class="field"><label>Barn</label><select id="eventChild" class="select">${opts}</select></div><div class="field"><label>Vad hände?</label><textarea id="eventNote" class="textarea" placeholder="Skriv några ord..."></textarea></div><div class="field"><label>Min plan</label><textarea id="eventPlan" class="textarea" placeholder="Vad vill jag prova nästa gång?"></textarea></div></div>`:"";if(typeof reapplyLumoraLanguage==='function')reapplyLumoraLanguage()}
 function nextStep(){if(step<4){step++;renderFlow();return}if(!db.children.length){alert("Lägg först till ett barn under Barn.");show("children");return}let e={id:Date.now(),child:$("eventChild").value,topic:S[si][1],example:S[si][3][ei],note:$("eventNote").value,plan:$("eventPlan").value,date:new Date().toISOString()};db.events.unshift(e);db.follow.unshift({id:Date.now()+"f",event:e.id,done:false});save();show("follow")}
 function previousStep(){if(step>0){step--;renderFlow()}else show("examples")}
 function addChild(){let name=$("childName").value.trim();if(!name){alert("Skriv barnets namn eller smeknamn.");return}db.children.push({id:Date.now(),name,age:$("childAge").value,note:$("childNote").value});$("childName").value="";$("childAge").value="";$("childNote").value="";save()}
 function addReminder(){let text=$("remText").value.trim(),date=$("remDate").value;if(!text||!date){alert("Fyll i text och datum.");return}db.reminders.push({id:Date.now(),text,date,done:false});$("remText").value="";$("remDate").value="";save()}
 function completeFollow(id,result="Klar"){let f=db.follow.find(x=>String(x.id)===String(id));if(f){f.done=true;f.result=result;f.completedAt=new Date().toISOString()}save()}
+function setFollowChoice(id,field,value){
+  let f=db.follow.find(x=>String(x.id)===String(id));
+  if(!f)return;
+  f[field]=value;
+  save();
+}
+function saveFollowDetails(id){
+  let f=db.follow.find(x=>String(x.id)===String(id));
+  if(!f)return;
+  const worked=document.getElementById('worked_'+id);
+  const next=document.getElementById('next_'+id);
+  f.worked=worked?worked.value.trim():(f.worked||'');
+  f.nextPlan=next?next.value.trim():(f.nextPlan||'');
+  if(!f.outcome) f.outcome='Ungefär samma';
+  if(!f.tried) f.tried='Delvis';
+  f.result=f.outcome;
+  f.done=true;
+  f.completedAt=new Date().toISOString();
+  save();
+}
 function rateFollow(id,result){completeFollow(id,result)}
 function completeReminder(id){let r=db.reminders.find(x=>String(x.id)===String(id));if(r)r.done=true;save()}
 
@@ -682,11 +731,39 @@ $("situations").innerHTML=S.map((s,i)=>`<button type="button" class="tile situat
 $("childList").innerHTML=db.children.length?db.children.map(c=>`<div class="item"><b>👤 ${esc(c.name)}</b>${c.age?`<span class="chip">${esc(c.age)} år</span>`:""}<p class="muted">${esc(c.note)}</p></div>`).join(""):'<div class="card">Inga barn ännu.</div>';
 let openFollow=db.follow.filter(f=>!f.done).length;
 let completedFollow=db.follow.filter(f=>f.done).length;
-$("historyList").innerHTML=db.events.length?`<div class="insight-summary"><b>Din sparade historik</b><div class="insight-grid"><div class="insight-mini"><b>${db.events.length}</b><span>sparade situationer</span></div><div class="insight-mini"><b>${new Set(db.events.map(e=>e.topic)).size}</b><span>olika områden</span></div><div class="insight-mini"><b>${openFollow}</b><span>att följa upp</span></div></div></div>`+db.events.map(e=>{let f=db.follow.find(x=>x.event==e.id);let child=db.children.find(c=>String(c.id)===String(e.child));return `<div class="item"><b>${esc(e.topic)}</b><div class="history-meta"><span class="chip">📅 ${new Date(e.date).toLocaleDateString("sv-SE")}</span>${child?`<span class="chip">👤 ${esc(child.name)}</span>`:""}${f?.done?`<span class="chip">✓ ${esc(f.result||"Uppföljd")}</span>`:`<span class="chip">🎯 Att följa upp</span>`}</div><p class="muted">${esc(e.example)}</p>${e.note?`<p class="history-note"><b>Det som hände:</b> ${esc(e.note)}</p>`:""}<div class="history-plan"><b>Min plan:</b><br>${esc(e.plan||"Ingen plan angiven")}</div></div>`}).join(""):'<div class="card">Ingen historik ännu. När du sparar en situation visas den här.</div>';
-let counts={};db.events.forEach(e=>counts[e.topic]=(counts[e.topic]||0)+1);let sortedCounts=Object.entries(counts).sort((a,b)=>b[1]-a[1]);let maxCount=sortedCounts[0]?.[1]||1;let latest=db.events[0];$("patternList").innerHTML=sortedCounts.length?`<div class="insight-summary"><b>Det här ser LUMORA i din historik</b><p class="muted">${sortedCounts[0][1]>1?`Det område som återkommer mest just nu är <b>${esc(sortedCounts[0][0])}</b>. Fundera på vad som brukar hända precis före situationen och om samma tid, krav eller övergång återkommer.`:`Du har ännu få upprepningar. Fortsätt gärna spara situationer så blir mönstren tydligare över tid.`}</p>${latest?`<p class="muted">Senast sparat: <b>${esc(latest.topic)}</b> · ${new Date(latest.date).toLocaleDateString("sv-SE")}</p>`:""}</div>`+sortedCounts.map(([k,v])=>`<div class="item"><b>${esc(k)}</b><p class="muted">${v} sparad${v===1?"":"e"} situation${v===1?"":"er"} inom området.</p><div class="pattern-bar"><i style="width:${Math.max(12,Math.round(v/maxCount*100))}%"></i></div>${v>1?`<p class="muted">💡 Titta efter vad som brukar hända före, när på dagen det händer och vad som verkar hjälpa efteråt.</p>`:""}</div>`).join(""):'<div class="card">Spara några situationer så kan LUMORA börja visa vad som återkommer.</div>';
-let openItems=db.follow.filter(f=>!f.done).map(f=>{let e=db.events.find(x=>x.id==f.event);return `<div class="item"><b>🎯 ${esc(e?.topic||"Situation")}</b><p class="muted">Det du ville prova:</p><div class="history-plan">${esc(e?.plan||"Du har ingen plan sparad.")}</div><p><b>Hur gick det?</b></p><div class="follow-actions"><button class="small" onclick="rateFollow('${f.id}','Hjälpte')">👍 Hjälpte</button><button class="small" onclick="rateFollow('${f.id}','Hjälpte lite')">🙂 Hjälpte lite</button><button class="small" onclick="rateFollow('${f.id}','Prova annat')">🔄 Prova annat</button></div></div>`}).join("");let doneItems=db.follow.filter(f=>f.done).slice(0,5).map(f=>{let e=db.events.find(x=>x.id==f.event);return `<div class="item"><b>✓ ${esc(e?.topic||"Situation")}</b><div class="follow-result"><b>Resultat:</b> ${esc(f.result||"Klar")}${f.completedAt?` · ${new Date(f.completedAt).toLocaleDateString("sv-SE")}`:""}</div><p class="muted">Planen var: ${esc(e?.plan||"Ingen plan sparad")}</p></div>`}).join("");$("followList").innerHTML=`<div class="insight-summary"><b>Din uppföljning</b><div class="insight-grid"><div class="insight-mini"><b>${openFollow}</b><span>att följa upp</span></div><div class="insight-mini"><b>${completedFollow}</b><span>uppföljda</span></div><div class="insight-mini"><b>${db.events.length}</b><span>sparade totalt</span></div></div></div>${openItems||'<div class="card">Inga öppna uppföljningar. 🎉</div>'}${doneItems?`<div class="section" style="font-size:18px">Senast uppföljt</div>${doneItems}`:""}`;
+$("historyList").innerHTML=db.events.length?`<div class="insight-summary"><b>Din sparade historik</b><div class="insight-grid"><div class="insight-mini"><b>${db.events.length}</b><span>sparade situationer</span></div><div class="insight-mini"><b>${new Set(db.events.map(e=>e.topic)).size}</b><span>olika områden</span></div><div class="insight-mini"><b>${openFollow}</b><span>att följa upp</span></div></div></div>`+db.events.map(e=>{let f=db.follow.find(x=>x.event==e.id);let child=db.children.find(c=>String(c.id)===String(e.child));return `<div class="item"><b>${esc(e.topic)}</b><div class="history-meta"><span class="chip">📅 ${new Date(e.date).toLocaleDateString("sv-SE")}</span>${child?`<span class="chip">👤 ${esc(child.name)}</span>`:""}${f?.done?`<span class="chip">✓ ${esc(f.outcome||f.result||"Uppföljd")}</span>`:`<span class="chip">🎯 Att följa upp</span>`}</div><p class="muted">${esc(e.example)}</p>${e.note?`<p class="history-note"><b>Det som hände:</b> ${esc(e.note)}</p>`:""}<div class="history-plan"><b>Min plan:</b><br>${esc(e.plan||"Ingen plan angiven")}</div>${f?.worked?`<p class="history-note"><b>Det som fungerade:</b> ${esc(f.worked)}</p>`:""}${f?.nextPlan?`<div class="history-plan"><b>Nästa gång:</b><br>${esc(f.nextPlan)}</div>`:""}</div>`}).join(""):'<div class="card">Ingen historik ännu. När du sparar en situation visas den här.</div>';
+let counts={};db.events.forEach(e=>counts[e.topic]=(counts[e.topic]||0)+1);let sortedCounts=Object.entries(counts).sort((a,b)=>b[1]-a[1]);let maxCount=sortedCounts[0]?.[1]||1;let latest=db.events[0];
+let helpful=db.follow.filter(f=>f.done&&((f.outcome||f.result)==='Bättre'||(f.result||'').includes('Hjälpte'))&&f.worked).map(f=>f.worked).filter(Boolean);
+let helpfulText=helpful.length?`<div class="week-summary"><h3>💡 Det som verkar hjälpa</h3><p class="muted">${esc(helpful.slice(0,3).join(' · '))}</p></div>`:'';
+$("patternList").innerHTML=helpfulText+sortedCounts.length?`<div class="insight-summary"><b>Det här ser LUMORA i din historik</b><p class="muted">${sortedCounts[0][1]>1?`Det område som återkommer mest just nu är <b>${esc(sortedCounts[0][0])}</b>. Fundera på vad som brukar hända precis före situationen och om samma tid, krav eller övergång återkommer.`:`Du har ännu få upprepningar. Fortsätt gärna spara situationer så blir mönstren tydligare över tid.`}</p>${latest?`<p class="muted">Senast sparat: <b>${esc(latest.topic)}</b> · ${new Date(latest.date).toLocaleDateString("sv-SE")}</p>`:""}</div>`+sortedCounts.map(([k,v])=>`<div class="item"><b>${esc(k)}</b><p class="muted">${v} sparad${v===1?"":"e"} situation${v===1?"":"er"} inom området.</p><div class="pattern-bar"><i style="width:${Math.max(12,Math.round(v/maxCount*100))}%"></i></div>${v>1?`<p class="muted">💡 Titta efter vad som brukar hända före, när på dagen det händer och vad som verkar hjälpa efteråt.</p>`:""}</div>`).join(""):'<div class="card">Spara några situationer så kan LUMORA börja visa vad som återkommer.</div>';
+let weekAgo=Date.now()-7*24*60*60*1000;
+let weekDone=db.follow.filter(f=>f.done&&f.completedAt&&new Date(f.completedAt).getTime()>=weekAgo);
+let better=weekDone.filter(f=>(f.outcome||f.result)==='Bättre'||(f.result||'').includes('Hjälpte')).length;
+let same=weekDone.filter(f=>(f.outcome||f.result)==='Ungefär samma'||(f.result||'').includes('lite')).length;
+let harder=weekDone.filter(f=>(f.outcome||f.result)==='Svårare'||(f.result||'').includes('Prova annat')).length;
+let weekText=weekDone.length
+  ? `${weekDone.length} uppföljning${weekDone.length===1?'':'ar'} senaste 7 dagarna. ${better?better+' gick bättre. ':''}${same?same+' ungefär samma. ':''}${harder?harder+' svårare.':''}`
+  : 'När du följer upp några situationer visas en enkel veckobild här.';
+let openItems=db.follow.filter(f=>!f.done).map(f=>{let e=db.events.find(x=>x.id==f.event);return `<div class="item follow-form"><b>🎯 ${esc(e?.topic||"Situation")}</b><p class="muted">Det du ville prova:</p><div class="history-plan">${esc(e?.plan||"Du har ingen plan sparad.")}</div>
+<p><b>Hur gick det sedan?</b></p>
+<div class="follow-choice-grid">
+<button class="follow-choice ${f.outcome==='Bättre'?'active':''}" onclick="setFollowChoice('${f.id}','outcome','Bättre')">🙂 Bättre</button>
+<button class="follow-choice ${f.outcome==='Ungefär samma'?'active':''}" onclick="setFollowChoice('${f.id}','outcome','Ungefär samma')">😐 Ungefär samma</button>
+<button class="follow-choice ${f.outcome==='Svårare'?'active':''}" onclick="setFollowChoice('${f.id}','outcome','Svårare')">🙁 Svårare</button>
+</div>
+<p><b>Provade du det du hade tänkt?</b></p>
+<div class="follow-choice-grid">
+<button class="follow-choice ${f.tried==='Ja'?'active':''}" onclick="setFollowChoice('${f.id}','tried','Ja')">Ja</button>
+<button class="follow-choice ${f.tried==='Delvis'?'active':''}" onclick="setFollowChoice('${f.id}','tried','Delvis')">Delvis</button>
+<button class="follow-choice ${f.tried==='Nej'?'active':''}" onclick="setFollowChoice('${f.id}','tried','Nej')">Nej</button>
+</div>
+<div class="field"><label>Vad fungerade bäst?</label><textarea id="worked_${f.id}" class="textarea" placeholder="Skriv några ord...">${esc(f.worked||'')}</textarea></div>
+<div class="field"><label>Vad vill du prova nästa gång?</label><textarea id="next_${f.id}" class="textarea" placeholder="Ett litet nästa steg...">${esc(f.nextPlan||e?.plan||'')}</textarea></div>
+<button class="btn primary" onclick="saveFollowDetails('${f.id}')">Spara uppföljning</button></div>`}).join("");
+let doneItems=db.follow.filter(f=>f.done).slice(0,8).map(f=>{let e=db.events.find(x=>x.id==f.event);return `<div class="item"><b>✓ ${esc(e?.topic||"Situation")}</b><div class="follow-result"><b>Hur gick det:</b> ${esc(f.outcome||f.result||"Klar")}${f.completedAt?` · ${new Date(f.completedAt).toLocaleDateString("sv-SE")}`:""}</div>${f.tried?`<p class="muted"><b>Provade planen:</b> ${esc(f.tried)}</p>`:""}${f.worked?`<p class="history-note"><b>Det som fungerade:</b> ${esc(f.worked)}</p>`:""}${f.nextPlan?`<div class="history-plan"><b>Nästa steg:</b><br>${esc(f.nextPlan)}</div>`:`<p class="muted">Planen var: ${esc(e?.plan||"Ingen plan sparad")}</p>`}</div>`}).join("");
+$("followList").innerHTML=`<div class="week-summary"><h3>🌱 Veckan i korthet</h3><p class="muted">${weekText}</p></div><div class="insight-summary"><b>Din uppföljning</b><div class="insight-grid"><div class="insight-mini"><b>${openFollow}</b><span>att följa upp</span></div><div class="insight-mini"><b>${completedFollow}</b><span>uppföljda</span></div><div class="insight-mini"><b>${db.events.length}</b><span>sparade totalt</span></div></div></div>${openItems||'<div class="card">Inga öppna uppföljningar. 🎉</div>'}${doneItems?`<div class="section" style="font-size:18px">Senast uppföljt</div>${doneItems}`:""}`;
 $("reminderList").innerHTML=db.reminders.map(r=>`<div class="item"><b>🔔 ${esc(r.text)}</b><p class="muted">${esc(r.date)}</p>${r.done?'<span class="chip">Klar</span>':`<button class="small" onclick="completeReminder('${r.id}')">Markera klar</button>`}</div>`).join("")||'<div class="card">Inga påminnelser.</div>';
-renderVideos();renderMoods();renderWords();
+renderVideos();renderMoods();renderWords();if(typeof reapplyLumoraLanguage==='function')reapplyLumoraLanguage();
 }
 
 function renderVideos(){$("videoList").innerHTML=S.map((s,i)=>`<div class="video-card"><b>${s[0]} ${s[1]}</b><div class="video-screen"><div class="characters"><span>🧑</span><span class="bubble">"${esc(s[3][0])}"</span><span>🧒</span></div><div class="play">▶</div></div><p class="muted">${esc(s[2])}</p><button class="btn secondary" onclick="openSituation(${i})">Gå till situationen</button></div>`).join("")}
@@ -1063,8 +1140,36 @@ addMsg("Hej! 👋 Skriv vad du funderar på så försöker jag hjälpa dig. Du k
 </script>
 
 <script>
+
+/* V15.11 – språkfix för dynamiskt skapade steg och kort */
+let lumoraTranslateTimer=null;
+function reapplyLumoraLanguage(){
+  const lang=localStorage.getItem('lumora_language')||'sv';
+  markLumoraLanguage(lang);
+  if(lang==='sv') return;
+  clearTimeout(lumoraTranslateTimer);
+  lumoraTranslateTimer=setTimeout(function(){
+    const c=document.querySelector('.goog-te-combo');
+    if(!c) return;
+    /* Google Translate översätter inte alltid ny JS-genererad text.
+       Växla kort till ett annat språk och tillbaka för att fånga det nya innehållet. */
+    const temp = lang==='en' ? 'de' : 'en';
+    if([...c.options].some(o=>o.value===temp)){
+      c.value=temp;
+      c.dispatchEvent(new Event('change'));
+      setTimeout(function(){
+        c.value=lang;
+        c.dispatchEvent(new Event('change'));
+      },180);
+    }else{
+      c.value=lang;
+      c.dispatchEvent(new Event('change'));
+    }
+  },120);
+}
+
 function markLumoraLanguage(lang){document.documentElement.lang=lang;document.documentElement.dir=(lang==='ar'?'rtl':'ltr');document.querySelectorAll('.langbtn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang);});}
-function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'sv',includedLanguages:'en,de,sq,ar',autoDisplay:false},'google_translate_element');markLumoraLanguage(localStorage.getItem('lumora_language')||'sv');}
+function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'sv',includedLanguages:'en,de,sq,ar,es',autoDisplay:false},'google_translate_element');markLumoraLanguage(localStorage.getItem('lumora_language')||'sv');}
 function setLumoraLanguage(lang){localStorage.setItem('lumora_language',lang);markLumoraLanguage(lang);if(lang==='sv'){document.cookie='googtrans=;path=/;max-age=0';document.cookie='googtrans=;path=/;domain='+location.hostname+';max-age=0';location.reload();return;}var tries=0;function apply(){var c=document.querySelector('.goog-te-combo');if(c){c.value=lang;c.dispatchEvent(new Event('change'));}else if(tries++<12){setTimeout(apply,250);}}apply();}
 </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
